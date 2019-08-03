@@ -4,6 +4,7 @@ import { Container, Text, Button } from 'native-base';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
+// import Geolocation from 'react-native-geolocation-service';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -19,6 +20,12 @@ export default class App extends React.Component {
       Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
       ...Ionicons.font,
     });
+    // WATCH CURRENT POSITION:
+    navigator.geolocation.watchPosition(
+      (position) => console.log(position),
+      (err) => console.error(err),
+      { timeout: 20000, maximumAge: 30000, enableHighAccuracy: true, distanceFilter: 20 }
+    );
     this.setState({ isReady: true });
   }
 

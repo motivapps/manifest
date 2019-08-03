@@ -1,10 +1,11 @@
-
+require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
 const axios = require('axios');
 const bodyParser = require('body-parser');
 const passport = require('passport');
+const { sequelize } = require('./models');
 
 /**
  * express required to aid in in handeling request made to server
@@ -30,6 +31,10 @@ app.use(passport.session());
 
 
 
-const PORT = 8080;
+// const PORT = 8080;
 
-app.listen(PORT, () => console.log(`Your app is manifesting on port ${PORT}!`));
+sequelize.sync().then(() => {
+  app.listen(process.env.PORT, () => {
+    console.log(`Your app is manifesting on port ${process.env.PORT}!`)
+  });
+})

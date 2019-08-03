@@ -4,7 +4,9 @@ import { Container, Text, Button } from 'native-base';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
+import * as Permissions from 'expo-permissions';
 // import Geolocation from 'react-native-geolocation-service';
+
 
 export default class App extends React.Component {
   constructor(props) {
@@ -20,12 +22,25 @@ export default class App extends React.Component {
       Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
       ...Ionicons.font,
     });
+    // GET LOCATION PERMISSIONS:
+    async function getLocationAsync() {
+      console.log('testing');
+      // permissions returns only for location permissions on iOS and under certain conditions, see Permissions.LOCATION
+      const { status, permissions } = await Permissions.askAsync(Permissions.LOCATION);
+      if (status === 'granted') {
+        return navigator.geolocation.watchPosition(
+          (position) => console.log(position),
+          (err) => console.error(err),
+          { timeout: 20000, maximumAge: 30000, enableHighAccuracy: true, distanceFilter: 20 }
+        );
+      } else {
+        throw new Error('Location permission not granted');
+      }
+    }
+
+    getLocationAsync();
     // WATCH CURRENT POSITION:
-    navigator.geolocation.watchPosition(
-      (position) => console.log(position),
-      (err) => console.error(err),
-      { timeout: 20000, maximumAge: 30000, enableHighAccuracy: true, distanceFilter: 20 }
-    );
+    
     this.setState({ isReady: true });
   }
 

@@ -1,5 +1,3 @@
-const sequelize = require('../index');
-
 const user = (sequelize, DataTypes) => {
   const User = sequelize.define('users',{
     "full_name": DataTypes.STRING,

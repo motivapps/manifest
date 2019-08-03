@@ -1,5 +1,3 @@
-const sequelize = require('../index');
-
 const vices = (sequelize, DataTypes) => {
   const Vices = sequelize.define('vices', {
       "vice": {

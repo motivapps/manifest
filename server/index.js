@@ -1,11 +1,11 @@
-
+require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
 const axios = require('axios');
 const bodyParser = require('body-parser');
 const passport = require('passport');
-const sequelize = require('./models');
+const { sequelize } = require('./models');
 
 /**
  * express required to aid in in handeling request made to server

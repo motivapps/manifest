@@ -5,7 +5,11 @@ const path = require('path');
 const axios = require('axios');
 const bodyParser = require('body-parser');
 const passport = require('passport');
+<<<<<<< HEAD
 const plaid = require('plaid');
+=======
+const { sequelize } = require('./models');
+>>>>>>> dbc0171964e1d73532a5689b1ead2a5986548414
 
 /**
  * express required to aid in in handeling request made to server
@@ -51,6 +55,10 @@ app.post('https://sandbox.plaid.com/item/public_token/exchange', {
 .catch((err) => console.error(err));
 
 
-const PORT = 8080;
+// const PORT = 8080;
 
-app.listen(PORT, () => console.log(`Your app is manifesting on port ${PORT}!`));
+sequelize.sync().then(() => {
+  app.listen(process.env.PORT, () => {
+    console.log(`Your app is manifesting on port ${process.env.PORT}!`)
+  });
+})

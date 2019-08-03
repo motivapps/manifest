@@ -1,9 +1,9 @@
 {
-  "expoServerPort": 19000,
-  "expoServerNgrokUrl": "https://jy-jq4.brandsnesr.manifest.exp.direct",
-  "packagerNgrokUrl": "https://packager.jy-jq4.brandsnesr.manifest.exp.direct",
-  "ngrokPid": 29052,
   "devToolsPort": 19002,
-  "packagerPort": 19003,
-  "packagerPid": 29043
+  "expoServerPort": null,
+  "packagerPort": 19001,
+  "packagerPid": 6688,
+  "expoServerNgrokUrl": "https://jy-jq4.anonymous.manifest-thesis.exp.direct",
+  "packagerNgrokUrl": "https://packager.jy-jq4.anonymous.manifest-thesis.exp.direct",
+  "ngrokPid": 6721
 }

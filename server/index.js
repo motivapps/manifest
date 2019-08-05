@@ -30,6 +30,10 @@ app.use(bodyParser.json());
 // app.use(passport.initialize());
 // app.use(passport.session());
 
+app.get('http://127.0.0.1:4041', (req, res) => {
+    console.log('inside app get');
+    console.log('req:', req);
+})
 
 let ACCESS_TOKEN = null;
 let PUBLIC_TOKEN = null;

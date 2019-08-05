@@ -13,7 +13,7 @@ class Link extends React.Component {
     status: ''
   };
   static navigationOptions = {
-    title: 'Money Mentor',
+    title: 'Manifest',
     headerStyle: styles.headerStyle,
     headerTitleStyle: { color: colorTheme.white.snow
     }
@@ -32,10 +32,10 @@ class Link extends React.Component {
     return (
       <PlaidAuthenticator
         onMessage={this.onMessage}
-        publicKey="bc8a1ae90c8899639cdfd58c69af10"
+        publicKey="a35fead643ab95153802609fa5c0a2"
         env="sandbox"
         product="auth,transactions"
-        clientName="MoneyMentor"
+        clientName="Manifest"
       />
     );
   }

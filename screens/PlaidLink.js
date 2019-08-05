@@ -42,6 +42,13 @@ class Link extends React.Component {
 
   renderDetails() {
     this.props.sendToken(this.state.data.metadata.public_token);
+    // send public_token to server:
+    fetch('https://67d0989d.ngrok.io', {
+      method: 'POST',
+      body: JSON.stringify({
+        public_token: this.state.data.metadata.public_token
+      })
+    })
 
     return (
       <View style={styles.container}>

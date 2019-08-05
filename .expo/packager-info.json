@@ -1,10 +1,10 @@
 {
-  "devToolsPort": 19002,
+  "devToolsPort": 19003,
   "expoServerPort": 19000,
-  "packagerPort": 19001,
-  "packagerPid": 35050,
-  "expoServerNgrokUrl": "https://jy-jq4.brandsnesr.manifest.exp.direct",
-  "packagerNgrokUrl": "https://packager.jy-jq4.brandsnesr.manifest.exp.direct",
-  "ngrokPid": 35067,
+  "packagerPort": 19004,
+  "packagerPid": 26782,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null,
   "webpackServerPort": null
 }

@@ -5,11 +5,8 @@ const path = require('path');
 const axios = require('axios');
 const bodyParser = require('body-parser');
 const passport = require('passport');
-<<<<<<< HEAD
 const plaid = require('plaid');
-=======
 const { sequelize } = require('./models');
->>>>>>> dbc0171964e1d73532a5689b1ead2a5986548414
 
 /**
  * express required to aid in in handeling request made to server
@@ -26,7 +23,7 @@ const app = express();
  * middleware assigned to app for use with incoming requests
  */
 
-// app.use(express.static(path.join(__dirname, '../dist')));
+app.use(express.static(path.join(__dirname, '../dist')));
 app.use(bodyParser.json());
 // app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(session({ secret: 'anything' }));
@@ -44,10 +41,10 @@ const client = new plaid.Client(
   plaid.environments.sandbox
 );
 
-app.post('https://sandbox.plaid.com/item/public_token/exchange', {
-  client_id: process.env.PLAID_CLIENT_ID,
-  secret: process.env.PLAID_SECRET,
-  public_token: process.env.PLAID_PUBLIC_KEY,
+axios.post('https://sandbox.plaid.com/item/public_token/exchange', {
+  "client_id": process.env.PLAID_CLIENT_ID,
+  "secret": process.env.PLAID_SECRET,
+  "public_token": "public-sandbox-3ef5a951-f351-4fc3-9073-5d3934397a10"
 })
 .then((response) => {
   console.log(response);
@@ -61,4 +58,4 @@ sequelize.sync().then(() => {
   app.listen(process.env.PORT, () => {
     console.log(`Your app is manifesting on port ${process.env.PORT}!`)
   });
-})
+});

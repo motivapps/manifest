@@ -29,6 +29,10 @@ app.use(session({ secret: 'anything' }));
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.get('http://127.0.0.1:4041', (req, res) => {
+    console.log('inside app get');
+    console.log('req:', req);
+})
 
 
 // const PORT = 8080;

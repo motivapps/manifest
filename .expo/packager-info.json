@@ -1,10 +1,1 @@
-{
-  "devToolsPort": 19002,
-  "expoServerPort": 19000,
-  "packagerPort": 19001,
-  "packagerPid": 61662,
-  "expoServerNgrokUrl": "https://a7-wxb.brandsnesr.manifest.exp.direct",
-  "packagerNgrokUrl": "https://packager.a7-wxb.brandsnesr.manifest.exp.direct",
-  "ngrokPid": 61678,
-  "webpackServerPort": null
-}
+{}

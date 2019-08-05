@@ -5,6 +5,7 @@ const path = require('path');
 const axios = require('axios');
 const bodyParser = require('body-parser');
 const passport = require('passport');
+const plaid = require('plaid');
 const { sequelize } = require('./models');
 
 /**
@@ -24,21 +25,20 @@ const app = express();
 
 app.use(express.static(path.join(__dirname, '../dist')));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(session({ secret: 'anything' }));
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(session({ secret: 'anything' }));
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 app.get('http://127.0.0.1:4041', (req, res) => {
-    console.log('inside app get');
-    console.log('req:', req);
-})
-
+  console.log('inside app get');
+  console.log('req:', req);
+});
 
 // const PORT = 8080;
 
 sequelize.sync().then(() => {
   app.listen(process.env.PORT, () => {
-    console.log(`Your app is manifesting on port ${process.env.PORT}!`)
+    console.log(`Your app is manifesting on port ${process.env.PORT}!`);
   });
-})
+});

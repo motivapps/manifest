@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Permissions from 'expo-permissions';
 import axios from 'axios';
 import Link from './screens/PlaidLink';
+import Login from './screens/Login';
 // import Geolocation from 'react-native-geolocation-service';
 
 
@@ -17,6 +18,7 @@ class HomeScreen extends React.Component {
     this.state = {
       isReady: false,
       buttonToggle: false,
+      isAuthenticated: false,
     };
     this.onToggleButton = this.onToggleButton.bind(this);
     this.onCheckLocation = this.onCheckLocation.bind(this);
@@ -160,10 +162,25 @@ class SettingsScreen extends React.Component {
   }
 }
 
+class LoginScreen extends React.Component {
+  render() {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Login />
+        <TouchableOpacity onPress={this.props.navigation.openDrawer}>
+          <Text>Open Menu</Text>
+        </TouchableOpacity>
+        <Text style={{ fontWeight: 'bold', marginTop: 20 }}>Login</Text>
+      </View>
+    );
+  }
+}
+
 const DrawerNavigator = createDrawerNavigator(
   {
     Home: HomeScreen,
     Plaid: SettingsScreen,
+    Login: LoginScreen,
   },
   {
     hideStatusBar: true,

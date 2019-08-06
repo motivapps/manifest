@@ -20,16 +20,16 @@ class Link extends React.Component {
     }
   };
 
-  // render() {
-  //   switch (this.state.status) {
-  //     case 'CONNECTED':
-  //       return this.renderDetails();
-  //     default:
-  //       return this.renderLogin();
-  //   }
-  // }
-
   render() {
+    switch (this.state.status) {
+      case 'CONNECTED':
+        return this.renderDetails();
+      default:
+        return this.renderLogin();
+    }
+  }
+
+  renderLogin() {
     return (
       <View>
       <Text>This is where the Plaid Authenticator is...</Text>
@@ -38,52 +38,54 @@ class Link extends React.Component {
           publicKey="a35fead643ab95153802609fa5c0a2"
           env="sandbox"
           product="auth,transactions"
-          clientName="Manifest"
+          clientName="Mani"
         />
       </View>
     );
   }
+  onMessage = data => {
+    console.log(data);
+    this.setState({
+        data,
+        status: data.action.substr(data.action.lastIndexOf(':') + 1).toUpperCase()
+      });
+    };
+    // 
+    // };
 
   renderDetails() {
-    this.props.sendToken(this.state.data.metadata.public_token);
+    // this.props.sendToken(this.state.data.metadata.public_token);
     // send public_token to server:
-    fetch('https://67d0989d.ngrok.io', {
+    fetch('https://a0b509f0.ngrok.io/get_access_token', {
       method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({
         public_token: this.state.data.metadata.public_token
       })
     })
-
-  //   return (
-  //     <View>
+    return (
+      <View>
        
-  //       <Text>NEXT STEP</Text>
-  //       <View>
-  //         <View style={{ padding: 10 }}>
-  //           <Button
-  //             raised
-  //             textStyle={{ textAlign: 'center' }}
-  //             title={`Set Up Your Budget`}
+        <Text>NEXT STEP</Text>
+        <View>
+          <View style={{ padding: 10 }}>
+            <Button
+              raised
+              textStyle={{ textAlign: 'center' }}
+              title={`Set Up Your Budget`}
               
-  //           />
-  //         </View>
-  //       </View>
-  //     </View>
-  //   );
-  // }
+            />
+          </View>
+        </View>
+      </View>
+    );
+  }
 
-  onMessage = data => {
-    fetch('https://67d0989d.ngrok.io/get_access_token', {
-      method: 'POST',
-      body: JSON.stringify({
-        public_token: data.metadata.public_token
-      })
-    // this.setState({
-    //   data,
-    //   status: data.action.substr(data.action.lastIndexOf(':') + 1).toUpperCase()
-    // });
-  };
- }
+  
+ 
 
 // const mapDispatch = dispatch => {
 //   return {
@@ -96,5 +98,5 @@ class Link extends React.Component {
 //   null,
 //   mapDispatch
 // )(Link);
-
+}
 export default Link;

@@ -1,15 +1,17 @@
 import React from 'react';
 import { AppLoading } from 'expo';
 import { Container, Text, Button } from 'native-base';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { Platform, StatusBar, StyleSheet, View , TouchableOpacity } from 'react-native';
+import { createDrawerNavigator, createStackNavigator, createAppContainer } from 'react-navigation';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import * as Permissions from 'expo-permissions';
 import axios from 'axios';
+import Link from './screens/PlaidLink';
 // import Geolocation from 'react-native-geolocation-service';
 
 
-export default class App extends React.Component {
+class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -97,6 +99,10 @@ export default class App extends React.Component {
 
     return (
       <Container style={styles.container}>
+            <TouchableOpacity onPress={this.props.navigation.openDrawer}>
+              <Text>Open Menu</Text>
+            </TouchableOpacity>
+            <Text style={{ fontWeight: 'bold', marginTop: 20 }}>Home</Text>
         <Text style={styles.title}>Manifest</Text>
         <Text>It's alive!</Text>
         <Button danger onPress={this.onToggleButton}>
@@ -125,6 +131,53 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
 });
+
+
+// class HomeScreen extends React.Component {
+//   render() {
+//     return (
+//       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+//         <TouchableOpacity onPress={this.props.navigation.openDrawer}>
+//           <Text>Open Drawer</Text>
+//         </TouchableOpacity>
+//         <Text style={{ fontWeight: 'bold', marginTop: 20 }}>Home</Text>
+//       </View>
+//     );
+//   }
+// }
+
+class SettingsScreen extends React.Component {
+  render() {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Link />
+        <TouchableOpacity onPress={this.props.navigation.openDrawer}>
+          <Text>Open Menu</Text>
+        </TouchableOpacity>
+        <Text style={{ fontWeight: 'bold', marginTop: 20 }}>Settings</Text>
+      </View>
+    );
+  }
+}
+
+const DrawerNavigator = createDrawerNavigator(
+  {
+    Home: HomeScreen,
+    Plaid: SettingsScreen,
+  },
+  {
+    hideStatusBar: true,
+    drawerBackgroundColor: 'rgba(255,255,255,.9)',
+    overlayColor: '#6b52ae',
+    contentOptions: {
+      activeTintColor: '#fff',
+      activeBackgroundColor: '#6b52ae',
+    },
+  }
+);
+
+export default createAppContainer(DrawerNavigator);
+
 
 
 // import { AppLoading } from 'expo';

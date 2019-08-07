@@ -1,6 +1,6 @@
 import React from 'react';
 import { AppLoading } from 'expo';
-import { Container, Text, Button } from 'native-base';
+import { Container, Text, Button, Footer, FooterTab, Icon, Content } from 'native-base';
 import { Platform, StatusBar, StyleSheet, View , TouchableOpacity } from 'react-native';
 import { createDrawerNavigator, createStackNavigator, createAppContainer } from 'react-navigation';
 import * as Font from 'expo-font';
@@ -19,6 +19,8 @@ class HomeScreen extends React.Component {
       isReady: false,
       buttonToggle: false,
       isAuthenticated: false,
+      latitude: null,
+      longitude: null,
     };
     this.onToggleButton = this.onToggleButton.bind(this);
     this.onCheckLocation = this.onCheckLocation.bind(this);
@@ -71,6 +73,20 @@ class HomeScreen extends React.Component {
       }
     }
 
+    setInterval(() => {
+    navigator.geolocation.watchPosition(
+      (position) => {
+        console.log('position outside of permissions', position);
+        this.setState({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        })
+      },
+      (err) => console.error(err),
+      { timeout: 2000, maximumAge: 3000, enableHighAccuracy: true, distanceFilter: 10 }
+    );
+    }, 3000);
+
     getLocationAsync();
     // WATCH CURRENT POSITION:
     this.setState({ isReady: true });
@@ -101,16 +117,39 @@ class HomeScreen extends React.Component {
 
     return (
       <Container style={styles.container}>
-            <TouchableOpacity onPress={this.props.navigation.openDrawer}>
-              <Text>Open Menu</Text>
-            </TouchableOpacity>
+            
             <Text style={{ fontWeight: 'bold', marginTop: 20 }}>Home</Text>
         <Text style={styles.title}>Manifest</Text>
         <Text>It's alive!</Text>
-        <Button danger onPress={this.onToggleButton}>
-          <Text>Do Not Click Me!</Text>
+        <Text>My Latitude: {this.state.latitude}</Text>
+        <Text>My Longitude: {this.state.longitude}</Text>
+        <Button style={styles.basicButton} onPress={this.onToggleButton}>
+          <Text style={styles.buttonText}>Do Not Click Me!</Text>
         </Button>
         {this.state.buttonToggle ? <Text style={styles.message}>I said don't click me!</Text> : null}
+        <Content />
+        <Footer style={styles.footerbar}>
+          <FooterTab>
+            <Button vertical>
+              <Icon style={{ fontSize: 30, color: '#fff'}} name="md-stats" />
+              <Text style={styles.buttonText}>Stats</Text>
+            </Button>
+            <Button vertical>
+              <Icon style={{ fontSize: 30, color: '#fff' }} name="logo-game-controller-a" />
+              <Text style={styles.buttonText}>Games</Text>
+            </Button>
+            <Button vertical>
+              <Icon style={{ fontSize: 30, color: '#fff' }} name="md-ribbon" />
+              <Text style={styles.buttonText}>Goals</Text>
+            </Button>
+            <Button vertical>
+              <TouchableOpacity onPress={this.props.navigation.openDrawer}>
+                <Icon style={{ fontSize: 30, color: '#fff' }} name="md-menu" />  
+                <Text style={styles.buttonText}>Menu</Text>
+              </TouchableOpacity>
+            </Button>
+          </FooterTab>
+        </Footer>
       </Container>
     );
   }
@@ -118,10 +157,10 @@ class HomeScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, 
+    
     justifyContent: "center",
     alignItems: 'center',
-    marginHorizontal: 50,
+    marginHorizontal: 0,
     backgroundColor: '#fff',
   },
   title: {
@@ -132,6 +171,18 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 20,
   },
+  basicButton: {
+    backgroundColor: '#34d1af',
+  },
+  buttonText: {
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  footerbar: {
+    backgroundColor: '#34d1af',
+    fontWeight: 'bold',
+    color: '#fff',
+  }
 });
 
 
@@ -185,10 +236,10 @@ const DrawerNavigator = createDrawerNavigator(
   {
     hideStatusBar: true,
     drawerBackgroundColor: 'rgba(255,255,255,.9)',
-    overlayColor: '#6b52ae',
+    overlayColor: '#34d1af',
     contentOptions: {
       activeTintColor: '#fff',
-      activeBackgroundColor: '#6b52ae',
+      activeBackgroundColor: '#34d1af',
     },
   }
 );

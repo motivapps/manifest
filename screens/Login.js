@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Button, Alert } from 'react-native';
 import { AuthSession } from 'expo';
 import jwtDecode from 'jwt-decode';
-import { AUTHO_CLIENT_ID, AUTHO_DOMAIN } from '../app.config.json';
+import { AUTHO_CLIENT_ID, AUTHO_DOMAIN, NGROK } from '../app.config.json';
 
 const auth0ClientId = AUTHO_CLIENT_ID;
 const auth0Domain = AUTHO_DOMAIN;
@@ -52,12 +52,23 @@ export default class Login extends React.Component {
 
     // Retrieve the JWT token and decode it
     const jwtToken = response.id_token;
-    const decoded = jwtDecode(jwtToken);
+    const { name, picture, nickname } = jwtDecode(jwtToken);
+    this.setState({ name, picture, email: `${nickname}@gmail.com` });
 
-    console.log('JWTotken data', decoded)
+    console.log('JWTotken data', jwtDecode(jwtToken))
 
-    const { name } = decoded;
-    this.setState({ name });
+    fetch(`${NGROK}/users`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name, 
+        picture, 
+        email: `${nickname}@gmail.com` 
+      }),
+    });
   };
 
   render() {

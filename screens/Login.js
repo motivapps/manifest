@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Button, Alert } from 'react-native';
 import { AuthSession } from 'expo';
 import jwtDecode from 'jwt-decode';
-import { AUTHO_CLIENT_ID, AUTHO_DOMAIN } from '../auth.config.json';
+import { AUTHO_CLIENT_ID, AUTHO_DOMAIN } from '../app.config.json';
 
 const auth0ClientId = AUTHO_CLIENT_ID;
 const auth0Domain = AUTHO_DOMAIN;
@@ -53,6 +53,8 @@ export default class Login extends React.Component {
     // Retrieve the JWT token and decode it
     const jwtToken = response.id_token;
     const decoded = jwtDecode(jwtToken);
+
+    console.log('JWTotken data', decoded)
 
     const { name } = decoded;
     this.setState({ name });

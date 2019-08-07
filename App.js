@@ -71,21 +71,24 @@ class HomeScreen extends React.Component {
       } else {
         throw new Error('Location permission not granted');
       }
-    }
-
-    setInterval(() => {
-    navigator.geolocation.watchPosition(
-      (position) => {
-        console.log('position outside of permissions', position);
-        this.setState({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        })
-      },
-      (err) => console.error(err),
-      { timeout: 2000, maximumAge: 3000, enableHighAccuracy: true, distanceFilter: 10 }
-    );
-    }, 3000);
+    } 
+    
+  /**
+   * uncomment for location info
+   */
+    // setInterval(() => {
+    // navigator.geolocation.watchPosition(
+    //   (position) => {
+    //     console.log('position outside of permissions', position);
+    //     this.setState({
+    //       latitude: position.coords.latitude,
+    //       longitude: position.coords.longitude,
+    //     })
+    //   },
+    //   (err) => console.error(err),
+    //   { timeout: 2000, maximumAge: 3000, enableHighAccuracy: true, distanceFilter: 10 }
+    // );
+    // }, 3000);
 
     getLocationAsync();
     // WATCH CURRENT POSITION:

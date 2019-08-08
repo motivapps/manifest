@@ -78,7 +78,9 @@ export default class Login extends React.Component {
       <View style={styles.container}>
         {
           name ?
-            <Text style={styles.title}>You are logged in, {name}!</Text> :
+            <Text style={styles.title}>You ar
+            
+            logged in, {name}!</Text> :
             <Button title="Log in with Auth0" onPress={this.login} />
         }
       </View>

@@ -56,7 +56,7 @@ export default class Login extends React.Component {
     const { name, picture, nickname } = jwtDecode(jwtToken);
     this.setState({ name, picture, email: `${nickname}@gmail.com` });
 
-    console.log('JWTotken data', jwtDecode(jwtToken))
+    console.log('JWTotken data', jwtDecode(jwtToken));
 
     fetch(`${NGROK}/users`, {
       method: 'POST',
@@ -65,9 +65,9 @@ export default class Login extends React.Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        name, 
-        picture, 
-        email: `${nickname}@gmail.com` 
+        name,
+        picture,
+        email: `${nickname}@gmail.com`,
       }),
     });
   };

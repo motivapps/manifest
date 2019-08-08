@@ -3,6 +3,7 @@ import { Text, View, Image } from 'react-native';
 import PlaidAuthenticator from 'react-native-plaid-link';
 import { Button } from 'native-base';
 import { connect } from 'react-redux';
+import { NGROK } from '../app.config.json'
 // import { Button } from 'react-native-elements';
 // import { styles, colorTheme } from '../../common/styles';
 
@@ -49,7 +50,7 @@ class Link extends React.Component {
   renderDetails() {
     // this.props.sendToken(this.state.data.metadata.public_token);
     // send public_token to server:
-    fetch('https://a0b509f0.ngrok.io/get_access_token', {
+    fetch(`${NGROK}/get_access_token`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',

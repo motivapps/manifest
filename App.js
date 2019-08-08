@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppLoading } from 'expo';
+import { AppLoading, Permissions } from 'expo';
 import { Container, Text, Button, Footer, FooterTab, Icon, Content } from 'native-base';
 import { Platform, StatusBar, StyleSheet, View , TouchableOpacity, PushNotificationIOS } from 'react-native';
 import { createDrawerNavigator, createStackNavigator, createAppContainer } from 'react-navigation';
@@ -9,11 +9,8 @@ import * as Permissions from 'expo-permissions';
 import axios from 'axios';
 import Link from './screens/PlaidLink';
 import Login from './screens/Login';
-<<<<<<< HEAD
 // import PushNotification from 'react-native-push-notification';
-=======
 import { FOURSQUARE_CLIENT_ID, FOURSQUARE_CLIENT_SECRET } from './app.config.json';
->>>>>>> 54da1d3b8242d99c165aa60fe100b6a8be83bc22
 // import Geolocation from 'react-native-geolocation-service';
 
 
@@ -76,7 +73,6 @@ class HomeScreen extends React.Component {
       } else {
         throw new Error('Location permission not granted');
       }
-<<<<<<< HEAD
     }
 
     // PushNotification.configure({
@@ -127,31 +123,11 @@ class HomeScreen extends React.Component {
       { enableHighAccuracy: true, timeout: 2000, maximumAge: 2000, distanceFilter: 0 }
     );
     //}, 20000);
-=======
-    } 
-    
-  /**
-   * uncomment for location info
-   */
-    // setInterval(() => {
-    // navigator.geolocation.watchPosition(
-    //   (position) => {
-    //     console.log('position outside of permissions', position);
-    //     this.setState({
-    //       latitude: position.coords.latitude,
-    //       longitude: position.coords.longitude,
-    //     })
-    //   },
-    //   (err) => console.error(err),
-    //   { timeout: 2000, maximumAge: 3000, enableHighAccuracy: true, distanceFilter: 10 }
-    // );
-    // }, 3000);
->>>>>>> 54da1d3b8242d99c165aa60fe100b6a8be83bc22
 
     getLocationAsync();
     // WATCH CURRENT POSITION:
     this.setState({ isReady: true });
-    
+
   }
 
   onCheckLocation() {

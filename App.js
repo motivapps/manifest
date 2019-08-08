@@ -126,6 +126,7 @@ class HomeScreen extends React.Component {
     getLocationAsync();
     // WATCH CURRENT POSITION:
     this.setState({ isReady: true });
+    
   }
 
   onCheckLocation() {

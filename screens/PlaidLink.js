@@ -39,6 +39,7 @@ class Link extends React.Component {
           env="sandbox"
           product="auth,transactions"
           clientName="Mani"
+          webhook={`${NGROK}/transaction_hook`}
         />
       </View>
     );

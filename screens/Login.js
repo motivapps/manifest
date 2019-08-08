@@ -4,9 +4,6 @@ import { AuthSession } from 'expo';
 import jwtDecode from 'jwt-decode';
 import { AUTHO_CLIENT_ID, AUTHO_DOMAIN, NGROK } from '../app.config.json';
 
-const auth0ClientId = AUTHO_CLIENT_ID;
-const auth0Domain = AUTHO_DOMAIN;
-
 function toQueryString(params) {
   return '?' + Object.entries(params)
     .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
@@ -26,13 +23,13 @@ export default class Login extends React.Component {
 
     // Structure the auth parameters and URL
     const queryParams = toQueryString({
-      client_id: auth0ClientId,
+      client_id: AUTHO_CLIENT_ID,
       redirect_uri: redirectUrl,
       response_type: 'id_token', // id_token will return a JWT token
       scope: 'openid profile', // retrieve the user's profile
       nonce: 'nonce', // ideally, this will be a random value
     });
-    const authUrl = `${auth0Domain}/authorize` + queryParams;
+    const authUrl = `${AUTHO_DOMAIN}/authorize` + queryParams;
     console.log('authURL', authUrl);
 
     // Perform the authentication

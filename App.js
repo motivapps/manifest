@@ -1,7 +1,7 @@
 import React from 'react';
 import { AppLoading } from 'expo';
 import { Container, Text, Button, Footer, FooterTab, Icon, Content } from 'native-base';
-import { Platform, StatusBar, StyleSheet, View , TouchableOpacity } from 'react-native';
+import { Platform, StatusBar, StyleSheet, View , TouchableOpacity, PushNotificationIOS } from 'react-native';
 import { createDrawerNavigator, createStackNavigator, createAppContainer } from 'react-navigation';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
@@ -9,6 +9,7 @@ import * as Permissions from 'expo-permissions';
 import axios from 'axios';
 import Link from './screens/PlaidLink';
 import Login from './screens/Login';
+// import PushNotification from 'react-native-push-notification';
 // import Geolocation from 'react-native-geolocation-service';
 
 
@@ -66,14 +67,37 @@ class HomeScreen extends React.Component {
             //   })
           },
           (err) => console.error(err),
-          { timeout: 20000, maximumAge: 30000, enableHighAccuracy: true, distanceFilter: 20 }
+          { timeout: 2000, maximumAge: 2000, enableHighAccuracy: true, distanceFilter: 1 }
         );
       } else {
         throw new Error('Location permission not granted');
       }
     }
 
-    setInterval(() => {
+    // PushNotification.configure({
+
+    //   onRegister: function (token) {
+    //     //process token
+    //   },
+
+    //   onNotification: function (notification) {
+    //     // process the notification
+    //     // required on iOS only
+    //     notification.finish(PushNotificationIOS.FetchResult.NoData);
+    //   },
+
+    //   permissions: {
+    //     alert: true,
+    //     badge: true,
+    //     sound: true
+    //   },
+
+    //   popInitialNotification: true,
+    //   requestPermissions: true,
+
+    // });
+
+    //setInterval(() => {
     navigator.geolocation.watchPosition(
       (position) => {
         console.log('position outside of permissions', position);
@@ -81,11 +105,23 @@ class HomeScreen extends React.Component {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
         })
+        // fetch(`https://api.foursquare.com/v2/venues/search?client_id=USVL34WDRM322JXRDHU4EQW1QREZGPXOMTZSNJKYQUIGKE5O&client_secret=2KGK1VOONWZ1T0OMNFKWXFHDOP0JYXPIVYXQ5KKUDXA55ZHQ&ll=${this.state.latitude},${this.state.longitude}&intent=checkin&radius=60&categoryId=4bf58dd8d48988d1e0931735&v=20190425`)
+        //       .then(result => {
+        //         console.log('get location Foursquare result:', result);
+        //         return result.json();
+        //       })
+        //       .then(response => {
+        //         console.log('response:', response);
+        //       })
+        //       .catch(err => {
+        //         console.log('get location error from front:', err);
+        //       })
+        // PushNotificationIOS.presentLocalNotification({alertBody: 'but does it work?'});
       },
       (err) => console.error(err),
-      { timeout: 2000, maximumAge: 3000, enableHighAccuracy: true, distanceFilter: 10 }
+      { enableHighAccuracy: true, timeout: 2000, maximumAge: 2000, distanceFilter: 0 }
     );
-    }, 3000);
+    //}, 20000);
 
     getLocationAsync();
     // WATCH CURRENT POSITION:

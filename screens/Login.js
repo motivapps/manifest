@@ -2,10 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Button, Alert } from 'react-native';
 import { AuthSession } from 'expo';
 import jwtDecode from 'jwt-decode';
-import { AUTHO_CLIENT_ID, AUTHO_DOMAIN } from '../auth.config.json';
-
-const auth0ClientId = AUTHO_CLIENT_ID;
-const auth0Domain = AUTHO_DOMAIN;
+import { AUTHO_CLIENT_ID, AUTHO_DOMAIN, NGROK } from '../app.config.json';
 
 function toQueryString(params) {
   return '?' + Object.entries(params)
@@ -26,13 +23,13 @@ export default class Login extends React.Component {
 
     // Structure the auth parameters and URL
     const queryParams = toQueryString({
-      client_id: auth0ClientId,
+      client_id: AUTHO_CLIENT_ID,
       redirect_uri: redirectUrl,
       response_type: 'id_token', // id_token will return a JWT token
       scope: 'openid profile', // retrieve the user's profile
       nonce: 'nonce', // ideally, this will be a random value
     });
-    const authUrl = `${auth0Domain}/authorize` + queryParams;
+    const authUrl = `${AUTHO_DOMAIN}/authorize` + queryParams;
     console.log('authURL', authUrl);
 
     // Perform the authentication
@@ -52,10 +49,23 @@ export default class Login extends React.Component {
 
     // Retrieve the JWT token and decode it
     const jwtToken = response.id_token;
-    const decoded = jwtDecode(jwtToken);
+    const { name, picture, nickname } = jwtDecode(jwtToken);
+    this.setState({ name, picture, email: `${nickname}@gmail.com` });
 
-    const { name } = decoded;
-    this.setState({ name });
+    console.log('JWTotken data', jwtDecode(jwtToken))
+
+    fetch(`${NGROK}/users`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name, 
+        picture, 
+        email: `${nickname}@gmail.com` 
+      }),
+    });
   };
 
   render() {
@@ -65,7 +75,9 @@ export default class Login extends React.Component {
       <View style={styles.container}>
         {
           name ?
-            <Text style={styles.title}>You are logged in, {name}!</Text> :
+            <Text style={styles.title}>You ar
+            
+            logged in, {name}!</Text> :
             <Button title="Log in with Auth0" onPress={this.login} />
         }
       </View>

@@ -9,7 +9,11 @@ import * as Permissions from 'expo-permissions';
 import axios from 'axios';
 import Link from './screens/PlaidLink';
 import Login from './screens/Login';
+<<<<<<< HEAD
 // import PushNotification from 'react-native-push-notification';
+=======
+import { FOURSQUARE_CLIENT_ID, FOURSQUARE_CLIENT_SECRET } from './app.config.json';
+>>>>>>> 54da1d3b8242d99c165aa60fe100b6a8be83bc22
 // import Geolocation from 'react-native-geolocation-service';
 
 
@@ -54,7 +58,7 @@ class HomeScreen extends React.Component {
             console.log('current latitude:', latitude);
             let longitude = position.coords.longitude;
             console.log('current longitude:', longitude);
-            // fetch(`https://api.foursquare.com/v2/venues/search?client_id=USVL34WDRM322JXRDHU4EQW1QREZGPXOMTZSNJKYQUIGKE5O&client_secret=2KGK1VOONWZ1T0OMNFKWXFHDOP0JYXPIVYXQ5KKUDXA55ZHQ&ll=${latitude},${longitude}&intent=checkin&radius=60&categoryId=4bf58dd8d48988d1e0931735&v=20190425`)
+            // fetch(`https://api.foursquare.com/v2/venues/search?client_id=${FOURSQUARE_CLIENT_ID}&client_secret=${FOURSQUARE_CLIENT_SECRET}&ll=${latitude},${longitude}&intent=checkin&radius=60&categoryId=4bf58dd8d48988d1e0931735&v=20190425`)
             //   .then(result => {
             //     console.log('get location result from front:', result);
             //     return result.json();
@@ -72,6 +76,7 @@ class HomeScreen extends React.Component {
       } else {
         throw new Error('Location permission not granted');
       }
+<<<<<<< HEAD
     }
 
     // PushNotification.configure({
@@ -122,6 +127,26 @@ class HomeScreen extends React.Component {
       { enableHighAccuracy: true, timeout: 2000, maximumAge: 2000, distanceFilter: 0 }
     );
     //}, 20000);
+=======
+    } 
+    
+  /**
+   * uncomment for location info
+   */
+    // setInterval(() => {
+    // navigator.geolocation.watchPosition(
+    //   (position) => {
+    //     console.log('position outside of permissions', position);
+    //     this.setState({
+    //       latitude: position.coords.latitude,
+    //       longitude: position.coords.longitude,
+    //     })
+    //   },
+    //   (err) => console.error(err),
+    //   { timeout: 2000, maximumAge: 3000, enableHighAccuracy: true, distanceFilter: 10 }
+    // );
+    // }, 3000);
+>>>>>>> 54da1d3b8242d99c165aa60fe100b6a8be83bc22
 
     getLocationAsync();
     // WATCH CURRENT POSITION:

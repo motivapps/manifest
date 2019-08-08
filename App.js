@@ -1,7 +1,8 @@
+/* eslint-disable react/prefer-stateless-function */
 import React from 'react';
 import { AppLoading } from 'expo';
 import { Container, Text, Button, Footer, FooterTab, Icon, Content } from 'native-base';
-import { Platform, StatusBar, StyleSheet, View , TouchableOpacity } from 'react-native';
+import { Platform, StatusBar, StyleSheet, View, TouchableOpacity } from 'react-native';
 import { createDrawerNavigator, createStackNavigator, createAppContainer } from 'react-navigation';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
@@ -9,8 +10,8 @@ import * as Permissions from 'expo-permissions';
 import axios from 'axios';
 import Link from './screens/PlaidLink';
 import Login from './screens/Login';
+import Transactions from './screens/Transactions';
 // import Geolocation from 'react-native-geolocation-service';
-
 
 class HomeScreen extends React.Component {
   constructor(props) {
@@ -33,25 +34,25 @@ class HomeScreen extends React.Component {
       Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
       ...Ionicons.font,
     });
-    
+
     // GET LOCATION PERMISSIONS:
     async function getLocationAsync() {
       // permissions returns only for location permissions on iOS and under certain conditions, see Permissions.LOCATION
       const { status, permissions } = await Permissions.askAsync(Permissions.LOCATION);
       if (status === 'granted') {
         return navigator.geolocation.watchPosition(
-          (position) => {
+          position => {
             console.log(position);
-            let positionLatitude = position.coords.latitude;
+            const positionLatitude = position.coords.latitude;
             console.log(positionLatitude);
             // this.setState({
             //   latitude: position.coords.latitude,
             // })
 
             // Call Foursquare API for coffee shops within 60 meters of current location
-            let latitude = position.coords.latitude;
+            const { latitude } = position.coords;
             console.log('current latitude:', latitude);
-            let longitude = position.coords.longitude;
+            const { longitude } = position.coords;
             console.log('current longitude:', longitude);
             // fetch(`https://api.foursquare.com/v2/venues/search?client_id=USVL34WDRM322JXRDHU4EQW1QREZGPXOMTZSNJKYQUIGKE5O&client_secret=2KGK1VOONWZ1T0OMNFKWXFHDOP0JYXPIVYXQ5KKUDXA55ZHQ&ll=${latitude},${longitude}&intent=checkin&radius=60&categoryId=4bf58dd8d48988d1e0931735&v=20190425`)
             //   .then(result => {
@@ -65,30 +66,29 @@ class HomeScreen extends React.Component {
             //     console.log('get location error from front:', err);
             //   })
           },
-          (err) => console.error(err),
+          err => console.error(err),
           { timeout: 20000, maximumAge: 30000, enableHighAccuracy: true, distanceFilter: 20 }
         );
-      } else {
-        throw new Error('Location permission not granted');
       }
-    } 
-    
-  /**
-   * uncomment for location info
-   */
+      throw new Error('Location permission not granted');
+    }
+
+    /**
+     * uncomment for location info
+     */
     // setInterval(() => {
-    // navigator.geolocation.watchPosition(
-    //   (position) => {
-    //     console.log('position outside of permissions', position);
-    //     this.setState({
-    //       latitude: position.coords.latitude,
-    //       longitude: position.coords.longitude,
-    //     })
-    //   },
-    //   (err) => console.error(err),
-    //   { timeout: 2000, maximumAge: 3000, enableHighAccuracy: true, distanceFilter: 10 }
-    // );
-    // }, 3000);
+      navigator.geolocation.watchPosition(
+        position => {
+          console.log('position outside of permissions', position);
+          this.setState({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
+        },
+        err => console.error(err),
+        { timeout: 2000, maximumAge: 3000, enableHighAccuracy: true, distanceFilter: 10 }
+      );
+   // }, 3000);
 
     getLocationAsync();
     // WATCH CURRENT POSITION:
@@ -97,20 +97,21 @@ class HomeScreen extends React.Component {
 
   onCheckLocation() {
     console.log('latitude:', this.state.latitude);
-    let latitude = this.state.latitude;
-    axios.get('/', {latitude})
-    .then(result => {
-      console.log('get location result from front:', result);
-    })
-    .catch(err => {
-      console.log('get location error from front:', err);
-    })
+    const { latitude } = this.state;
+    axios
+      .get('/', { latitude })
+      .then(result => {
+        console.log('get location result from front:', result);
+      })
+      .catch(err => {
+        console.log('get location error from front:', err);
+      });
   }
 
   onToggleButton() {
     this.setState({
       buttonToggle: !this.state.buttonToggle,
-    })
+    });
   }
 
   render() {
@@ -120,8 +121,7 @@ class HomeScreen extends React.Component {
 
     return (
       <Container style={styles.container}>
-            
-            <Text style={{ fontWeight: 'bold', marginTop: 20 }}>Home</Text>
+        <Text style={{ fontWeight: 'bold', marginTop: 20 }}>Home</Text>
         <Text style={styles.title}>Manifest</Text>
         <Text>It's alive!</Text>
         <Text>My Latitude: {this.state.latitude}</Text>
@@ -129,12 +129,14 @@ class HomeScreen extends React.Component {
         <Button style={styles.basicButton} onPress={this.onToggleButton}>
           <Text style={styles.buttonText}>Do Not Click Me!</Text>
         </Button>
-        {this.state.buttonToggle ? <Text style={styles.message}>I said don't click me!</Text> : null}
+        {this.state.buttonToggle ? (
+          <Text style={styles.message}>I said don't click me!</Text>
+        ) : null}
         <Content />
         <Footer style={styles.footerbar}>
           <FooterTab>
             <Button vertical>
-              <Icon style={{ fontSize: 30, color: '#fff'}} name="md-stats" />
+              <Icon style={{ fontSize: 30, color: '#fff' }} name="md-stats" />
               <Text style={styles.buttonText}>Stats</Text>
             </Button>
             <Button vertical>
@@ -147,7 +149,7 @@ class HomeScreen extends React.Component {
             </Button>
             <Button vertical>
               <TouchableOpacity onPress={this.props.navigation.openDrawer}>
-                <Icon style={{ fontSize: 30, color: '#fff' }} name="md-menu" />  
+                <Icon style={{ fontSize: 30, color: '#fff' }} name="md-menu" />
                 <Text style={styles.buttonText}>Menu</Text>
               </TouchableOpacity>
             </Button>
@@ -160,8 +162,7 @@ class HomeScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    
-    justifyContent: "center",
+    justifyContent: 'center',
     alignItems: 'center',
     marginHorizontal: 0,
     backgroundColor: '#fff',
@@ -175,19 +176,18 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   basicButton: {
-    backgroundColor: '#34d1af',
+    backgroundColor: '#49d5b6',
   },
   buttonText: {
     fontWeight: 'bold',
     color: '#fff',
   },
   footerbar: {
-    backgroundColor: '#34d1af',
+    backgroundColor: '#49d5b6',
     fontWeight: 'bold',
-    color: '#fff',
-  }
+    color: '#49d5b6',
+  },
 });
-
 
 // class HomeScreen extends React.Component {
 //   render() {
@@ -206,11 +206,21 @@ class SettingsScreen extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Link />
+        <Link />
         <TouchableOpacity onPress={this.props.navigation.openDrawer}>
           <Text>Open Menu</Text>
         </TouchableOpacity>
         <Text style={{ fontWeight: 'bold', marginTop: 20 }}>Settings</Text>
+      </View>
+    );
+  }
+}
+
+class TransactionScreen extends React.Component {
+  render() {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Transactions />
       </View>
     );
   }
@@ -235,6 +245,7 @@ const DrawerNavigator = createDrawerNavigator(
     Home: HomeScreen,
     Plaid: SettingsScreen,
     Login: LoginScreen,
+    Transactions: TransactionScreen,
   },
   {
     hideStatusBar: true,
@@ -248,8 +259,6 @@ const DrawerNavigator = createDrawerNavigator(
 );
 
 export default createAppContainer(DrawerNavigator);
-
-
 
 // import { AppLoading } from 'expo';
 // import { Asset } from 'expo-asset';

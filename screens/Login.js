@@ -8,14 +8,15 @@ const auth0ClientId = AUTHO_CLIENT_ID;
 const auth0Domain = AUTHO_DOMAIN;
 
 function toQueryString(params) {
-  return '?' + Object.entries(params)
+  return `?${Object.entries(params)
     .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-    .join('&');
+    .join('&')}`;
 }
 
 export default class Login extends React.Component {
   state = {
     name: null,
+    email: null,
   };
 
   login = async () => {
@@ -32,7 +33,7 @@ export default class Login extends React.Component {
       scope: 'openid profile', // retrieve the user's profile
       nonce: 'nonce', // ideally, this will be a random value
     });
-    const authUrl = `${auth0Domain}/authorize` + queryParams;
+    const authUrl = `${auth0Domain}/authorize${queryParams}`;
     console.log('authURL', authUrl);
 
     // Perform the authentication
@@ -44,7 +45,7 @@ export default class Login extends React.Component {
     }
   };
 
-  handleResponse = (response) => {
+  handleResponse = response => {
     if (response.error) {
       Alert('Authentication error', response.error_description || 'something went wrong');
       return;
@@ -54,10 +55,10 @@ export default class Login extends React.Component {
     const jwtToken = response.id_token;
     const decoded = jwtDecode(jwtToken);
 
-    console.log('JWTotken data', decoded)
+    console.log('JWTotken data', decoded);
 
-    const { name } = decoded;
-    this.setState({ name });
+    const { name, nickname } = decoded;
+    this.setState({ name, email: `${nickname}@gmail.com` });
   };
 
   render() {
@@ -65,11 +66,11 @@ export default class Login extends React.Component {
 
     return (
       <View style={styles.container}>
-        {
-          name ?
-            <Text style={styles.title}>You are logged in, {name}!</Text> :
-            <Button title="Log in with Auth0" onPress={this.login} />
-        }
+        {name ? (
+          <Text style={styles.title}>You are logged in, {name}!</Text>
+        ) : (
+          <Button title="Log in with Auth0" onPress={this.login} />
+        )}
       </View>
     );
   }
@@ -88,4 +89,3 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
 });
-

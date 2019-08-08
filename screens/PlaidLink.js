@@ -9,30 +9,29 @@ import { connect } from 'react-redux';
 // import { sendToken } from '../../store/token';
 
 class Link extends React.Component {
-  state = {
-    data: {},
-    status: ''
-  };
   static navigationOptions = {
     title: 'Manifest',
-    headerStyle: { fontWeight: 'bold'},
-    headerTitleStyle: { color: 'green'
-    }
+    headerStyle: { fontWeight: 'bold' },
+    headerTitleStyle: { color: 'green' },
   };
 
-  render() {
-    switch (this.state.status) {
-      case 'CONNECTED':
-        return this.renderDetails();
-      default:
-        return this.renderLogin();
-    }
-  }
+  state = {
+    data: {},
+    status: '',
+  };
+
+  onMessage = data => {
+    console.log(data);
+    this.setState({
+      data,
+      status: data.action.substr(data.action.lastIndexOf(':') + 1).toUpperCase(),
+    });
+  };
 
   renderLogin() {
     return (
       <View>
-      <Text>This is where the Plaid Authenticator is...</Text>
+        <Text>This is where the Plaid Authenticator is...</Text>
         <PlaidAuthenticator
           onMessage={this.onMessage}
           publicKey="a35fead643ab95153802609fa5c0a2"
@@ -43,15 +42,9 @@ class Link extends React.Component {
       </View>
     );
   }
-  onMessage = data => {
-    console.log(data);
-    this.setState({
-        data,
-        status: data.action.substr(data.action.lastIndexOf(':') + 1).toUpperCase()
-      });
-    };
-    // 
-    // };
+
+  //
+  // };
 
   renderDetails() {
     // this.props.sendToken(this.state.data.metadata.public_token);
@@ -63,40 +56,40 @@ class Link extends React.Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        public_token: this.state.data.metadata.public_token
-      })
-    })
+        public_token: this.state.data.metadata.public_token,
+      }),
+    });
     return (
       <View>
-       
         <Text>NEXT STEP</Text>
         <View>
           <View style={{ padding: 10 }}>
-            <Button
-              raised
-              textStyle={{ textAlign: 'center' }}
-              title={`Set Up Your Budget`}
-              
-            />
+            <Button raised textStyle={{ textAlign: 'center' }} title={`Set Up Your Budget`} />
           </View>
         </View>
       </View>
     );
   }
 
-  
- 
+  render() {
+    switch (this.state.status) {
+      case 'CONNECTED':
+        return this.renderDetails();
+      default:
+        return this.renderLogin();
+    }
+  }
 
-// const mapDispatch = dispatch => {
-//   return {
-//     // rename to same thing - shorthand
-//     sendToken: token => dispatch(sendToken(token))
-//   };
-// };
+  // const mapDispatch = dispatch => {
+  //   return {
+  //     // rename to same thing - shorthand
+  //     sendToken: token => dispatch(sendToken(token))
+  //   };
+  // };
 
-// export default connect(
-//   null,
-//   mapDispatch
-// )(Link);
+  // export default connect(
+  //   null,
+  //   mapDispatch
+  // )(Link);
 }
 export default Link;

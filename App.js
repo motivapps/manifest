@@ -9,6 +9,7 @@ import * as Permissions from 'expo-permissions';
 import axios from 'axios';
 import Link from './screens/PlaidLink';
 import Login from './screens/Login';
+import { FOURSQUARE_CLIENT_ID, FOURSQUARE_CLIENT_SECRET } from './app.config.json';
 // import Geolocation from 'react-native-geolocation-service';
 
 
@@ -53,7 +54,7 @@ class HomeScreen extends React.Component {
             console.log('current latitude:', latitude);
             let longitude = position.coords.longitude;
             console.log('current longitude:', longitude);
-            // fetch(`https://api.foursquare.com/v2/venues/search?client_id=USVL34WDRM322JXRDHU4EQW1QREZGPXOMTZSNJKYQUIGKE5O&client_secret=2KGK1VOONWZ1T0OMNFKWXFHDOP0JYXPIVYXQ5KKUDXA55ZHQ&ll=${latitude},${longitude}&intent=checkin&radius=60&categoryId=4bf58dd8d48988d1e0931735&v=20190425`)
+            // fetch(`https://api.foursquare.com/v2/venues/search?client_id=${FOURSQUARE_CLIENT_ID}&client_secret=${FOURSQUARE_CLIENT_SECRET}&ll=${latitude},${longitude}&intent=checkin&radius=60&categoryId=4bf58dd8d48988d1e0931735&v=20190425`)
             //   .then(result => {
             //     console.log('get location result from front:', result);
             //     return result.json();

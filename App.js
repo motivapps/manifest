@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Permissions from 'expo-permissions';
 import axios from 'axios';
 import PlaidScreen from './screens/PlaidScreen';
+import SignupScreen from './screens/SignupScreen';
 import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
 // import PushNotification from 'react-native-push-notification';
@@ -23,8 +24,12 @@ class App extends React.Component {
       isAuthenticated: false,
       latitude: null,
       longitude: null,
+      auth0_id: null,
+      picture: null,
+      name: null,
     };
-
+    this.setJwt = this.setJwt.bind(this);
+    // this.DrawerNavigator = DrawerNavigator.bind(this);
   }
 
   async componentDidMount() {
@@ -78,6 +83,10 @@ class App extends React.Component {
     // WATCH CURRENT POSITION:
     this.setState({ isReady: true });
 
+  }
+
+  setJwt({ name, auth0_id, picture }) {
+    this.setState({ name, auth0_id, picture });
   }
 
   render() {
@@ -135,9 +144,11 @@ const PlaidLinkContainer = () => {
     );
   }
 
-const LoginScreenContainer = () => {
+const SignupScreenContainer = () => {
+  // const { name } = this.state;
+  // const LoginScreen = () => <LoginScreen name={this.state.name} setJwt={this.setJwt}/>
   return (
-    <LoginScreen />
+    SignupScreen
   )
 }
 
@@ -162,6 +173,7 @@ const DrawerNavigator = createDrawerNavigator(
     Home: HomeScreen,
     PlaidLink: PlaidScreen,
     Login: LoginScreen,
+    Signup: SignupScreenContainer(),
   },
   {
     hideStatusBar: true,

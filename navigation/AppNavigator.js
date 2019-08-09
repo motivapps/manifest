@@ -1,15 +1,12 @@
 import React from 'react';
 import {
   createSwitchNavigator,
-  createStackNavigator,
-  createDrawerNavigator,
+//   createStackNavigator,
   createAppContainer,
 } from 'react-navigation';
 
 import SignupScreen from '../screens/SignupScreen';
 import LoginScreen from '../screens/LoginScreen';
-import SettingsScreen from '../screens/SettingsScreen';
-import PlaidScreen from '../screens/PlaidScreen';
 import HomeScreen from '../screens/HomeScreen';
 
 // Implementation of HomeScreen, OtherScreen, SignInScreen, AuthLoadingScreen
@@ -30,7 +27,7 @@ const AuthStack = createStackNavigator(
   }
 );
 
-const AppStack = createDrawerNavigator(
+const AppDrawerNav = createDrawerNavigator(
   {
     Home: {
       screen: HomeScreen,
@@ -56,7 +53,7 @@ const AppStack = createDrawerNavigator(
   }
 );
 
-const AppNavContainer = createAppContainer(
+export default createAppContainer(
   createSwitchNavigator(
     {
       // AuthLoading: AuthLoadingScreen,
@@ -68,5 +65,3 @@ const AppNavContainer = createAppContainer(
     }
   )
 );
-
-export default AppNavContainer;

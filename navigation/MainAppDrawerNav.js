@@ -1,11 +1,10 @@
 import React from 'react';
 import { Platform } from 'react-native';
-import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
+import { createStackNavigator, createDrawerNavigator } from 'react-navigation';
 
-import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import PlaidScreen from '../screens/PlaidScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -35,21 +34,21 @@ HomeStack.navigationOptions = {
 
 HomeStack.path = '';
 
-const LinksStack = createStackNavigator(
+const PlaidStack = createStackNavigator(
   {
-    Links: LinksScreen,
+    Plaid: PlaidScreen,
   },
   config
 );
 
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Links',
+PlaidStack.navigationOptions = {
+  tabBarLabel: 'Plaid',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
   ),
 };
 
-LinksStack.path = '';
+PlaidStack.path = '';
 
 const SettingsStack = createStackNavigator(
   {
@@ -67,12 +66,32 @@ SettingsStack.navigationOptions = {
 
 SettingsStack.path = '';
 
-const tabNavigator = createBottomTabNavigator({
-  HomeStack,
-  LinksStack,
-  SettingsStack,
-});
+const drawerNavigator = createDrawerNavigator(
+  {
+    Home: {
+      screen: HomeScreen,
+      path: 'app/home/',
+    },
+    Plaid: {
+      screen: PlaidScreen,
+      path: 'app/home/',
+    },
+    Settings: {
+      screen: SettingsScreen,
+      path: 'app/settings/',
+    },
+  },
+  {
+    hideStatusBar: true,
+    drawerBackgroundColor: 'rgba(255,255,255,.9)',
+    overlayColor: '#49d5b6',
+    contentOptions: {
+      activeTintColor: '#fff',
+      activeBackgroundColor: '#49d5b6',
+    },
+  }
+);
 
-tabNavigator.path = '';
+drawerNavigator.path = 'app/';
 
-export default tabNavigator;
+export default drawerNavigator;

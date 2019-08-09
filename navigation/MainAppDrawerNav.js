@@ -1,6 +1,7 @@
 import React from 'react';
 import { Platform } from 'react-native';
 import { createStackNavigator, createDrawerNavigator } from 'react-navigation';
+import TabBarIcon from '../components/TabBarIcon';
 
 import HomeScreen from '../screens/HomeScreen';
 import SettingsScreen from '../screens/SettingsScreen';
@@ -32,7 +33,7 @@ HomeStack.navigationOptions = {
   ),
 };
 
-HomeStack.path = '';
+HomeStack.path = 'app/home/';
 
 const PlaidStack = createStackNavigator(
   {
@@ -48,7 +49,7 @@ PlaidStack.navigationOptions = {
   ),
 };
 
-PlaidStack.path = '';
+PlaidStack.path = 'app.Plaid';
 
 const SettingsStack = createStackNavigator(
   {
@@ -64,21 +65,18 @@ SettingsStack.navigationOptions = {
   ),
 };
 
-SettingsStack.path = '';
+SettingsStack.path = 'app/settings';
 
 const drawerNavigator = createDrawerNavigator(
   {
     Home: {
       screen: HomeScreen,
-      path: 'app/home/',
     },
     Plaid: {
       screen: PlaidScreen,
-      path: 'app/home/',
     },
     Settings: {
       screen: SettingsScreen,
-      path: 'app/settings/',
     },
   },
   {

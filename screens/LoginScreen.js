@@ -68,11 +68,11 @@ class LoginScreen extends React.Component {
 
   render() {
     const { name } = this.state;
-
+    const { navigation } = this.props;
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         {/* <Content /> */}
-        <Auth0 style={{ marginBottom: 30 }} callback={this.login} name={name} type="signup" />
+        <Auth0 style={{ marginBottom: 30 }} callback={this.login} name={name} navigation={navigation} type="login" />
         {/* <Footer style={styles.footerbar}>
           <FooterTab style={{backgroundColor: '#49d5b6'}}>
             <Button vertical>

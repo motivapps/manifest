@@ -1,64 +1,16 @@
-import React from 'react';
-import {
-  createSwitchNavigator,
-//   createStackNavigator,
-  createAppContainer,
-} from 'react-navigation';
+import { createSwitchNavigator, createAppContainer } from 'react-navigation';
 
-import SignupScreen from '../screens/SignupScreen';
-import LoginScreen from '../screens/LoginScreen';
-import HomeScreen from '../screens/HomeScreen';
+import AuthStack from './MainAuthStackNav';
+import AppDrawerNav from './MainAppDrawerNav';
 
 // Implementation of HomeScreen, OtherScreen, SignInScreen, AuthLoadingScreen
 // goes here.
-const AuthStack = createStackNavigator(
-  {
-    Signup: {
-      screen: SignupScreen,
-      path: 'auth/signup',
-    },
-    Login: {
-      screen: LoginScreen,
-      path: 'auth/login',
-    },
-  },
-  {
-    initialRouteName: 'Signup',
-  }
-);
-
-const AppDrawerNav = createDrawerNavigator(
-  {
-    Home: {
-      screen: HomeScreen,
-      path: 'app/home/',
-    },
-    Plaid: {
-      screen: PlaidScreen,
-      path: 'app/home/',
-    },
-    Settings: {
-      screen: SettingsScreen,
-      path: 'app/settings/',
-    },
-  },
-  {
-    hideStatusBar: true,
-    drawerBackgroundColor: 'rgba(255,255,255,.9)',
-    overlayColor: '#49d5b6',
-    contentOptions: {
-      activeTintColor: '#fff',
-      activeBackgroundColor: '#49d5b6',
-    },
-  }
-);
-
 export default createAppContainer(
   createSwitchNavigator(
     {
       // AuthLoading: AuthLoadingScreen,
       Auth: AuthStack,
-      App: AppStack,
+      App: AppDrawerNav,
     },
     {
       initialRouteName: 'Auth',

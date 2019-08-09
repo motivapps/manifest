@@ -1,11 +1,12 @@
 import React from 'react';
 import { StyleSheet, View, Alert, TouchableOpacity, Button, Text } from 'react-native';
 
-const Auth0 = ({ name, callback, type }) => {
+const Auth0 = ({ name, callback, type, navigation}) => {
   return type === 'login' ? (
     <View>
       {name ? (
-        <Text style={styles.title}>You are logged in, {name}!</Text>
+        // <Text style={styles.title}>You are logged in, {name}!</Text>
+        <View>{ navigation.Navigate('App') }</View>
       ) : (
         <Button title="Log in with Auth0" onPress={callback} />
       )}
@@ -13,7 +14,10 @@ const Auth0 = ({ name, callback, type }) => {
   ) : (
     <View>
       {name ? (
-        <Text style={styles.title}> Welcome, You are now logged in as {name}!</Text>
+        <Text style={styles.title}>
+          Welcome, You are now logged in as {name}!
+          <View>{navigation.Navigate('App')}</View>
+        </Text>
       ) : (
         <Button title="Sign up with Auth0" onPress={callback} />
       )}

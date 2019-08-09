@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Alert, TouchableOpacity, Button, Text } from 'react-native';
 
-const Login = (props) => {
+const Auth0 = (props) => {
     const { name, login } = props;
     return (
         <View>
@@ -27,4 +27,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Login;
+export default Auth0;

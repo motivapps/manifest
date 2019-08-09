@@ -4,7 +4,7 @@ import { Container, Footer, FooterTab, Icon, Content, Button, Text } from 'nativ
 import { AuthSession } from 'expo';
 import jwtDecode from 'jwt-decode';
 import { AUTHO_CLIENT_ID, AUTHO_DOMAIN, NGROK } from '../app.config.json';
-import Login from './Login';
+import Auth0 from './subViews/Auth0';
 
 function toQueryString(params) {
   return '?' + Object.entries(params)
@@ -12,7 +12,7 @@ function toQueryString(params) {
     .join('&');
 }
 
-class LoginScreen extends React.Component {
+class SignupScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -20,7 +20,7 @@ class LoginScreen extends React.Component {
     };
   }
 
-  login = async () => {
+  Signup = async () => {
     // Retrieve the redirect URL, add this to the callback URL list
     // of your Auth0 application.
     const redirectUrl = AuthSession.getRedirectUrl();
@@ -69,7 +69,7 @@ class LoginScreen extends React.Component {
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
     
       <Content />
-        <Login style={{marginBottom: 30}} login={this.login} name={name} />
+        <Auth0 style={{marginBottom: 30}} login={this.login} name={name} />
         <Footer style={styles.footerbar}>
           <FooterTab>
             <Button vertical>
@@ -122,4 +122,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default LoginScreen;
+export default SignupScreen;

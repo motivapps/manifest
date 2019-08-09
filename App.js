@@ -143,7 +143,7 @@ const PlaidLinkContainer = () => {
 
 const LoginScreenContainer = () => {
   // const { name } = this.state;
-  const LoginScreen = () => <LoginScreen name={this.state.name} setJwt={this.setJwt}/>
+  // const LoginScreen = () => <LoginScreen name={this.state.name} setJwt={this.setJwt}/>
   return (
     LoginScreen
   )

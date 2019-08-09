@@ -10,7 +10,8 @@ import {
   PushNotificationIOS,
 } from 'react-native';
 
-import { MonoText } from '../components/StyledText';
+import * as Font from 'expo-font';
+// import { MonoText } from '../components/StyledText';
 
 class HomeScreen extends React.Component {
   constructor(props) {
@@ -24,6 +25,14 @@ class HomeScreen extends React.Component {
     this.setState = this.setState.bind(this);
   }
 
+  async componentWillMount() {
+    await Font.loadAsync({
+      Roboto: require("../node_modules/native-base/Fonts/Roboto.ttf"),
+      Roboto_medium: require("../node_modules/native-base/Fonts/Roboto_medium.ttf")
+    });
+    this.setState({isReady: true});
+  }
+
   onToggleButton() {
     this.setState({
       buttonToggle: !this.state.buttonToggle,
@@ -31,6 +40,9 @@ class HomeScreen extends React.Component {
   }
 
   render() {
+    if (!this.state.isReady) {
+      return <AppLoading />;
+    }
     return (
       <Container style={styles.container}>
         <Text style={{ fontWeight: 'bold', marginTop: 20 }}>Home</Text>
@@ -46,7 +58,7 @@ class HomeScreen extends React.Component {
         ) : null}
         <Content />
         <Footer style={styles.footerbar}>
-          <FooterTab>
+          <FooterTab style={{backgroundColor: '#49d5b6'}}>
             <Button vertical>
               <Icon style={{ fontSize: 30, color: '#fff' }} name="md-stats" />
               <Text style={styles.buttonText}>Stats</Text>
@@ -58,8 +70,10 @@ class HomeScreen extends React.Component {
               </TouchableOpacity>
             </Button>
             <Button vertical>
-              <Icon style={{ fontSize: 30, color: '#fff' }} name="md-ribbon" />
-              <Text style={styles.buttonText}>Goals</Text>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('Goals')}>
+                <Icon style={{ fontSize: 30, color: '#fff' }} name="md-ribbon" />
+                <Text style={styles.buttonText}>Goals</Text>
+              </TouchableOpacity>
             </Button>
             <Button vertical>
               <TouchableOpacity onPress={this.props.navigation.openDrawer}>

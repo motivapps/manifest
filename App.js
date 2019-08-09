@@ -23,8 +23,12 @@ class App extends React.Component {
       isAuthenticated: false,
       latitude: null,
       longitude: null,
+      auth0_id: null,
+      picture: null,
+      name: null,
     };
-
+    this.setJwt = this.setJwt.bind(this);
+    // this.DrawerNavigator = DrawerNavigator.bind(this);
   }
 
   async componentDidMount() {
@@ -78,6 +82,10 @@ class App extends React.Component {
     // WATCH CURRENT POSITION:
     this.setState({ isReady: true });
 
+  }
+
+  setJwt({ name, auth0_id, picture }) {
+    this.setState({ name, auth0_id, picture });
   }
 
   render() {
@@ -134,8 +142,10 @@ const PlaidLinkContainer = () => {
   }
 
 const LoginScreenContainer = () => {
+  // const { name } = this.state;
+  const LoginScreen = () => <LoginScreen name={this.state.name} setJwt={this.setJwt}/>
   return (
-    <LoginScreen />
+    LoginScreen
   )
 }
 
@@ -159,7 +169,7 @@ const DrawerNavigator = createDrawerNavigator(
   {
     Home: HomeScreenContainer(),
     PlaidLink: PlaidScreen,
-    Login: LoginScreen,
+    Login: LoginScreenContainer(),
   },
   {
     hideStatusBar: true,

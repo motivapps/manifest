@@ -13,9 +13,6 @@ function toQueryString(params) {
 }
 
 class LoginScreen extends React.Component {
-  // state = {
-  //   name: null,
-  // };
   constructor(props) {
     super(props);
     this.state = {
@@ -57,23 +54,12 @@ class LoginScreen extends React.Component {
 
     // Retrieve the JWT token and decode it
     const jwtToken = response.id_token;
-    const { name, picture, nickname } = jwtDecode(jwtToken);
-    this.setState({ name, picture, email: `${nickname}@gmail.com` });
+    const { name, picture, sub } = jwtDecode(jwtToken);
+    this.setState({ name, picture, auth0_id: sub });
 
     console.log('JWTotken data', jwtDecode(jwtToken))
 
-    fetch(`${NGROK}/users`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        name, 
-        picture, 
-        email: `${nickname}@gmail.com` 
-      }),
-    });
+    axios.post(`${NGROK}/users`, { name, auth0_id: sub , picture })
   };
 
   render() {

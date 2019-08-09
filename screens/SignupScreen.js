@@ -8,15 +8,12 @@ import { AUTHO_CLIENT_ID, AUTHO_DOMAIN, NGROK } from '../app.config.json';
 import Auth0 from './subViews/Auth0';
 
 function toQueryString(params) {
-  return (
-    '?' +
-    Object.entries(params)
-      .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-      .join('&')
-  );
+  return '?' + Object.entries(params)
+    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+    .join('&');
 }
 
-class LoginScreen extends React.Component {
+class SignupScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,7 +21,7 @@ class LoginScreen extends React.Component {
     };
   }
 
-  login = async () => {
+  signup = async () => {
     // Retrieve the redirect URL, add this to the callback URL list
     // of your Auth0 application.
     const redirectUrl = AuthSession.getRedirectUrl();
@@ -38,7 +35,7 @@ class LoginScreen extends React.Component {
       scope: 'openid profile', // retrieve the user's profile
       nonce: 'nonce', // ideally, this will be a random value
     });
-    const authUrl = `${AUTHO_DOMAIN}/authorize${  queryParams}`;
+    const authUrl = `${AUTHO_DOMAIN}/authorize` + queryParams;
     console.log('authURL', authUrl);
 
     // Perform the authentication
@@ -50,7 +47,7 @@ class LoginScreen extends React.Component {
     }
   };
 
-  handleResponse = response => {
+  handleResponse = (response) => {
     if (response.error) {
       Alert('Authentication error', response.error_description || 'something went wrong');
       return;
@@ -63,7 +60,7 @@ class LoginScreen extends React.Component {
 
     console.log('JWTotken data', jwtDecode(jwtToken));
 
-    axios.post(`${NGROK}/login`, { name, auth0_id: sub, picture });
+    axios.post(`${NGROK}/signup`, { name, auth0_id: sub, picture });
   };
 
   render() {
@@ -71,8 +68,9 @@ class LoginScreen extends React.Component {
 
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        {/* <Content /> */}
-        <Auth0 style={{ marginBottom: 30 }} callback={this.login} name={name} type="signup" />
+    
+      {/* <Content /> */}
+        <Auth0 style={{marginBottom: 30}} callback={this.signup} name={name} type='signup' />
         {/* <Footer style={styles.footerbar}>
           <FooterTab>
             <Button vertical>
@@ -125,4 +123,4 @@ class LoginScreen extends React.Component {
 //   }
 // });
 
-export default LoginScreen;
+export default SignupScreen;

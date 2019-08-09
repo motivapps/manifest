@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Alert, TouchableOpacity } from 'react-native';
 import { Container, Footer, FooterTab, Icon, Content, Button, Text } from 'native-base';
-import Link from './PlaidLink';
+import Link from './subViews/PlaidLink';
 
 class PlaidScreen extends React.Component {
     constructor(props) {

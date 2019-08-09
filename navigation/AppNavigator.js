@@ -56,7 +56,7 @@ const AppStack = createDrawerNavigator(
   }
 );
 
-export default AppNavContainer = createAppContainer(
+const AppNavContainer = createAppContainer(
   createSwitchNavigator(
     {
       // AuthLoading: AuthLoadingScreen,
@@ -68,3 +68,5 @@ export default AppNavContainer = createAppContainer(
     }
   )
 );
+
+export default AppNavContainer;

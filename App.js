@@ -2,7 +2,7 @@ import React from 'react';
 import { AppLoading } from 'expo';
 import { Container, Text, Button, Footer, FooterTab, Icon, Content } from 'native-base';
 import { Platform, StatusBar, StyleSheet, View , TouchableOpacity, PushNotificationIOS } from 'react-native';
-import { createDrawerNavigator, createStackNavigator, createBottomTabNavigator, createAppContainer } from 'react-navigation';
+import { createDrawerNavigator, createStackNavigator, createBottomTabNavigator, createAppContainer, DrawerItems, SafeAreaView } from 'react-navigation';
 // import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import * as Permissions from 'expo-permissions';
@@ -81,12 +81,14 @@ class App extends React.Component {
   }
 
   render() {
+    const { latitude } = this.state;
+
     if (!this.state.isReady) {
       return <AppLoading />;
     }
     return (
       <Container>
-        <DrawerNavigator />
+        <DrawerNavigator latitude={latitude} />
       </Container>
     )
   }
@@ -157,7 +159,7 @@ const LoginScreenContainer = () => {
 
 const DrawerNavigator = createDrawerNavigator(
   {
-    Home: HomeScreenContainer(),
+    Home: HomeScreen,
     PlaidLink: PlaidScreen,
     Login: LoginScreen,
   },
@@ -170,6 +172,14 @@ const DrawerNavigator = createDrawerNavigator(
       activeBackgroundColor: '#49d5b6',
     },
   }
+);
+
+const CustomDrawerContentComponent = props => (
+  <ScrollView>
+    <SafeAreaView style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
+      <DrawerItems {...props} />
+    </SafeAreaView>
+  </ScrollView>
 );
 
 export default createAppContainer(DrawerNavigator);

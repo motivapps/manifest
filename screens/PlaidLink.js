@@ -13,12 +13,12 @@ class Link extends React.Component {
     data: {},
     status: ''
   };
-  static navigationOptions = {
-    title: 'Manifest',
-    headerStyle: { fontWeight: 'bold'},
-    headerTitleStyle: { color: 'green'
-    }
-  };
+  // static navigationOptions = {
+  //   title: 'PlaidLink',
+  //   headerStyle: { fontWeight: 'bold'},
+  //   headerTitleStyle: { color: 'green'
+  //   }
+  // };
 
   render() {
     switch (this.state.status) {
@@ -31,8 +31,8 @@ class Link extends React.Component {
 
   renderLogin() {
     return (
-      <View>
-      <Text>This is where the Plaid Authenticator is...</Text>
+      <View style={{ marginTop: 10, marginBottom: 5, height: '90%', width: '100%' }} >
+        
         <PlaidAuthenticator
           onMessage={this.onMessage}
           publicKey="a35fead643ab95153802609fa5c0a2"
@@ -84,19 +84,6 @@ class Link extends React.Component {
     );
   }
 
-  
- 
 
-// const mapDispatch = dispatch => {
-//   return {
-//     // rename to same thing - shorthand
-//     sendToken: token => dispatch(sendToken(token))
-//   };
-// };
-
-// export default connect(
-//   null,
-//   mapDispatch
-// )(Link);
 }
 export default Link;

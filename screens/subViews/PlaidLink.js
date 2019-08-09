@@ -3,7 +3,7 @@ import { Text, View, Image } from 'react-native';
 import PlaidAuthenticator from 'react-native-plaid-link';
 import { Button } from 'native-base';
 import { connect } from 'react-redux';
-import { NGROK } from '../app.config.json';
+import { NGROK } from '../../app.config.json';
 // import { Button } from 'react-native-elements';
 // import { styles, colorTheme } from '../../common/styles';
 
@@ -33,6 +33,8 @@ class Link extends React.Component {
       status: data.action.substr(data.action.lastIndexOf(':') + 1).toUpperCase(),
     });
   };
+
+  
 
   renderLogin() {
     return (
@@ -75,6 +77,13 @@ class Link extends React.Component {
         </View>
       </View>
     );
+  }
+
+  render() {
+    if (this.state.status === 'CONNECTED') {
+      return this.renderDetails();
+    }
+    return this.renderLogin();
   }
 }
 export default Link;

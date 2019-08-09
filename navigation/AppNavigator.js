@@ -14,12 +14,36 @@ import HomeScreen from '../screens/HomeScreen';
 
 // Implementation of HomeScreen, OtherScreen, SignInScreen, AuthLoadingScreen
 // goes here.
+const AuthStack = createStackNavigator(
+  {
+    Signup: {
+      screen: SignupScreen,
+      path: 'auth/signup',
+    },
+    Login: {
+      screen: LoginScreen,
+      path: 'auth/login',
+    },
+  },
+  {
+    initialRouteName: 'Signup',
+  }
+);
 
 const AppStack = createDrawerNavigator(
   {
-    Home: HomeScreen,
-    Plaid: PlaidScreen,
-    Settings: SettingsScreen,
+    Home: {
+      screen: HomeScreen,
+      path: 'app/home/',
+    },
+    Plaid: {
+      screen: PlaidScreen,
+      path: 'app/home/',
+    },
+    Settings: {
+      screen: SettingsScreen,
+      path: 'app/settings/',
+    },
   },
   {
     hideStatusBar: true,
@@ -31,14 +55,13 @@ const AppStack = createDrawerNavigator(
     },
   }
 );
-const AuthStack = createStackNavigator({ Signup: SignupScreen, login: LoginScreen });
 
-export default createAppContainer(
+export default AppNavContainer = createAppContainer(
   createSwitchNavigator(
     {
       // AuthLoading: AuthLoadingScreen,
-      App: AppStack,
       Auth: AuthStack,
+      App: AppStack,
     },
     {
       initialRouteName: 'Auth',

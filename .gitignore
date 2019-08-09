@@ -63,5 +63,5 @@ typings/
 # something for expo
 .expo/
 
-#client side secrets
-app.config.json
+# app config secrets
+.app.config.json/

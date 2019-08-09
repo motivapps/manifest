@@ -10,11 +10,16 @@ import { NGROK } from '../app.config.json'
 // import { sendToken } from '../../store/token';
 
 class Link extends React.Component {
-  static navigationOptions = {
-    title: 'Manifest',
-    headerStyle: { fontWeight: 'bold' },
-    headerTitleStyle: { color: 'green' },
+  state = {
+    data: {},
+    status: ''
   };
+  // static navigationOptions = {
+  //   title: 'PlaidLink',
+  //   headerStyle: { fontWeight: 'bold'},
+  //   headerTitleStyle: { color: 'green'
+  //   }
+  // };
 
   state = {
     data: {},
@@ -31,8 +36,8 @@ class Link extends React.Component {
 
   renderLogin() {
     return (
-      <View>
-        <Text>This is where the Plaid Authenticator is...</Text>
+      <View style={{ marginTop: 10, marginBottom: 5, height: '90%', width: '100%' }} >
+        
         <PlaidAuthenticator
           onMessage={this.onMessage}
           publicKey="a35fead643ab95153802609fa5c0a2"
@@ -73,25 +78,5 @@ class Link extends React.Component {
     );
   }
 
-  render() {
-    switch (this.state.status) {
-      case 'CONNECTED':
-        return this.renderDetails();
-      default:
-        return this.renderLogin();
-    }
-  }
-
-  // const mapDispatch = dispatch => {
-  //   return {
-  //     // rename to same thing - shorthand
-  //     sendToken: token => dispatch(sendToken(token))
-  //   };
-  // };
-
-  // export default connect(
-  //   null,
-  //   mapDispatch
-  // )(Link);
 }
 export default Link;

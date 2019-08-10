@@ -30,7 +30,6 @@ class HomeScreen extends React.Component {
     };
     this.onToggleButton = this.onToggleButton.bind(this);
     this.setState = this.setState.bind(this);
-    console.log(props);
   }
 
   async componentWillMount() {
@@ -186,7 +185,7 @@ class HomeScreen extends React.Component {
               <Text style={styles.buttonText}>Stats</Text>
             </Button>
             <Button vertical>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('Games')}>
                 <Icon style={{ fontSize: 30, color: '#fff' }} name="logo-game-controller-a" />
                 <Text style={styles.buttonText}>Games</Text>
               </TouchableOpacity>

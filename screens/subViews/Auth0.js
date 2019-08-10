@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleSheet, View, Alert, TouchableOpacity, Button, Text, AsyncStorage } from 'react-native';
-import HomeScreen from '../HomeScreen';
 
 const Auth0 = ({ name, callback, type }) => {
   return type === 'login' ? (

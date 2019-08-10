@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { SwitchActions } from 'react-navigation';
 import { StyleSheet, View, Alert, TouchableOpacity, AsyncStorage } from 'react-native';
 import { Container, Footer, FooterTab, Icon, Content, Button, Text } from 'native-base';
 import { AuthSession } from 'expo';
@@ -23,17 +24,12 @@ class LoginScreen extends React.Component {
   }
 
   componentDidUpdate() {
-    const { auth0_id } = this.state;
-    const { navigation } = this.props;
+    // const { auth0_id } = this.state;
 
-    if (name) {
-      this.storeData(auth0_id);
-      navigaiton.dispatch(
-        navigation.navigate({
-          routeName: 'App',
-          action: NavigationActions.setParams(this.state),
-        })
-      );
+    if (this.state.name) {
+      this.storeData(this.state.auth0_id);
+      // this.props.navigation.dispatch(SwitchActions.jumpTo({ routeName: 'App' }));
+      this.props.navigate('App');
     }
   }
 

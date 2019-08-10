@@ -1,7 +1,9 @@
 import React from 'react';
 import axios from 'axios';
+import { SwitchActions } from 'react-navigation';
+
 import { StyleSheet, View, Alert, AsyncStorage } from 'react-native';
-import { NavigationActions } from 'react-navigation';
+// import { NavigationActions, } from 'react-navigation';
 // import { Container, Footer, FooterTab, Icon, Content, Button, Text } from 'native-base';
 import { AuthSession } from 'expo';
 import jwtDecode from 'jwt-decode';
@@ -26,17 +28,12 @@ class SignupScreen extends React.Component {
   }
 
   componentDidUpdate() {
-    const { name, picture, auth0_id } = this.state;
+    const { name, auth0_id } = this.state;
     const { navigation } = this.props;
 
     if (name) {
       this.storeData(auth0_id);
-      navigaiton.dispatch(
-        navigation.navigate({
-          routeName: 'App',
-          action: NavigationActions.setParams(this.state),
-        })
-      );
+      this.props.navigation.dispatch(SwitchActions.jumpTo({ routeName: 'App' }));
     }
   }
 

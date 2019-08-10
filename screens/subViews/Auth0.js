@@ -5,7 +5,8 @@ import HomeScreen from '../HomeScreen';
 const Auth0 = ({ name, userToken, callback, type, goToApp }) => {
   const storeData = async () => {
     try {
-      await AsyncStorage.setItem('userToken', userToken, goToApp);
+      await AsyncStorage.setItem('@userToken', userToken);
+      return goToApp();
     } catch (error) {
       // Error saving data
     }

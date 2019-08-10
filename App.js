@@ -1,3 +1,4 @@
+/* eslint-disable react/prefer-stateless-function */
 import React from 'react';
 import { AppLoading } from 'expo';
 import { Container, Text, Button, Footer, FooterTab, Icon, Content } from 'native-base';
@@ -40,7 +41,7 @@ class App extends React.Component {
       const { status, permissions } = await Permissions.askAsync(Permissions.LOCATION);
       if (status === 'granted') {
         return navigator.geolocation.watchPosition(
-          (position) => {
+          position => {
             console.log(position);
           },
           (err) => console.error(err),
@@ -82,7 +83,6 @@ class App extends React.Component {
     getLocationAsync();
     // WATCH CURRENT POSITION:
     this.setState({ isReady: true });
-
   }
 
   setJwt({ name, auth0_id, picture }) {
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   basicButton: {
-    backgroundColor: '#34d1af',
+    backgroundColor: '#49d5b6',
   },
   buttonText: {
     fontWeight: 'bold',
@@ -127,8 +127,8 @@ const styles = StyleSheet.create({
   footerbar: {
     backgroundColor: '#49d5b6',
     fontWeight: 'bold',
-    color: '#fff',
-  }
+    color: '#49d5b6',
+  },
 });
 
 const HomeScreenContainer = () => {

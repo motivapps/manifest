@@ -1,8 +1,14 @@
 import React from 'react';
 import { AppLoading } from 'expo';
 import { Container, Text, Button, Footer, FooterTab, Icon, Content } from 'native-base';
-import { Platform, StatusBar, StyleSheet, View, TouchableOpacity, PushNotificationIOS } from 'react-native';
-
+import {
+  Platform,
+  StatusBar,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  PushNotificationIOS,
+} from 'react-native';
 
 import { MonoText } from '../components/StyledText';
 
@@ -13,25 +19,20 @@ class HomeScreen extends React.Component {
       isReady: false,
       buttonToggle: false,
       isAuthenticated: false,
-      
     };
     this.onToggleButton = this.onToggleButton.bind(this);
     this.setState = this.setState.bind(this);
   }
 
- 
-
   onToggleButton() {
     this.setState({
       buttonToggle: !this.state.buttonToggle,
-    })
+    });
   }
 
   render() {
-
     return (
       <Container style={styles.container}>
-
         <Text style={{ fontWeight: 'bold', marginTop: 20 }}>Home</Text>
         <Text style={styles.title}>Manifest</Text>
         <Text>It's alive!</Text>
@@ -40,7 +41,9 @@ class HomeScreen extends React.Component {
         <Button style={styles.basicButton} onPress={this.onToggleButton}>
           <Text style={styles.buttonText}>Do Not Click Me!</Text>
         </Button>
-        {this.state.buttonToggle ? <Text style={styles.message}>I said don't click me!</Text> : null}
+        {this.state.buttonToggle ? (
+          <Text style={styles.message}>I said don't click me!</Text>
+        ) : null}
         <Content />
         <Footer style={styles.footerbar}>
           <FooterTab>
@@ -73,8 +76,7 @@ class HomeScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-
-    justifyContent: "center",
+    justifyContent: 'center',
     alignItems: 'center',
     marginHorizontal: 0,
     backgroundColor: '#fff',
@@ -98,7 +100,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#49d5b6',
     fontWeight: 'bold',
     color: '#fff',
-  }
+  },
 });
 
 export default HomeScreen;

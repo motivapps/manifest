@@ -8,12 +8,9 @@ import { AUTHO_CLIENT_ID, AUTHO_DOMAIN, NGROK } from '../app.config.json';
 import Auth0 from './subViews/Auth0';
 
 function toQueryString(params) {
-  return (
-    `?${ 
-    Object.entries(params)
-      .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-      .join('&')}`
-  );
+  return `?${Object.entries(params)
+    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+    .join('&')}`;
 }
 
 class LoginScreen extends React.Component {
@@ -77,7 +74,6 @@ class LoginScreen extends React.Component {
 
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        {/* <Content /> */}
         <Auth0
           style={{ marginBottom: 30 }}
           callback={this.login}
@@ -85,56 +81,9 @@ class LoginScreen extends React.Component {
           goToApp={this.go}
           type="login"
         />
-        {/* <Footer style={styles.footerbar}>
-          <FooterTab style={{backgroundColor: '#49d5b6'}}>
-            <Button vertical>
-              <Icon style={{ fontSize: 30, color: '#fff' }} name="md-stats" />
-              <Text style={styles.buttonText}>Stats</Text>
-            </Button>
-            <Button vertical>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
-                <Icon style={{ fontSize: 30, color: '#fff' }} name="logo-game-controller-a" />
-                <Text style={styles.buttonText}>Games</Text>
-              </TouchableOpacity>
-            </Button>
-            <Button vertical>
-              <Icon style={{ fontSize: 30, color: '#fff' }} name="md-ribbon" />
-              <Text style={styles.buttonText}>Goals</Text>
-            </Button>
-            <Button vertical>
-              <TouchableOpacity onPress={this.props.navigation.openDrawer}>
-                <Icon style={{ fontSize: 30, color: '#fff' }} name="md-menu" />
-                <Text style={styles.buttonText}>Menu</Text>
-              </TouchableOpacity>
-            </Button>
-          </FooterTab>
-        </Footer> */}
       </View>
     );
   }
 }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-//   title: {
-//     fontSize: 20,
-//     textAlign: 'center',
-//     marginTop: 0,
-//   },
-//   buttonText: {
-//     fontWeight: 'bold',
-//     color: '#fff',
-//   },
-//   footerbar: {
-//     backgroundColor: '#49d5b6',
-//     fontWeight: 'bold',
-//     color: '#fff',
-//   }
-// });
 
 export default LoginScreen;

@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { StyleSheet, View, Alert, AsyncStorage } from 'react-native';
+import { NavigationActions } from 'react-navigation';
 // import { Container, Footer, FooterTab, Icon, Content, Button, Text } from 'native-base';
 import { AuthSession } from 'expo';
 import jwtDecode from 'jwt-decode';
@@ -30,11 +31,17 @@ class SignupScreen extends React.Component {
 
     if (name) {
       this.storeData(auth0_id);
-      navigation.navigate('Home', { name, picture, auth0_id });
+      navigaiton.dispatch(
+        navigation.navigate({
+          routeName: 'App',
+          // params: this.state,
+          action: NavigationActions.setParams(this.state),
+        })
+      );
     }
   }
 
-  storeData = async (token) => {
+  storeData = async token => {
     try {
       await AsyncStorage.setItem('userToken', token);
     } catch (error) {
@@ -56,7 +63,7 @@ class SignupScreen extends React.Component {
       scope: 'openid profile', // retrieve the user's profile
       nonce: 'nonce', // ideally, this will be a random value
     });
-    const authUrl = `${AUTHO_DOMAIN}/authorize` + queryParams;
+    const authUrl = `${AUTHO_DOMAIN}/authorize${  queryParams}`;
     console.log('authURL', authUrl);
 
     // Perform the authentication
@@ -68,7 +75,7 @@ class SignupScreen extends React.Component {
     }
   };
 
-  handleResponse = (response) => {
+  handleResponse = response => {
     if (response.error) {
       Alert('Authentication error', response.error_description || 'something went wrong');
       return;
@@ -84,16 +91,11 @@ class SignupScreen extends React.Component {
     axios.post(`${NGROK}/signup`, { name, auth0_id: sub, picture });
   };
 
-  // go() {
-  //   const { name, picture, auth0_id } = this.state;
-  //   this.props.navigation.navigate('Home', { name, picture, auth0_id })
-  // }
-
   render() {
     const { name } = this.state;
 
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>    
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Auth0
           style={{ marginBottom: 30 }}
           callback={this.signup}

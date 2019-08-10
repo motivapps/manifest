@@ -120,6 +120,7 @@ const drawerNavigator = createDrawerNavigator(
     Settings: SettingsStack,
   },
   {
+    initialRouteName: 'Home',
     hideStatusBar: true,
     drawerBackgroundColor: 'rgba(255,255,255,.9)',
     overlayColor: '#49d5b6',
@@ -127,9 +128,13 @@ const drawerNavigator = createDrawerNavigator(
       activeTintColor: '#fff',
       activeBackgroundColor: '#49d5b6',
     },
-  }
-);
-
+    backBehavior: 'initialRoute',
+    // navigationOptions: {
+      
+    // }
+  });
+  
+  // const { params } = this.props.navigation.state
 drawerNavigator.path = 'app/';
 
 export default drawerNavigator;

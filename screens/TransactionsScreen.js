@@ -6,8 +6,8 @@ import { Container, Text, Button, Footer, FooterTab, Icon, Content } from 'nativ
 export default class Transactions extends React.Component {
   render() {
     return (
-      <Container style={this.styles.container}>
-        <View style={this.styles.container}>
+      <Container style={styles.container}>
+        <View style={styles.container}>
           <Text style={{ fontWeight: 'bold', marginTop: 20 }}>Transactions</Text>
         </View>
         <Footer style={styles.footerbar}>

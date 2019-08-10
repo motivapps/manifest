@@ -6,6 +6,8 @@ import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import PlaidScreen from '../screens/PlaidScreen';
+import GoalsScreen from '../screens/GoalsScreen';
+import TransactionsScreen from '../screens/TransactionsScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -55,6 +57,42 @@ PlaidStack.navigationOptions = {
 
 PlaidStack.path = 'app/plaid';
 
+const GoalsStack = createStackNavigator(
+  {
+    Goals: {
+      screen: GoalsScreen,
+    },
+  },
+  config
+);
+
+GoalsStack.navigationOptions = {
+  tabBarLabel: 'Goals',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
+  ),
+};
+
+GoalsStack.path = 'app/goals';
+
+const TransactionsStack = createStackNavigator(
+  {
+    Transactions: {
+      screen: TransactionsScreen,
+    },
+  },
+  config
+);
+
+TransactionsStack.navigationOptions = {
+  tabBarLabel: 'Transactions',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
+  ),
+};
+
+TransactionsStack.path = 'app/transactions';
+
 const SettingsStack = createStackNavigator(
   {
     Settings: {
@@ -77,6 +115,8 @@ const drawerNavigator = createDrawerNavigator(
   {
     Home: HomeStack,
     Plaid: PlaidStack,
+    Goals: GoalsStack,
+    Transactions: TransactionsStack,
     Settings: SettingsStack,
   },
   {

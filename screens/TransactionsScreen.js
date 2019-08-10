@@ -4,20 +4,6 @@ import { Platform, StatusBar, StyleSheet, View, TouchableOpacity } from 'react-n
 import { Container, Text, Button, Footer, FooterTab, Icon, Content } from 'native-base';
 
 export default class Transactions extends React.Component {
-  styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    title: {
-      fontSize: 20,
-      textAlign: 'center',
-      marginTop: 40,
-    },
-  });
-
   render() {
     return (
       <Container style={this.styles.container}>
@@ -51,3 +37,16 @@ export default class Transactions extends React.Component {
   }
 }
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  title: {
+    fontSize: 20,
+    textAlign: 'center',
+    marginTop: 40,
+  },
+});

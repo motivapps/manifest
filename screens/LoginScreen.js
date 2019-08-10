@@ -74,7 +74,7 @@ class LoginScreen extends React.Component {
         {/* <Content /> */}
         <Auth0 style={{ marginBottom: 30 }} callback={this.login} name={name} type="signup" />
         {/* <Footer style={styles.footerbar}>
-          <FooterTab>
+          <FooterTab style={{backgroundColor: '#49d5b6'}}>
             <Button vertical>
               <Icon style={{ fontSize: 30, color: '#fff' }} name="md-stats" />
               <Text style={styles.buttonText}>Stats</Text>

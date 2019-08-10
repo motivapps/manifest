@@ -2,9 +2,20 @@
 import React from 'react';
 import { AppLoading } from 'expo';
 import { Container, Text, Button, Footer, FooterTab, Icon, Content } from 'native-base';
-import { Platform, StatusBar, StyleSheet, View , TouchableOpacity, PushNotificationIOS } from 'react-native';
-import { createDrawerNavigator, createStackNavigator, createBottomTabNavigator, createAppContainer } from 'react-navigation';
-// import * as Font from 'expo-font';
+import {
+  Platform,
+  StatusBar,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  PushNotificationIOS,
+} from 'react-native';
+import {
+  createDrawerNavigator,
+  createStackNavigator,
+  createBottomTabNavigator,
+  createAppContainer,
+} from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
 import * as Permissions from 'expo-permissions';
 import axios from 'axios';
@@ -12,10 +23,10 @@ import PlaidScreen from './screens/PlaidScreen';
 import SignupScreen from './screens/SignupScreen';
 import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
+import GoalsScreen from './screens/GoalsScreen';
 // import PushNotification from 'react-native-push-notification';
 import { FOURSQUARE_CLIENT_ID, FOURSQUARE_CLIENT_SECRET } from './app.config.json';
 // import Geolocation from 'react-native-geolocation-service';
-
 
 class App extends React.Component {
   constructor(props) {
@@ -33,8 +44,7 @@ class App extends React.Component {
     // this.DrawerNavigator = DrawerNavigator.bind(this);
   }
 
-  async componentDidMount() {
-
+  async componentWillMount() {
     // GET LOCATION PERMISSIONS:
     async function getLocationAsync() {
       // permissions returns only for location permissions on iOS and under certain conditions, see Permissions.LOCATION
@@ -47,41 +57,43 @@ class App extends React.Component {
           (err) => console.error(err),
           { timeout: 2000, maximumAge: 2000, enableHighAccuracy: true, distanceFilter: 1 }
         );
-      } else {
+      } 
         throw new Error('Location permission not granted');
-      }
+      
     }
 
-
-
-    //setInterval(() => {
+    // setInterval(() => {
     navigator.geolocation.watchPosition(
-      (position) => {
+      position => {
         console.log('position outside of permissions', position);
         this.setState({
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
-        })
+        });
         // fetch(`https://api.foursquare.com/v2/venues/search?client_id=${FOURSQUARE_CLIENT_ID}&client_secret=${FOURSQUARE_CLIENT_SECRET}&ll=${latitude},${longitude}&intent=checkin&radius=60&categoryId=4bf58dd8d48988d1e0931735&v=20190425`)
-            //   .then(result => {
-            //     console.log('get location result from front:', result);
-            //     return result.json();
-            //   })
-            //   .then(response => {
-            //     console.log('response:', response);
-            //   })
-            //   .catch(err => {
-            //     console.log('get location error from front:', err);
-            //   })
+        //   .then(result => {
+        //     console.log('get location result from front:', result);
+        //     return result.json();
+        //   })
+        //   .then(response => {
+        //     console.log('response:', response);
+        //   })
+        //   .catch(err => {
+        //     console.log('get location error from front:', err);
+        //   })
         // PushNotificationIOS.presentLocalNotification({alertBody: 'but does it work?'});
       },
-      (err) => console.error(err),
+      err => console.error(err),
       { enableHighAccuracy: true, timeout: 2000, maximumAge: 2000, distanceFilter: 0 }
     );
-    //}, 20000);
+    // }, 20000);
 
     getLocationAsync();
-    // WATCH CURRENT POSITION:
+    
+    await Font.loadAsync({
+      Roboto: require("native-base/Fonts/Roboto.ttf"),
+      Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf")
+    });
     this.setState({ isReady: true });
   }
 
@@ -97,14 +109,13 @@ class App extends React.Component {
       <Container>
         <DrawerNavigator />
       </Container>
-    )
+    );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-
-    justifyContent: "center",
+    justifyContent: 'center',
     alignItems: 'center',
     marginHorizontal: 0,
     backgroundColor: '#fff',
@@ -132,24 +143,17 @@ const styles = StyleSheet.create({
 });
 
 const HomeScreenContainer = () => {
-  return (
-    HomeScreen
-  )
-}
+  return HomeScreen;
+};
 const PlaidLinkContainer = () => {
-    return (
-      <PlaidScreen />
-    );
-  }
+  return <PlaidScreen />;
+};
 
 const SignupScreenContainer = () => {
   // const { name } = this.state;
   // const LoginScreen = () => <LoginScreen name={this.state.name} setJwt={this.setJwt}/>
-  return (
-    SignupScreen
-  )
-}
-
+  return SignupScreen;
+};
 
 // class LoginScreen extends React.Component {
 //   render() {
@@ -160,7 +164,7 @@ const SignupScreenContainer = () => {
 //           <Text>Open Menu</Text>
 //         </TouchableOpacity>
 //         <Text style={{ fontWeight: 'bold', marginTop: 20 }}>Login</Text>
-//       
+//
 //       </View>
 //     );
 //   }
@@ -172,6 +176,7 @@ const DrawerNavigator = createDrawerNavigator(
     PlaidLink: PlaidScreen,
     Login: LoginScreen,
     Signup: SignupScreenContainer(),
+    Goals: GoalsScreen,
   },
   {
     hideStatusBar: true,

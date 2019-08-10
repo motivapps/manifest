@@ -50,7 +50,3 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
 });
-<<<<<<< HEAD:screens/Transactions.js
-
-=======
->>>>>>> e401d77a496f40d0ad507c02fe110c0e31d5eee4:screens/TransactionsScreen.js

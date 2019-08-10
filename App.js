@@ -2,19 +2,7 @@
 import React from 'react';
 import { AppLoading } from 'expo';
 import { Container, Text, Button, Footer, FooterTab, Icon, Content } from 'native-base';
-// import { Platform, StatusBar, StyleSheet, View , TouchableOpacity, PushNotificationIOS } from 'react-native';
-// import { createDrawerNavigator, createStackNavigator, createBottomTabNavigator, createAppContainer } from 'react-navigation';
-// import * as Font from 'expo-font';
-// import { Ionicons } from '@expo/vector-icons';
 import * as Permissions from 'expo-permissions';
-// import axios from 'axios';
-// import PlaidScreen from './screens/PlaidScreen';
-// import SignupScreen from './screens/SignupScreen';
-// import LoginScreen from './screens/LoginScreen';
-// import HomeScreen from './screens/HomeScreen';
-// import PushNotification from 'react-native-push-notification';
-// import { FOURSQUARE_CLIENT_ID, FOURSQUARE_CLIENT_SECRET } from './app.config.json';
-// import Geolocation from 'react-native-geolocation-service';
 import AppContainer from './navigation/AppNavigator.js';
 
 class App extends React.Component {

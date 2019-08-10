@@ -1,16 +1,16 @@
 import React from 'react';
 import axios from 'axios';
-import { StyleSheet, View, Alert, TouchableOpacity } from 'react-native';
-import { Container, Footer, FooterTab, Icon, Content, Button, Text } from 'native-base';
+import { StyleSheet, View, Alert, AsyncStorage } from 'react-native';
+// import { Container, Footer, FooterTab, Icon, Content, Button, Text } from 'native-base';
 import { AuthSession } from 'expo';
 import jwtDecode from 'jwt-decode';
 import { AUTHO_CLIENT_ID, AUTHO_DOMAIN, NGROK } from '../app.config.json';
 import Auth0 from './subViews/Auth0';
 
 function toQueryString(params) {
-  return '?' + Object.entries(params)
+  return `?${Object.entries(params)
     .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-    .join('&');
+    .join('&')}`;
 }
 
 class SignupScreen extends React.Component {
@@ -18,9 +18,29 @@ class SignupScreen extends React.Component {
     super(props);
     this.state = {
       name: null,
+      picture: '',
+      auth0_id: '',
     };
-    this.go = this.go.bind(this);
+    this.storeData = this.storeData.bind(this);
   }
+
+  componentDidUpdate() {
+    const { name, picture, auth0_id } = this.state;
+    const { navigation } = this.props;
+
+    if (name) {
+      this.storeData(auth0_id);
+      navigation.navigate('Home', { name, picture, auth0_id });
+    }
+  }
+
+  storeData = async (token) => {
+    try {
+      await AsyncStorage.setItem('userToken', token);
+    } catch (error) {
+      navigation.navigate('Signup');
+    }
+  };
 
   signup = async () => {
     // Retrieve the redirect URL, add this to the callback URL list
@@ -64,69 +84,26 @@ class SignupScreen extends React.Component {
     axios.post(`${NGROK}/signup`, { name, auth0_id: sub, picture });
   };
 
-  go() {
-    const { name, picture, auth0_id } = this.state;
-    this.props.navigation.navigate('Home', { name, picture, auth0_id })
-  }
+  // go() {
+  //   const { name, picture, auth0_id } = this.state;
+  //   this.props.navigation.navigate('Home', { name, picture, auth0_id })
+  // }
 
   render() {
     const { name } = this.state;
 
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-    
-      {/* <Content /> */}
-        <Auth0 style={{ marginBottom: 30 }} callback={this.signup} goToApp={this.go} name={name} type='signup' />
-        {/* <Footer style={styles.footerbar}>
-          <FooterTab>
-            <Button vertical>
-              <Icon style={{ fontSize: 30, color: '#fff' }} name="md-stats" />
-              <Text style={styles.buttonText}>Stats</Text>
-            </Button>
-            <Button vertical>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
-                <Icon style={{ fontSize: 30, color: '#fff' }} name="logo-game-controller-a" />
-                <Text style={styles.buttonText}>Games</Text>
-              </TouchableOpacity>
-            </Button>
-            <Button vertical>
-              <Icon style={{ fontSize: 30, color: '#fff' }} name="md-ribbon" />
-              <Text style={styles.buttonText}>Goals</Text>
-            </Button>
-            <Button vertical>
-              <TouchableOpacity onPress={this.props.navigation.openDrawer}>
-                <Icon style={{ fontSize: 30, color: '#fff' }} name="md-menu" />
-                <Text style={styles.buttonText}>Menu</Text>
-              </TouchableOpacity>
-            </Button>
-          </FooterTab>
-        </Footer> */}
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>    
+        <Auth0
+          style={{ marginBottom: 30 }}
+          callback={this.signup}
+          goToApp={this.go}
+          name={name}
+          type="signup"
+        />
       </View>
     );
   }
 }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-//   title: {
-//     fontSize: 20,
-//     textAlign: 'center',
-//     marginTop: 0,
-//   },
-//   buttonText: {
-//     fontWeight: 'bold',
-//     color: '#fff',
-//   },
-//   footerbar: {
-//     backgroundColor: '#49d5b6',
-//     fontWeight: 'bold',
-//     color: '#fff',
-//   }
-// });
 
 export default SignupScreen;

@@ -1,12 +1,9 @@
 import React from 'react';
 import { AppLoading, Notifications } from 'expo';
 import { Container, Text, Button, Footer, FooterTab, Icon, Content } from 'native-base';
-<<<<<<< HEAD
-import { Platform, StatusBar, StyleSheet, View, TouchableOpacity, PushNotificationIOS } from 'react-native';
 import * as Permissions from 'expo-permissions';
 import { FOURSQUARE_CLIENT_ID, FOURSQUARE_CLIENT_SECRET, NGROK, GOOGLE_OAUTH_ID, PUSH_TOKEN } from '../app.config.json';
 import axios from 'axios';
-=======
 import {
   Platform,
   StatusBar,
@@ -18,7 +15,6 @@ import {
 
 import * as Font from 'expo-font';
 // import { MonoText } from '../components/StyledText';
->>>>>>> a9d4100c1bd19a995dfddacc205653c2af3c39c4
 
 class HomeScreen extends React.Component {
   constructor(props) {
@@ -153,12 +149,15 @@ class HomeScreen extends React.Component {
     } else {
       console.log('did not fire:', this.state.dangerDistance);
     }
+    this.setState({ isReady: true });
+  }
+
   async componentWillMount() {
     await Font.loadAsync({
       Roboto: require("../node_modules/native-base/Fonts/Roboto.ttf"),
       Roboto_medium: require("../node_modules/native-base/Fonts/Roboto_medium.ttf")
     });
-    this.setState({isReady: true});
+
   }
 
   onToggleButton() {

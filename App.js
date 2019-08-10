@@ -80,59 +80,15 @@ class App extends React.Component {
   }
 
   render() {
-    const { latitude } = this.state;
-
     if (!this.state.isReady) {
       return <AppLoading />;
     }
     return (
       <Container>
-        <DrawerNavigator latitude={latitude} />
+        <AppContainer />
       </Container>
     );
   }
 }
 
-
-// class LoginScreen extends React.Component {
-//   render() {
-//     return (
-//       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-//         <Login />
-//         <TouchableOpacity onPress={this.props.navigation.openDrawer}>
-//           <Text>Open Menu</Text>
-//         </TouchableOpacity>
-//         <Text style={{ fontWeight: 'bold', marginTop: 20 }}>Login</Text>
-//       
-//       </View>
-//     );
-//   }
-// }
-
-const DrawerNavigator = createDrawerNavigator(
-  {
-    Home: HomeScreen,
-    PlaidLink: PlaidScreen,
-    Login: LoginScreen,
-    Signup: SignupScreenContainer(),
-  },
-  {
-    hideStatusBar: true,
-    drawerBackgroundColor: 'rgba(255,255,255,.9)',
-    overlayColor: '#49d5b6',
-    contentOptions: {
-      activeTintColor: '#fff',
-      activeBackgroundColor: '#49d5b6',
-    },
-  }
-);
-
-const CustomDrawerContentComponent = props => (
-  <ScrollView>
-    <SafeAreaView style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
-      <DrawerItems {...props} />
-    </SafeAreaView>
-  </ScrollView>
-);
-
-export default createAppContainer(DrawerNavigator);
+export default App;

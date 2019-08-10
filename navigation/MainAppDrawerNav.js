@@ -14,7 +14,9 @@ const config = Platform.select({
 
 const HomeStack = createStackNavigator(
   {
-    Home: HomeScreen,
+    HomePg: {
+      screen: HomeScreen,
+    },
   },
   config
 );
@@ -37,7 +39,9 @@ HomeStack.path = 'app/home/';
 
 const PlaidStack = createStackNavigator(
   {
-    Plaid: PlaidScreen,
+    Plaid: {
+      screen: PlaidScreen,
+    },
   },
   config
 );
@@ -49,11 +53,13 @@ PlaidStack.navigationOptions = {
   ),
 };
 
-PlaidStack.path = 'app.Plaid';
+PlaidStack.path = 'app/plaid';
 
 const SettingsStack = createStackNavigator(
   {
-    Settings: SettingsScreen,
+    Settings: {
+      screen: SettingsScreen,
+    },
   },
   config
 );
@@ -69,15 +75,9 @@ SettingsStack.path = 'app/settings';
 
 const drawerNavigator = createDrawerNavigator(
   {
-    Home: {
-      screen: HomeScreen,
-    },
-    Plaid: {
-      screen: PlaidScreen,
-    },
-    Settings: {
-      screen: SettingsScreen,
-    },
+    Home: HomeStack,
+    Plaid: PlaidStack,
+    Settings: SettingsStack,
   },
   {
     hideStatusBar: true,

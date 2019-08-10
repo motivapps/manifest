@@ -14,6 +14,7 @@ export default createAppContainer(
     },
     {
       initialRouteName: 'Auth',
+      backBehavior: 'none',
     }
   )
 );

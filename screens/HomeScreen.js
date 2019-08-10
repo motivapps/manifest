@@ -2,7 +2,6 @@ import React from 'react';
 import { AppLoading, Notifications } from 'expo';
 import { Container, Text, Button, Footer, FooterTab, Icon, Content } from 'native-base';
 import * as Permissions from 'expo-permissions';
-import { FOURSQUARE_CLIENT_ID, FOURSQUARE_CLIENT_SECRET, NGROK, GOOGLE_OAUTH_ID, PUSH_TOKEN } from '../app.config.json';
 import axios from 'axios';
 import {
   Platform,
@@ -10,10 +9,12 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
-  PushNotificationIOS,
+  Image,
 } from 'react-native';
 
 import * as Font from 'expo-font';
+import { kayak } from '../assets/images/kayak.jpg';
+import { FOURSQUARE_CLIENT_ID, FOURSQUARE_CLIENT_SECRET, NGROK, GOOGLE_OAUTH_ID, PUSH_TOKEN } from '../app.config.json';
 // import { MonoText } from '../components/StyledText';
 
 class HomeScreen extends React.Component {
@@ -33,6 +34,13 @@ class HomeScreen extends React.Component {
     console.log(props);
   }
 
+  async componentWillMount() {
+    await Font.loadAsync({
+      Roboto: require('../node_modules/native-base/Fonts/Roboto.ttf'),
+      Roboto_medium: require('../node_modules/native-base/Fonts/Roboto_medium.ttf'),
+    });
+  }
+
   async componentDidMount() {
     // GET LOCATION PERMISSIONS:
     async function getLocationAsync() {
@@ -46,22 +54,22 @@ class HomeScreen extends React.Component {
           (err) => console.error(err),
           { timeout: 2000, maximumAge: 2000, enableHighAccuracy: true, distanceFilter: 1 }
           );
-        } else {
+        } 
           throw new Error('Location permission not granted');
-        }
+        
       }
-      
-      //setInterval(() => {
-        navigator.geolocation.watchPosition(
-          (position) => {
-            // console.log('position outside of permissions', position);
-            // console.log('authID', this.state.authID);
-        let latitude = position.coords.latitude;
-        let longitude = position.coords.longitude;
+
+    // setInterval(() => {
+    navigator.geolocation.watchPosition(
+      position => {
+        // console.log('position outside of permissions', position);
+        // console.log('authID', this.state.authID);
+        const {latitude} = position.coords;
+        const {longitude} = position.coords;
         this.setState({
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
-        })
+        });
         // fetch(`https://api.foursquare.com/v2/venues/search?client_id=${FOURSQUARE_CLIENT_ID}&client_secret=${FOURSQUARE_CLIENT_SECRET}&ll=${this.state.latitude},${this.state.longitude}&intent=checkin&radius=60&categoryId=4bf58dd8d48988d1e0931735&v=20190425`)
         //   .then(result => {
         //     //console.log('get location result from front:', result);
@@ -79,69 +87,58 @@ class HomeScreen extends React.Component {
         //     console.log('get location error from front:', err);
         //   })
       },
-      (err) => console.error(err),
+      err => console.error(err),
       { enableHighAccuracy: true, timeout: 2000, maximumAge: 2000, distanceFilter: 0 }
     );
-    //}, 20000);
+    // }, 20000);
 
     getLocationAsync();
-    // WATCH CURRENT POSITION:
-    this.setState({ isReady: true });
 
     // PUSH NOTIFICATION PERMISSIONS
-
-    // const PUSH_ENDPOINT = 'https://your-server.com/users/push-token';
-    // const PUSH_ENDPOINT = `${NGROK}/pushtoken`;
-    let authID = this.state.authID;
+    const {authID} = this.state;
     async function registerForPushNotificationsAsync() {
       const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
       let finalStatus = existingStatus;
-      // existingStatus = null;
 
       // only ask if permissions have not already been determined, because
-      // iOS won't necessarily prompt the user a second time.
       if (existingStatus !== 'granted') {
-        // Android remote notification permissions are granted during the app
-        // install, so this will only ask on iOS
         const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
         finalStatus = status;
       }
-
-      // Stop here if the user did not grant permissions
       if (finalStatus !== 'granted') {
         return;
       }
-
       // Get the token that uniquely identifies this device
-      let token = await Notifications.getExpoPushTokenAsync();
+      const token = await Notifications.getExpoPushTokenAsync();
       console.log('token:', token);
 
-      axios.post(`${NGROK}/pushtoken`, { pushToken: token, authID })
-      .then((result) => {
-        console.log('device token post result:', result.config.data);
-      })
-      .catch((err) => {
-        console.log('device token post error:', err);
-      });
+      axios
+        .post(`${NGROK}/pushtoken`, { pushToken: token, authID })
+        .then(result => {
+          console.log('device token post result:', result.config.data);
+        })
+        .catch(err => {
+          console.log('device token post error:', err);
+        });
     }
 
-  registerForPushNotificationsAsync();
+    registerForPushNotificationsAsync();
 
-  sendPushNotification = () => {
-    let response = fetch('https://exp.host/--/api/v2/push/send', {
-      method: 'POST', 
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        to: PUSH_TOKEN,
-        sound: 'default',
-        title: 'Manifest',
-        body: 'Don\'t you even think about going inside that CC\'s...'
-      })
-    });
-  };
+    sendPushNotification = () => {
+      const response = fetch('https://exp.host/--/api/v2/push/send', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          to: PUSH_TOKEN,
+          sound: 'default',
+          title: 'Manifest',
+          body: "Don't you even think about going inside that CC's...",
+        }),
+      });
+    };
 
     if (this.state.dangerDistance < 60) {
       console.log('dangerDistance:', this.state.dangerDistance);
@@ -149,15 +146,8 @@ class HomeScreen extends React.Component {
     } else {
       console.log('did not fire:', this.state.dangerDistance);
     }
+
     this.setState({ isReady: true });
-  }
-
-  async componentWillMount() {
-    await Font.loadAsync({
-      Roboto: require("../node_modules/native-base/Fonts/Roboto.ttf"),
-      Roboto_medium: require("../node_modules/native-base/Fonts/Roboto_medium.ttf")
-    });
-
   }
 
   onToggleButton() {
@@ -183,9 +173,13 @@ class HomeScreen extends React.Component {
         {this.state.buttonToggle ? (
           <Text style={styles.message}>I said don't click me!</Text>
         ) : null}
+        <Image
+          style={{ width: 50, height: 50 }}
+          source={kayak}
+        />
         <Content />
         <Footer style={styles.footerbar}>
-          <FooterTab style={{backgroundColor: '#49d5b6'}}>
+          <FooterTab style={{ backgroundColor: '#49d5b6' }}>
             <Button vertical>
               <Icon style={{ fontSize: 30, color: '#fff' }} name="md-stats" />
               <Text style={styles.buttonText}>Stats</Text>
@@ -197,7 +191,7 @@ class HomeScreen extends React.Component {
               </TouchableOpacity>
             </Button>
             <Button vertical>
-            <TouchableOpacity onPress={() => this.props.navigation.navigate('Goals')}>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('Goals')}>
                 <Icon style={{ fontSize: 30, color: '#fff' }} name="md-ribbon" />
                 <Text style={styles.buttonText}>Goals</Text>
               </TouchableOpacity>

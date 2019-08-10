@@ -9,6 +9,7 @@ import PlaidScreen from '../screens/PlaidScreen';
 import GoalsScreen from '../screens/GoalsScreen';
 import TransactionsScreen from '../screens/TransactionsScreen';
 import LogOutScreen from '../screens/LogOutScreen';
+import GamesScreen from '../screens/GamesScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -112,6 +113,24 @@ SettingsStack.navigationOptions = {
 
 SettingsStack.path = 'app/settings';
 
+// const GamesStack = createStackNavigator(
+//   {
+//     Games: {
+//       screen: GamesScreen,
+//     },
+//   },
+//   config
+// );
+
+// GamesStack.navigationOptions = {
+//   tabBarLabel: 'Games',
+//   tabBarIcon: ({ focused }) => (
+//     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
+//   ),
+// };
+
+// GamesStack.path = 'app/games';
+
 const drawerNavigator = createDrawerNavigator(
   {
     Home: HomeStack,
@@ -122,6 +141,7 @@ const drawerNavigator = createDrawerNavigator(
     LogOut: {
       screen: LogOutScreen,
     },
+    //Games: null,
   },
   {
     initialRouteName: 'Home',

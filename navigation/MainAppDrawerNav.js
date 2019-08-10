@@ -8,6 +8,8 @@ import SettingsScreen from '../screens/SettingsScreen';
 import PlaidScreen from '../screens/PlaidScreen';
 import GoalsScreen from '../screens/GoalsScreen';
 import TransactionsScreen from '../screens/TransactionsScreen';
+import LogOutScreen from '../screens/LogOutScreen';
+import GamesScreen from '../screens/GamesScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -111,6 +113,24 @@ SettingsStack.navigationOptions = {
 
 SettingsStack.path = 'app/settings';
 
+const GamesStack = createStackNavigator(
+  {
+    Games: {
+      screen: GamesScreen,
+    },
+  },
+  config
+);
+
+GamesStack.navigationOptions = {
+  tabBarLabel: 'Games',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
+  ),
+};
+
+GamesStack.path = 'app/games';
+
 const drawerNavigator = createDrawerNavigator(
   {
     Home: HomeStack,
@@ -118,8 +138,13 @@ const drawerNavigator = createDrawerNavigator(
     Goals: GoalsStack,
     Transactions: TransactionsStack,
     Settings: SettingsStack,
+    LogOut: {
+      screen: LogOutScreen,
+    },
+    Games: GamesStack,
   },
   {
+    initialRouteName: 'Home',
     hideStatusBar: true,
     drawerBackgroundColor: 'rgba(255,255,255,.9)',
     overlayColor: '#49d5b6',
@@ -127,6 +152,7 @@ const drawerNavigator = createDrawerNavigator(
       activeTintColor: '#fff',
       activeBackgroundColor: '#49d5b6',
     },
+    backBehavior: 'initialRoute',
   }
 );
 

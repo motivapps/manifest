@@ -9,10 +9,10 @@ import Auth0 from './subViews/Auth0';
 
 function toQueryString(params) {
   return (
-    '?' +
+    `?${ 
     Object.entries(params)
       .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-      .join('&')
+      .join('&')}`
   );
 }
 
@@ -22,6 +22,7 @@ class LoginScreen extends React.Component {
     this.state = {
       name: null,
     };
+    this.go = this.go.bind(this);
   }
 
   login = async () => {
@@ -38,7 +39,7 @@ class LoginScreen extends React.Component {
       scope: 'openid profile', // retrieve the user's profile
       nonce: 'nonce', // ideally, this will be a random value
     });
-    const authUrl = `${AUTHO_DOMAIN}/authorize${  queryParams}`;
+    const authUrl = `${AUTHO_DOMAIN}/authorize${queryParams}`;
     console.log('authURL', authUrl);
 
     // Perform the authentication
@@ -66,13 +67,24 @@ class LoginScreen extends React.Component {
     axios.post(`${NGROK}/login`, { name, auth0_id: sub, picture });
   };
 
+  go() {
+    const { name, picture, auth0_id } = this.state;
+    this.props.navigation.navigate('Home', { name, picture, auth0_id })
+  }
+
   render() {
     const { name } = this.state;
 
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         {/* <Content /> */}
-        <Auth0 style={{ marginBottom: 30 }} callback={this.login} name={name} type="signup" />
+        <Auth0
+          style={{ marginBottom: 30 }}
+          callback={this.login}
+          name={name}
+          goToApp={this.go}
+          type="login"
+        />
         {/* <Footer style={styles.footerbar}>
           <FooterTab style={{backgroundColor: '#49d5b6'}}>
             <Button vertical>

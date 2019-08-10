@@ -19,6 +19,7 @@ class SignupScreen extends React.Component {
     this.state = {
       name: null,
     };
+    this.go = this.go.bind(this);
   }
 
   signup = async () => {
@@ -63,6 +64,11 @@ class SignupScreen extends React.Component {
     axios.post(`${NGROK}/signup`, { name, auth0_id: sub, picture });
   };
 
+  go() {
+    const { name, picture, auth0_id } = this.state;
+    this.props.navigation.navigate('Home', { name, picture, auth0_id })
+  }
+
   render() {
     const { name } = this.state;
 
@@ -70,7 +76,7 @@ class SignupScreen extends React.Component {
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
     
       {/* <Content /> */}
-        <Auth0 style={{marginBottom: 30}} callback={this.signup} name={name} type='signup' />
+        <Auth0 style={{ marginBottom: 30 }} callback={this.signup} goToApp={this.go} name={name} type='signup' />
         {/* <Footer style={styles.footerbar}>
           <FooterTab>
             <Button vertical>

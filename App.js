@@ -2,31 +2,20 @@
 import React from 'react';
 import { AppLoading } from 'expo';
 import { Container, Text, Button, Footer, FooterTab, Icon, Content } from 'native-base';
-import {
-  Platform,
-  StatusBar,
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  PushNotificationIOS,
-} from 'react-native';
-import {
-  createDrawerNavigator,
-  createStackNavigator,
-  createBottomTabNavigator,
-  createAppContainer,
-} from 'react-navigation';
-import { Ionicons } from '@expo/vector-icons';
+// import { Platform, StatusBar, StyleSheet, View , TouchableOpacity, PushNotificationIOS } from 'react-native';
+// import { createDrawerNavigator, createStackNavigator, createBottomTabNavigator, createAppContainer } from 'react-navigation';
+// import * as Font from 'expo-font';
+// import { Ionicons } from '@expo/vector-icons';
 import * as Permissions from 'expo-permissions';
-import axios from 'axios';
-import PlaidScreen from './screens/PlaidScreen';
-import SignupScreen from './screens/SignupScreen';
-import LoginScreen from './screens/LoginScreen';
-import HomeScreen from './screens/HomeScreen';
-import GoalsScreen from './screens/GoalsScreen';
+// import axios from 'axios';
+// import PlaidScreen from './screens/PlaidScreen';
+// import SignupScreen from './screens/SignupScreen';
+// import LoginScreen from './screens/LoginScreen';
+// import HomeScreen from './screens/HomeScreen';
 // import PushNotification from 'react-native-push-notification';
-import { FOURSQUARE_CLIENT_ID, FOURSQUARE_CLIENT_SECRET } from './app.config.json';
+// import { FOURSQUARE_CLIENT_ID, FOURSQUARE_CLIENT_SECRET } from './app.config.json';
 // import Geolocation from 'react-native-geolocation-service';
+import AppContainer from './navigation/AppNavigator.js';
 
 class App extends React.Component {
   constructor(props) {
@@ -40,11 +29,9 @@ class App extends React.Component {
       picture: null,
       name: null,
     };
-    this.setJwt = this.setJwt.bind(this);
-    // this.DrawerNavigator = DrawerNavigator.bind(this);
   }
 
-  async componentWillMount() {
+  async componentDidMount() {
     // GET LOCATION PERMISSIONS:
     async function getLocationAsync() {
       // permissions returns only for location permissions on iOS and under certain conditions, see Permissions.LOCATION
@@ -54,12 +41,11 @@ class App extends React.Component {
           position => {
             console.log(position);
           },
-          (err) => console.error(err),
+          err => console.error(err),
           { timeout: 2000, maximumAge: 2000, enableHighAccuracy: true, distanceFilter: 1 }
         );
-      } 
-        throw new Error('Location permission not granted');
-      
+      }
+      throw new Error('Location permission not granted');
     }
 
     // setInterval(() => {
@@ -89,16 +75,8 @@ class App extends React.Component {
     // }, 20000);
 
     getLocationAsync();
-    
-    await Font.loadAsync({
-      Roboto: require("native-base/Fonts/Roboto.ttf"),
-      Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf")
-    });
+    // WATCH CURRENT POSITION:
     this.setState({ isReady: true });
-  }
-
-  setJwt({ name, auth0_id, picture }) {
-    this.setState({ name, auth0_id, picture });
   }
 
   render() {
@@ -107,86 +85,10 @@ class App extends React.Component {
     }
     return (
       <Container>
-        <DrawerNavigator />
+        <AppContainer />
       </Container>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginHorizontal: 0,
-    backgroundColor: '#fff',
-  },
-  title: {
-    fontWeight: 'bold',
-    fontSize: 50,
-  },
-  message: {
-    fontWeight: 'bold',
-    fontSize: 20,
-  },
-  basicButton: {
-    backgroundColor: '#49d5b6',
-  },
-  buttonText: {
-    fontWeight: 'bold',
-    color: '#fff',
-  },
-  footerbar: {
-    backgroundColor: '#49d5b6',
-    fontWeight: 'bold',
-    color: '#49d5b6',
-  },
-});
-
-const HomeScreenContainer = () => {
-  return HomeScreen;
-};
-const PlaidLinkContainer = () => {
-  return <PlaidScreen />;
-};
-
-const SignupScreenContainer = () => {
-  // const { name } = this.state;
-  // const LoginScreen = () => <LoginScreen name={this.state.name} setJwt={this.setJwt}/>
-  return SignupScreen;
-};
-
-// class LoginScreen extends React.Component {
-//   render() {
-//     return (
-//       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-//         <Login />
-//         <TouchableOpacity onPress={this.props.navigation.openDrawer}>
-//           <Text>Open Menu</Text>
-//         </TouchableOpacity>
-//         <Text style={{ fontWeight: 'bold', marginTop: 20 }}>Login</Text>
-//
-//       </View>
-//     );
-//   }
-// }
-
-const DrawerNavigator = createDrawerNavigator(
-  {
-    Home: HomeScreenContainer(),
-    PlaidLink: PlaidScreen,
-    Login: LoginScreen,
-    Signup: SignupScreenContainer(),
-    Goals: GoalsScreen,
-  },
-  {
-    hideStatusBar: true,
-    drawerBackgroundColor: 'rgba(255,255,255,.9)',
-    overlayColor: '#49d5b6',
-    contentOptions: {
-      activeTintColor: '#fff',
-      activeBackgroundColor: '#49d5b6',
-    },
-  }
-);
-
-export default createAppContainer(DrawerNavigator);
+export default App;

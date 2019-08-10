@@ -33,7 +33,7 @@ class HomeScreen extends React.Component {
     console.log(props);
   }
 
-  async componentDidMount() {
+  async componentWillMount() {
     // GET LOCATION PERMISSIONS:
     async function getLocationAsync() {
       // permissions returns only for location permissions on iOS and under certain conditions, see Permissions.LOCATION
@@ -45,10 +45,11 @@ class HomeScreen extends React.Component {
           },
           (err) => console.error(err),
           { timeout: 2000, maximumAge: 2000, enableHighAccuracy: true, distanceFilter: 1 }
-        );
-      } 
-        throw new Error('Location permission not granted');
-    }
+          );
+        } 
+          throw new Error('Location permission not granted');
+        
+      }
 
     // setInterval(() => {
     navigator.geolocation.watchPosition(
@@ -84,8 +85,6 @@ class HomeScreen extends React.Component {
     // }, 20000);
 
     getLocationAsync();
-    // WATCH CURRENT POSITION:
-    this.setState({ isReady: true });
 
     // PUSH NOTIFICATION PERMISSIONS
 
@@ -149,12 +148,11 @@ class HomeScreen extends React.Component {
     } else {
       console.log('did not fire:', this.state.dangerDistance);
     }
-    this.setState({ isReady: true });
-
     await Font.loadAsync({
       Roboto: require('../node_modules/native-base/Fonts/Roboto.ttf'),
       Roboto_medium: require('../node_modules/native-base/Fonts/Roboto_medium.ttf'),
     });
+    this.setState({ isReady: true });
   }
 
   onToggleButton() {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, Image } from 'react-native';
+import { Text, View, AsyncStorage } from 'react-native';
 import PlaidAuthenticator from 'react-native-plaid-link';
 import { Button } from 'native-base';
 import { connect } from 'react-redux';
@@ -10,20 +10,25 @@ import { NGROK } from '../../app.config.json';
 // import { sendToken } from '../../store/token';
 
 class Link extends React.Component {
-  state = {
-    data: {},
-    status: '',
-  };
-  // static navigationOptions = {
-  //   title: 'PlaidLink',
-  //   headerStyle: { fontWeight: 'bold'},
-  //   headerTitleStyle: { color: 'green'
-  //   }
-  // };
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: {},
+      status: '',
+      userToken: null,
+    };
+  }
 
-  state = {
-    data: {},
-    status: '',
+  async componentWillMount() {
+    try {
+      const userToken = await AsyncStorage.getItem('userToken');
+      if (userToken !== null) {
+        console.log(userToken);
+        this.setState({ userToken });
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   onMessage = data => {
@@ -33,8 +38,6 @@ class Link extends React.Component {
       status: data.action.substr(data.action.lastIndexOf(':') + 1).toUpperCase(),
     });
   };
-
-  
 
   renderLogin() {
     return (
@@ -51,9 +54,6 @@ class Link extends React.Component {
     );
   }
 
-  //
-  // };
-
   renderDetails() {
     // this.props.sendToken(this.state.data.metadata.public_token);
     // send public_token to server:
@@ -65,6 +65,7 @@ class Link extends React.Component {
       },
       body: JSON.stringify({
         public_token: this.state.data.metadata.public_token,
+        userToken: this.state.userToken,
       }),
     });
     return (

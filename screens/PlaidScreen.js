@@ -1,14 +1,11 @@
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react';
-import { StyleSheet, View, Alert, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Alert, TouchableOpacity, AsyncStorage } from 'react-native';
 import { Container, Footer, FooterTab, Icon, Content, Button, Text } from 'native-base';
 import Link from './subViews/PlaidLink';
+import console from 'console';
 
 class PlaidScreen extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>

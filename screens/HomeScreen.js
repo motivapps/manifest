@@ -200,11 +200,14 @@ class HomeScreen extends React.Component {
         </Grid>
         </View>
         
+        
         <Footer style={styles.footerbar}>
           <FooterTab style={{ backgroundColor: '#49d5b6' }}>
             <Button vertical>
-              <Icon style={{ fontSize: 30, color: '#fff' }} name="md-stats" />
-              <Text style={styles.buttonText}>Stats</Text>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('Stats')}>
+                <Icon style={{ fontSize: 30, color: '#fff' }} name="md-stats" />
+                <Text style={styles.buttonText}>Stats</Text>
+              </TouchableOpacity>
             </Button>
             <Button vertical>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>

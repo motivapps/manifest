@@ -165,22 +165,22 @@ class HomeScreen extends React.Component {
     }
     return (
       <Container style={styles.container}>
-        <Text style={{ fontWeight: 'bold', marginTop: 20 }}>Home</Text>
+      <View style={styles.viewport}>
         <Text style={styles.title}>Manifest</Text>
-        <Text>It's alive!</Text>
-        <Text>My Latitude: {this.state.latitude}</Text>
-        <Text>My Longitude: {this.state.longitude}</Text>
-        <Button style={styles.basicButton} onPress={this.onToggleButton}>
-          <Text style={styles.buttonText}>Do Not Click Me!</Text>
-        </Button>
-        {this.state.buttonToggle ? (
-          <Text style={styles.message}>I said don't click me!</Text>
-        ) : null}
+        <Text style={styles.heading}>Goal: Fancy Pants Kayak</Text>
+
         <Image
-          style={{ width: 50, height: 50 }}
-          source={kayak}
+          style={styles.mainImage}
+          source={require('../assets/images/kayak.jpg')}
         />
-        <Content />
+        <Text style={styles.smallText}>Projected Completion Date: 9/14/19</Text>
+        <Text style={styles.largeText}>Money Saved: $248</Text>
+        <Text style={styles.largeText}>Current Streak: 79 days</Text>
+        <Text style={styles.smallTextLeft}>Relapses: 3</Text>
+        <Text style={styles.smallTextLeft}>Money Lost: $22.35</Text>
+        <Text style={styles.smallTextLeft}>Setback: 6 days</Text>
+        </View>
+        
         <Footer style={styles.footerbar}>
           <FooterTab style={{ backgroundColor: '#49d5b6' }}>
             <Button vertical>
@@ -219,16 +219,50 @@ const styles = StyleSheet.create({
     marginHorizontal: 0,
     backgroundColor: '#fff',
   },
+  viewport: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 30,
+    marginRight: 30,
+  },
   title: {
     fontWeight: 'bold',
-    fontSize: 50,
+    fontSize: 30,
+    color: '#49d5b6',
+  },
+  heading: {
+    fontWeight: 'bold',
+    fontSize: 26,
+    color: '#49d5b6',
+    marginBottom: 20,
+  },
+  largeText: {
+    fontWeight: 'bold',
+    fontSize: 22,
+    color: '#49d5b6',
+    alignSelf: 'flex-start',
+    marginLeft: 0,
+  },
+  smallText: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    color: '#4c4c4c',
+  },
+  smallTextLeft: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    color: '#4c4c4c',
+    alignSelf: 'flex-start',
+    marginLeft: 0,
   },
   message: {
     fontWeight: 'bold',
     fontSize: 20,
   },
   basicButton: {
-    backgroundColor: '#34d1af',
+    backgroundColor: '#49d5b6',
   },
   buttonText: {
     fontWeight: 'bold',
@@ -238,6 +272,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#49d5b6',
     fontWeight: 'bold',
     color: '#fff',
+  },
+  mainImage: {
+    width: 200,
+    height: 200,
+    backgroundColor: '#49d5b6',
+    margin: 10,
+    borderRadius: '100%',
+    borderWidth: 4,
+    borderColor: '#49d5b6',
   },
 });
 

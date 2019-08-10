@@ -1,10 +1,24 @@
 import React from 'react';
 import { AppLoading, Notifications } from 'expo';
 import { Container, Text, Button, Footer, FooterTab, Icon, Content } from 'native-base';
+<<<<<<< HEAD
 import { Platform, StatusBar, StyleSheet, View, TouchableOpacity, PushNotificationIOS } from 'react-native';
 import * as Permissions from 'expo-permissions';
 import { FOURSQUARE_CLIENT_ID, FOURSQUARE_CLIENT_SECRET, NGROK, GOOGLE_OAUTH_ID, PUSH_TOKEN } from '../app.config.json';
 import axios from 'axios';
+=======
+import {
+  Platform,
+  StatusBar,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  PushNotificationIOS,
+} from 'react-native';
+
+import * as Font from 'expo-font';
+// import { MonoText } from '../components/StyledText';
+>>>>>>> a9d4100c1bd19a995dfddacc205653c2af3c39c4
 
 class HomeScreen extends React.Component {
   constructor(props) {
@@ -20,6 +34,7 @@ class HomeScreen extends React.Component {
     };
     this.onToggleButton = this.onToggleButton.bind(this);
     this.setState = this.setState.bind(this);
+    console.log(props);
   }
 
   async componentDidMount() {
@@ -138,18 +153,26 @@ class HomeScreen extends React.Component {
     } else {
       console.log('did not fire:', this.state.dangerDistance);
     }
+  async componentWillMount() {
+    await Font.loadAsync({
+      Roboto: require("../node_modules/native-base/Fonts/Roboto.ttf"),
+      Roboto_medium: require("../node_modules/native-base/Fonts/Roboto_medium.ttf")
+    });
+    this.setState({isReady: true});
   }
 
   onToggleButton() {
     this.setState({
       buttonToggle: !this.state.buttonToggle,
-    })
+    });
   }
 
   render() {
+    if (!this.state.isReady) {
+      return <AppLoading />;
+    }
     return (
       <Container style={styles.container}>
-
         <Text style={{ fontWeight: 'bold', marginTop: 20 }}>Home</Text>
         <Text style={styles.title}>Manifest</Text>
         <Text>It's alive!</Text>
@@ -158,10 +181,12 @@ class HomeScreen extends React.Component {
         <Button style={styles.basicButton} onPress={this.onToggleButton}>
           <Text style={styles.buttonText}>Do Not Click Me!</Text>
         </Button>
-        {this.state.buttonToggle ? <Text style={styles.message}>I said don't click me!</Text> : null}
+        {this.state.buttonToggle ? (
+          <Text style={styles.message}>I said don't click me!</Text>
+        ) : null}
         <Content />
         <Footer style={styles.footerbar}>
-          <FooterTab>
+          <FooterTab style={{backgroundColor: '#49d5b6'}}>
             <Button vertical>
               <Icon style={{ fontSize: 30, color: '#fff' }} name="md-stats" />
               <Text style={styles.buttonText}>Stats</Text>
@@ -173,8 +198,10 @@ class HomeScreen extends React.Component {
               </TouchableOpacity>
             </Button>
             <Button vertical>
-              <Icon style={{ fontSize: 30, color: '#fff' }} name="md-ribbon" />
-              <Text style={styles.buttonText}>Goals</Text>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('Goals')}>
+                <Icon style={{ fontSize: 30, color: '#fff' }} name="md-ribbon" />
+                <Text style={styles.buttonText}>Goals</Text>
+              </TouchableOpacity>
             </Button>
             <Button vertical>
               <TouchableOpacity onPress={this.props.navigation.openDrawer}>
@@ -191,8 +218,7 @@ class HomeScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-
-    justifyContent: "center",
+    justifyContent: 'center',
     alignItems: 'center',
     marginHorizontal: 0,
     backgroundColor: '#fff',
@@ -216,7 +242,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#49d5b6',
     fontWeight: 'bold',
     color: '#fff',
-  }
+  },
 });
 
 export default HomeScreen;

@@ -1,11 +1,11 @@
 import React from 'react';
 import { Platform } from 'react-native';
-import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
-
+import { createStackNavigator, createDrawerNavigator } from 'react-navigation';
 import TabBarIcon from '../components/TabBarIcon';
+
 import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import PlaidScreen from '../screens/PlaidScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -14,7 +14,9 @@ const config = Platform.select({
 
 const HomeStack = createStackNavigator(
   {
-    Home: HomeScreen,
+    HomePg: {
+      screen: HomeScreen,
+    },
   },
   config
 );
@@ -33,27 +35,31 @@ HomeStack.navigationOptions = {
   ),
 };
 
-HomeStack.path = '';
+HomeStack.path = 'app/home/';
 
-const LinksStack = createStackNavigator(
+const PlaidStack = createStackNavigator(
   {
-    Links: LinksScreen,
+    Plaid: {
+      screen: PlaidScreen,
+    },
   },
   config
 );
 
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Links',
+PlaidStack.navigationOptions = {
+  tabBarLabel: 'Plaid',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
   ),
 };
 
-LinksStack.path = '';
+PlaidStack.path = 'app/plaid';
 
 const SettingsStack = createStackNavigator(
   {
-    Settings: SettingsScreen,
+    Settings: {
+      screen: SettingsScreen,
+    },
   },
   config
 );
@@ -65,14 +71,25 @@ SettingsStack.navigationOptions = {
   ),
 };
 
-SettingsStack.path = '';
+SettingsStack.path = 'app/settings';
 
-const tabNavigator = createBottomTabNavigator({
-  HomeStack,
-  LinksStack,
-  SettingsStack,
-});
+const drawerNavigator = createDrawerNavigator(
+  {
+    Home: HomeStack,
+    Plaid: PlaidStack,
+    Settings: SettingsStack,
+  },
+  {
+    hideStatusBar: true,
+    drawerBackgroundColor: 'rgba(255,255,255,.9)',
+    overlayColor: '#49d5b6',
+    contentOptions: {
+      activeTintColor: '#fff',
+      activeBackgroundColor: '#49d5b6',
+    },
+  }
+);
 
-tabNavigator.path = '';
+drawerNavigator.path = 'app/';
 
-export default tabNavigator;
+export default drawerNavigator;

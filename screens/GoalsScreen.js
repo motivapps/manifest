@@ -4,18 +4,27 @@ import { StyleSheet, View, Alert, TouchableOpacity } from 'react-native';
 import { Container, Footer, FooterTab, Icon, Content, Button, Text } from 'native-base';
 import Link from './subViews/PlaidLink';
 
-class PlaidScreen extends React.Component {
+class GoalsScreen extends React.Component {
   constructor(props) {
     super(props);
   }
 
   render() {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Link />
+       <View style={{ flex: 1 }}>
+        <Container style={styles.Container}>
+          <Text style={{ fontWeight: 'bold', marginTop: 20, alignContent: 'center' }}>
+            My Goals
+          </Text>
+        </Container>
+        <Container>
+          <Button style={styles.basicButton} onPress={this.onToggleButton}>
+            <Text style={styles.buttonText}>Current Goals</Text>
+          </Button>
+        </Container>
         <Content />
         <Footer style={styles.footerbar}>
-          <FooterTab style={{backgroundColor: '#49d5b6'}}>
+          <FooterTab style={{ backgroundColor: '#49d5b6' }}>
             <Button vertical>
               <Icon style={{ fontSize: 30, color: '#fff' }} name="md-stats" />
               <Text style={styles.buttonText}>Stats</Text>
@@ -69,4 +78,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PlaidScreen;
+export default GoalsScreen;

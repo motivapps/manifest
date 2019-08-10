@@ -1,13 +1,21 @@
 import React from 'react';
-import { StyleSheet, View, Alert, TouchableOpacity, Button, Text } from 'react-native';
+import { StyleSheet, View, Alert, TouchableOpacity, Button, Text, AsyncStorage } from 'react-native';
 import HomeScreen from '../HomeScreen';
 
-const Auth0 = ({ name, callback, type, goToApp }) => {
+const Auth0 = ({ name, userToken, callback, type, goToApp }) => {
+  const storeData = async () => {
+    try {
+      await AsyncStorage.setItem('userToken', userToken, goToApp);
+    } catch (error) {
+      // Error saving data
+    }
+  };
+
   return type === 'login' ? (
     <View>
       {name ? (
         // <Text style={styles.title}>You are logged in, {name}!</Text>
-        goToApp()
+        storeData()
         ) : (
         <Button title="Log in with Auth0" onPress={callback} />
       )}
@@ -16,7 +24,7 @@ const Auth0 = ({ name, callback, type, goToApp }) => {
     <View>
       {name ? (
         // <Text style={styles.title}>Welcome, You are now logged in as {name}!</Text>
-        goToApp()
+        storeData()
       ) : (
         <Button title="Sign up with Auth0" onPress={callback} />
       )}

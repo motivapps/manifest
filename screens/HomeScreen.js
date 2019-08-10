@@ -3,7 +3,8 @@ import { AppLoading, Notifications } from 'expo';
 import { Container, Text, Button, Footer, FooterTab, Icon, Content } from 'native-base';
 import { Platform, StatusBar, StyleSheet, View, TouchableOpacity, PushNotificationIOS } from 'react-native';
 import * as Permissions from 'expo-permissions';
-import { FOURSQUARE_CLIENT_ID, FOURSQUARE_CLIENT_SECRET } from '../app.config.json';
+import { FOURSQUARE_CLIENT_ID, FOURSQUARE_CLIENT_SECRET, NGROK, GOOGLE_OAUTH_ID, PUSH_TOKEN } from '../app.config.json';
+import axios from 'axios';
 
 class HomeScreen extends React.Component {
   constructor(props) {
@@ -15,13 +16,13 @@ class HomeScreen extends React.Component {
       latitude: null,
       longitude: null,
       dangerDistance: null,
+      authID: GOOGLE_OAUTH_ID,
     };
     this.onToggleButton = this.onToggleButton.bind(this);
     this.setState = this.setState.bind(this);
   }
 
   async componentDidMount() {
-
     // GET LOCATION PERMISSIONS:
     async function getLocationAsync() {
       // permissions returns only for location permissions on iOS and under certain conditions, see Permissions.LOCATION
@@ -33,38 +34,39 @@ class HomeScreen extends React.Component {
           },
           (err) => console.error(err),
           { timeout: 2000, maximumAge: 2000, enableHighAccuracy: true, distanceFilter: 1 }
-        );
-      } else {
-        throw new Error('Location permission not granted');
+          );
+        } else {
+          throw new Error('Location permission not granted');
+        }
       }
-    }
-
-    //setInterval(() => {
-    navigator.geolocation.watchPosition(
-      (position) => {
-        console.log('position outside of permissions', position);
+      
+      //setInterval(() => {
+        navigator.geolocation.watchPosition(
+          (position) => {
+            // console.log('position outside of permissions', position);
+            // console.log('authID', this.state.authID);
         let latitude = position.coords.latitude;
         let longitude = position.coords.longitude;
         this.setState({
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
         })
-        fetch(`https://api.foursquare.com/v2/venues/search?client_id=${FOURSQUARE_CLIENT_ID}&client_secret=${FOURSQUARE_CLIENT_SECRET}&ll=${this.state.latitude},${this.state.longitude}&intent=checkin&radius=60&categoryId=4bf58dd8d48988d1e0931735&v=20190425`)
-          .then(result => {
-            console.log('get location result from front:', result);
-            return result.json();
-          })
-          .then(response => {
-            console.log('response:', response);
-            console.log('location distance:', response.response.venues[0].location.distance);
-            let distance = response.response.venues[0].location.distance;
-            this.setState({
-              dangerDistance: response.response.venues[0].location.distance,
-            })
-          })
-          .catch(err => {
-            console.log('get location error from front:', err);
-          })
+        // fetch(`https://api.foursquare.com/v2/venues/search?client_id=${FOURSQUARE_CLIENT_ID}&client_secret=${FOURSQUARE_CLIENT_SECRET}&ll=${this.state.latitude},${this.state.longitude}&intent=checkin&radius=60&categoryId=4bf58dd8d48988d1e0931735&v=20190425`)
+        //   .then(result => {
+        //     //console.log('get location result from front:', result);
+        //     return result.json();
+        //   })
+        //   .then(response => {
+        //     //console.log('response:', response);
+        //     console.log('location distance:', response.response.venues[0].location.distance);
+        //     let distance = response.response.venues[0].location.distance;
+        //     this.setState({
+        //       dangerDistance: response.response.venues[0].location.distance,
+        //     })
+        //   })
+        //   .catch(err => {
+        //     console.log('get location error from front:', err);
+        //   })
       },
       (err) => console.error(err),
       { enableHighAccuracy: true, timeout: 2000, maximumAge: 2000, distanceFilter: 0 }
@@ -77,11 +79,13 @@ class HomeScreen extends React.Component {
 
     // PUSH NOTIFICATION PERMISSIONS
 
-    const PUSH_ENDPOINT = 'https://your-server.com/users/push-token';
-
+    // const PUSH_ENDPOINT = 'https://your-server.com/users/push-token';
+    // const PUSH_ENDPOINT = `${NGROK}/pushtoken`;
+    let authID = this.state.authID;
     async function registerForPushNotificationsAsync() {
       const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
       let finalStatus = existingStatus;
+      // existingStatus = null;
 
       // only ask if permissions have not already been determined, because
       // iOS won't necessarily prompt the user a second time.
@@ -101,21 +105,12 @@ class HomeScreen extends React.Component {
       let token = await Notifications.getExpoPushTokenAsync();
       console.log('token:', token);
 
-      // POST the token to your backend server from where you can retrieve it to send push notifications.
-      return fetch(PUSH_ENDPOINT, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          token: {
-            value: token,
-          },
-          user: {
-            username: 'Rachel Brandsness',
-          },
-        }),
+      axios.post(`${NGROK}/pushtoken`, { pushToken: token, authID })
+      .then((result) => {
+        console.log('device token post result:', result.config.data);
+      })
+      .catch((err) => {
+        console.log('device token post error:', err);
       });
     }
 
@@ -129,7 +124,7 @@ class HomeScreen extends React.Component {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        to: 'ExponentPushToken[-ksyynDb5CVJ4kRH_8eSUV]',
+        to: PUSH_TOKEN,
         sound: 'default',
         title: 'Manifest',
         body: 'Don\'t you even think about going inside that CC\'s...'
@@ -137,15 +132,13 @@ class HomeScreen extends React.Component {
     });
   };
 
-    if(this.state.dangerDistance < 60) {
+    if (this.state.dangerDistance < 60) {
       console.log('dangerDistance:', this.state.dangerDistance);
       sendPushNotification();
     } else {
       console.log('did not fire:', this.state.dangerDistance);
     }
   }
-
- 
 
   onToggleButton() {
     this.setState({

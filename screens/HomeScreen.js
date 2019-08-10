@@ -13,7 +13,10 @@ import {
 } from 'react-native';
 
 import * as Font from 'expo-font';
+<<<<<<< HEAD
 import { kayak } from '../assets/images/kayak.jpg';
+=======
+>>>>>>> e401d77a496f40d0ad507c02fe110c0e31d5eee4
 import { FOURSQUARE_CLIENT_ID, FOURSQUARE_CLIENT_SECRET, NGROK, GOOGLE_OAUTH_ID, PUSH_TOKEN } from '../app.config.json';
 // import { MonoText } from '../components/StyledText';
 
@@ -53,11 +56,18 @@ class HomeScreen extends React.Component {
           },
           (err) => console.error(err),
           { timeout: 2000, maximumAge: 2000, enableHighAccuracy: true, distanceFilter: 1 }
+<<<<<<< HEAD
           );
         } 
           throw new Error('Location permission not granted');
         
       }
+=======
+        );
+      } 
+        throw new Error('Location permission not granted');
+    }
+>>>>>>> e401d77a496f40d0ad507c02fe110c0e31d5eee4
 
     // setInterval(() => {
     navigator.geolocation.watchPosition(
@@ -95,6 +105,12 @@ class HomeScreen extends React.Component {
     getLocationAsync();
 
     // PUSH NOTIFICATION PERMISSIONS
+<<<<<<< HEAD
+=======
+
+    // const PUSH_ENDPOINT = 'https://your-server.com/users/push-token';
+    // const PUSH_ENDPOINT = `${NGROK}/pushtoken`;
+>>>>>>> e401d77a496f40d0ad507c02fe110c0e31d5eee4
     const {authID} = this.state;
     async function registerForPushNotificationsAsync() {
       const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
@@ -146,8 +162,17 @@ class HomeScreen extends React.Component {
     } else {
       console.log('did not fire:', this.state.dangerDistance);
     }
+<<<<<<< HEAD
 
     this.setState({ isReady: true });
+=======
+    this.setState({ isReady: true });
+
+    await Font.loadAsync({
+      Roboto: require('../node_modules/native-base/Fonts/Roboto.ttf'),
+      Roboto_medium: require('../node_modules/native-base/Fonts/Roboto_medium.ttf'),
+    });
+>>>>>>> e401d77a496f40d0ad507c02fe110c0e31d5eee4
   }
 
   onToggleButton() {

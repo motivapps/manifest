@@ -4,8 +4,6 @@ import { Platform, StatusBar, StyleSheet, View, TouchableOpacity } from 'react-n
 import { Container, Text, Button, Footer, FooterTab, Icon, Content } from 'native-base';
 
 export default class Transactions extends React.Component {
-
-
   render() {
     return (
       <Container style={this.styles.container}>
@@ -52,4 +50,7 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
 });
+<<<<<<< HEAD:screens/Transactions.js
 
+=======
+>>>>>>> e401d77a496f40d0ad507c02fe110c0e31d5eee4:screens/TransactionsScreen.js

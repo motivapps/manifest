@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { StyleSheet, View, Alert, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Alert, TouchableOpacity, AsyncStorage } from 'react-native';
 import { Container, Footer, FooterTab, Icon, Content, Button, Text } from 'native-base';
 import { AuthSession } from 'expo';
 import jwtDecode from 'jwt-decode';
@@ -19,8 +19,31 @@ class LoginScreen extends React.Component {
     this.state = {
       name: null,
     };
-    this.go = this.go.bind(this);
+    this.storeData = this.storeData.bind(this);
   }
+
+  componentDidUpdate() {
+    const { auth0_id } = this.state;
+    const { navigation } = this.props;
+
+    if (name) {
+      this.storeData(auth0_id);
+      navigaiton.dispatch(
+        navigation.navigate({
+          routeName: 'App',
+          action: NavigationActions.setParams(this.state),
+        })
+      );
+    }
+  }
+
+  storeData = async token => {
+    try {
+      await AsyncStorage.setItem('userToken', token);
+    } catch (error) {
+      navigation.navigate('Signup');
+    }
+  };
 
   login = async () => {
     // Retrieve the redirect URL, add this to the callback URL list
@@ -56,31 +79,20 @@ class LoginScreen extends React.Component {
 
     // Retrieve the JWT token and decode it
     const jwtToken = response.id_token;
-    const { name, picture, sub } = jwtDecode(jwtToken);
-    this.setState({ name, picture, auth0_id: sub });
+    const { name, sub } = jwtDecode(jwtToken);
+    this.setState({ name, auth0_id: sub });
 
     console.log('JWTotken data', jwtDecode(jwtToken));
 
-    axios.post(`${NGROK}/login`, { name, auth0_id: sub, picture });
+    axios.post(`${NGROK}/login`, { auth0_id: sub });
   };
-
-  go() {
-    const { name, picture, auth0_id } = this.state;
-    this.props.navigation.navigate('Home', { name, picture, auth0_id })
-  }
 
   render() {
     const { name } = this.state;
 
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Auth0
-          style={{ marginBottom: 30 }}
-          callback={this.login}
-          name={name}
-          goToApp={this.go}
-          type="login"
-        />
+        <Auth0 style={{ marginBottom: 30 }} callback={this.login} name={name} type="login" />
       </View>
     );
   }

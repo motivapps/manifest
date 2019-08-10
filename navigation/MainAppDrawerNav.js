@@ -8,6 +8,7 @@ import SettingsScreen from '../screens/SettingsScreen';
 import PlaidScreen from '../screens/PlaidScreen';
 import GoalsScreen from '../screens/GoalsScreen';
 import TransactionsScreen from '../screens/TransactionsScreen';
+import LogOutScreen from '../screens/LogOutScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -118,6 +119,9 @@ const drawerNavigator = createDrawerNavigator(
     Goals: GoalsStack,
     Transactions: TransactionsStack,
     Settings: SettingsStack,
+    LogOut: {
+      screen: LogOutScreen,
+    },
   },
   {
     initialRouteName: 'Home',
@@ -129,12 +133,9 @@ const drawerNavigator = createDrawerNavigator(
       activeBackgroundColor: '#49d5b6',
     },
     backBehavior: 'initialRoute',
-    // navigationOptions: {
-      
-    // }
-  });
-  
-  // const { params } = this.props.navigation.state
+  }
+);
+
 drawerNavigator.path = 'app/';
 
 export default drawerNavigator;

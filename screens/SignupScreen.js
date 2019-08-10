@@ -34,7 +34,6 @@ class SignupScreen extends React.Component {
       navigaiton.dispatch(
         navigation.navigate({
           routeName: 'App',
-          // params: this.state,
           action: NavigationActions.setParams(this.state),
         })
       );
@@ -96,13 +95,7 @@ class SignupScreen extends React.Component {
 
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Auth0
-          style={{ marginBottom: 30 }}
-          callback={this.signup}
-          goToApp={this.go}
-          name={name}
-          type="signup"
-        />
+        <Auth0 style={{ marginBottom: 30 }} callback={this.signup} name={name} type="signup" />
       </View>
     );
   }

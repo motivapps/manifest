@@ -113,23 +113,23 @@ SettingsStack.navigationOptions = {
 
 SettingsStack.path = 'app/settings';
 
-// const GamesStack = createStackNavigator(
-//   {
-//     Games: {
-//       screen: GamesScreen,
-//     },
-//   },
-//   config
-// );
+const GamesStack = createStackNavigator(
+  {
+    Games: {
+      screen: GamesScreen,
+    },
+  },
+  config
+);
 
-// GamesStack.navigationOptions = {
-//   tabBarLabel: 'Games',
-//   tabBarIcon: ({ focused }) => (
-//     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
-//   ),
-// };
+GamesStack.navigationOptions = {
+  tabBarLabel: 'Games',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
+  ),
+};
 
-// GamesStack.path = 'app/games';
+GamesStack.path = 'app/games';
 
 const drawerNavigator = createDrawerNavigator(
   {
@@ -141,7 +141,7 @@ const drawerNavigator = createDrawerNavigator(
     LogOut: {
       screen: LogOutScreen,
     },
-    //Games: null,
+    Games: GamesStack,
   },
   {
     initialRouteName: 'Home',

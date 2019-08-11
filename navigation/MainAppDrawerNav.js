@@ -8,6 +8,7 @@ import SettingsScreen from '../screens/SettingsScreen';
 import PlaidScreen from '../screens/PlaidScreen';
 import GoalsScreen from '../screens/GoalsScreen';
 import TransactionsScreen from '../screens/TransactionsScreen';
+import StatsScreen from '../screens/StatsScreen';
 import LogOutScreen from '../screens/LogOutScreen';
 import GamesScreen from '../screens/GamesScreen';
 
@@ -77,6 +78,42 @@ GoalsStack.navigationOptions = {
 
 GoalsStack.path = 'app/goals';
 
+const GamesStack = createStackNavigator(
+  {
+    Goals: {
+      screen: GamesScreen,
+    },
+  },
+  config
+);
+
+GamesStack.navigationOptions = {
+  tabBarLabel: 'Games',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
+  ),
+};
+
+GamesStack.path = 'app/games';
+
+const StatsStack = createStackNavigator(
+  {
+    Stats: {
+      screen: StatsScreen,
+    },
+  },
+  config
+);
+
+StatsStack.navigationOptions = {
+  tabBarLabel: 'Stats',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
+  ),
+};
+
+StatsStack.path = 'app/stats';
+
 const TransactionsStack = createStackNavigator(
   {
     Transactions: {
@@ -113,29 +150,13 @@ SettingsStack.navigationOptions = {
 
 SettingsStack.path = 'app/settings';
 
-const GamesStack = createStackNavigator(
-  {
-    Games: {
-      screen: GamesScreen,
-    },
-  },
-  config
-);
-
-GamesStack.navigationOptions = {
-  tabBarLabel: 'Games',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
-  ),
-};
-
-GamesStack.path = 'app/games';
-
 const drawerNavigator = createDrawerNavigator(
   {
     Home: HomeStack,
     Plaid: PlaidStack,
+    Stats: StatsStack,
     Goals: GoalsStack,
+    Games: GamesStack,
     Transactions: TransactionsStack,
     Settings: SettingsStack,
     LogOut: {

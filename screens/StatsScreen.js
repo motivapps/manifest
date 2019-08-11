@@ -53,7 +53,6 @@ export default class StatsScreen extends React.Component {
           <Text style={styles.smallTextGreen}>Relapse Total to Date: $$87.16</Text>
 
           <BarChart
-            
             data={barchartData}
             width={330}
             height={180}

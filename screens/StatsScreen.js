@@ -82,12 +82,16 @@ export default class StatsScreen extends React.Component {
               </TouchableOpacity>
             </Button>
             <Button vertical>
-              <Icon style={{ fontSize: 30, color: '#fff' }} name="logo-game-controller-a" />
-              <Text style={styles.buttonText}>Games</Text>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('Games')}>
+                <Icon style={{ fontSize: 30, color: '#fff' }} name="logo-game-controller-a" />
+                <Text style={styles.buttonText}>Games</Text>
+              </TouchableOpacity>
             </Button>
             <Button vertical>
-              <Icon style={{ fontSize: 30, color: '#fff' }} name="md-ribbon" />
-              <Text style={styles.buttonText}>Goals</Text>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('Goals')}>
+                <Icon style={{ fontSize: 30, color: '#fff' }} name="md-ribbon" />
+                <Text style={styles.buttonText}>Goals</Text>
+              </TouchableOpacity>
             </Button>
             <Button vertical>
               <TouchableOpacity onPress={this.props.navigation.openDrawer}>

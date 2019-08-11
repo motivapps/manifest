@@ -4,84 +4,45 @@ import { StyleSheet, View, Alert, TouchableOpacity } from 'react-native';
 import { Container, Footer, FooterTab, Icon, Content, Button, Text, Item, Input, Grid, Row, Col, Picker } from 'native-base';
 import Link from './subViews/PlaidLink';
 
-class GoalsScreen extends React.Component {
+class GamesScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selected2: undefined,
+  
     };
-  }
-
-  onValueChange2(value: string) {
-    this.setState({
-      selected2: value
-    });
   }
 
   render() {
     return (
-       <Container style={styles.container}>
+      <Container style={styles.container}>
         <View style={styles.viewport}>
-          <Text style={styles.heading}>My Goals</Text>
+          <Text style={styles.heading}>My Games</Text>
 
-          <Grid style={{ width: '100%', marginTop: 10 }}>
+          <Grid style={{ width: 260, marginTop: 20 }}>
             <Row style={{ width: '100%' }}>
-              <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                <Button style={styles.transactionButton}><Text style={styles.buttonText}>Current Goals</Text></Button>
+              <Col style={{ backgroundColor: '#fff', height: 120 }}>
+                <Container style={styles.gameContainer}></Container>
               </Col>
-              <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                <Button style={styles.transactionButton}><Text style={styles.buttonText}>Set New Goal</Text></Button></Col>
+              <Col style={{ backgroundColor: '#fff', height: 120 }}>
+                <Container style={styles.gameContainer}></Container></Col>
+            </Row>
+            <Row style={{ width: '100%', marginBottom: 10 }}><Text style={styles.smallText}>Stick with your goals to unlock more games</Text></Row>
+            <Row style={{ width: '100%' }}>
+              <Col style={{ backgroundColor: '#fff', height: 120 }}>
+                <Container style={styles.gameContainer}></Container>
+              </Col>
+              <Col style={{ backgroundColor: '#fff', height: 120 }}>
+                <Container style={styles.gameContainer}></Container></Col>
+            </Row>
+            <Row style={{ width: '100%' }}>
+              <Col style={{ backgroundColor: '#fff', height: 120 }}>
+                <Container style={styles.gameContainer}></Container>
+              </Col>
+              <Col style={{ backgroundColor: '#fff', height: 120 }}>
+                <Container style={styles.gameContainer}></Container></Col>
             </Row>
           </Grid>
-          <Text style={styles.smallTextLeft}>Goal Name:</Text>
-          <Item floatingLabel style={{marginBottom: 10, height: 36 }}>
-            <Input placeholder="Ex. Clyde's New Kayak" />
-          </Item>
-          <Text style={styles.smallTextLeft}>What are you saving up to purchase?</Text>
-          <Item floatingLabel style={{ marginBottom: 10, height: 36 }}>
-            <Input placeholder="Ex. Fancy Pants Kayak" />
-          </Item>
-          <Text style={styles.smallTextLeft}>Amount Needed to reach goal:</Text>
-          <Item floatingLabel style={{ marginBottom: 10, height: 36 }}>
-            <Input placeholder="Ex. $495.00" />
-          </Item>
-          <Text style={styles.smallTextLeft}>Select vice you want to quit:</Text>
-          <Item picker style={{ marginBottom: 10, height: 36 }}>
-            <Picker
-              mode="dropdown"
-              iosIcon={<Icon name="arrow-down" />}
-              style={{ width: '75%' }}
-              placeholder="Ex. Coffee"
-              placeholderStyle={{ color: "#4c4c4c" }}
-              placeholderIconColor="#49d5b6"
-              selectedValue={this.state.selected2}
-              onValueChange={this.onValueChange2.bind(this)} >
-              <Picker.Item label="Coffee" value="key0" />
-              <Picker.Item label="Smoking" value="key1" />
-              <Picker.Item label="Fast Food" value="key2" />
-            </Picker>
-          </Item>
-          <Text style={styles.smallTextLeft}>Price per vice purchase:</Text>
-          <Item floatingLabel style={{ marginBottom: 10, height: 36 }}>
-            <Input placeholder="Ex. $5.95" />
-          </Item>
-          <Text style={styles.smallTextLeft}>Vice purchase frequency:</Text>
-          <Item picker style={{ marginBottom: 10, height: 36 }}>
-            <Picker
-              mode="dropdown"
-              iosIcon={<Icon name="arrow-down" />}
-              style={{ width: '74%' }}
-              placeholder="Ex. Daily"
-              placeholderStyle={{ color: "#4c4c4c" }}
-              placeholderIconColor="#49d5b6"
-              selectedValue={this.state.selected2}
-              onValueChange={this.onValueChange2.bind(this)} >
-              <Picker.Item label="Daily" value="key0" />
-              <Picker.Item label="Twice per Week" value="key1" />
-              <Picker.Item label="Once per Week" value="key2" />
-            </Picker>
-          </Item>
-          <Button style={styles.saveButton}><Text style={styles.buttonText}>Save Goal</Text></Button>
+          
         </View>
         <Footer style={styles.footerbar}>
           <FooterTab style={{ backgroundColor: '#49d5b6' }}>
@@ -153,6 +114,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
     color: '#4c4c4c',
+    textAlign: 'center',
   },
   smallTextLeft: {
     fontWeight: 'bold',
@@ -210,6 +172,13 @@ const styles = StyleSheet.create({
     borderWidth: 4,
     borderColor: '#49d5b6',
   },
+  gameContainer: {
+    backgroundColor: '#49d5b6',
+    width: 120,
+    height: 120,
+    marginBottom: 10,
+    borderRadius: 8,
+  },
 });
 
-export default GoalsScreen;
+export default GamesScreen;

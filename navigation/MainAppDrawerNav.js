@@ -9,6 +9,7 @@ import PlaidScreen from '../screens/PlaidScreen';
 import GoalsScreen from '../screens/GoalsScreen';
 import TransactionsScreen from '../screens/TransactionsScreen';
 import StatsScreen from '../screens/StatsScreen';
+import GamesScreen from '../screens/GamesScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -76,6 +77,24 @@ GoalsStack.navigationOptions = {
 
 GoalsStack.path = 'app/goals';
 
+const GamesStack = createStackNavigator(
+  {
+    Goals: {
+      screen: GamesScreen,
+    },
+  },
+  config
+);
+
+GamesStack.navigationOptions = {
+  tabBarLabel: 'Games',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
+  ),
+};
+
+GamesStack.path = 'app/games';
+
 const StatsStack = createStackNavigator(
   {
     Stats: {
@@ -136,6 +155,7 @@ const drawerNavigator = createDrawerNavigator(
     Plaid: PlaidStack,
     Stats: StatsStack,
     Goals: GoalsStack,
+    Games: GamesStack,
     Transactions: TransactionsStack,
     Settings: SettingsStack,
   },

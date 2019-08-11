@@ -1,6 +1,6 @@
 import React from 'react';
 import { AppLoading, Notifications } from 'expo';
-import { Container, Text, Button, Footer, FooterTab, Icon, Content } from 'native-base';
+import { Container, Text, Button, Footer, FooterTab, Icon, Content, Grid, Row, Col } from 'native-base';
 import * as Permissions from 'expo-permissions';
 import axios from 'axios';
 import {
@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 
 import * as Font from 'expo-font';
+import * as Progress from 'react-native-progress';
 import { kayak } from '../assets/images/kayak.jpg';
 import { FOURSQUARE_CLIENT_ID, FOURSQUARE_CLIENT_SECRET, NGROK, GOOGLE_OAUTH_ID, PUSH_TOKEN } from '../app.config.json';
 // import { MonoText } from '../components/StyledText';
@@ -158,26 +159,47 @@ class HomeScreen extends React.Component {
     return (
       <Container style={styles.container}>
       <View style={styles.viewport}>
-        <Text style={styles.title}>Manifest</Text>
         <Text style={styles.heading}>Goal: Fancy Pants Kayak</Text>
 
         <Image
           style={styles.mainImage}
           source={require('../assets/images/kayak.jpg')}
         />
-        <Text style={styles.smallText}>Projected Completion Date: 9/14/19</Text>
-        <Text style={styles.largeText}>Money Saved: $248</Text>
-        <Text style={styles.largeText}>Current Streak: 79 days</Text>
-        <Text style={styles.smallTextLeft}>Relapses: 3</Text>
-        <Text style={styles.smallTextLeft}>Money Lost: $22.35</Text>
-        <Text style={styles.smallTextLeft}>Setback: 6 days</Text>
+
+          <Progress.Bar progress={0.66} width={240} color={'#49d5b6'} unfilledColor={'#cccccc'} height={24} />
+        <View style={{marginTop: 10, marginBottom: 10}}>
+          <Text style={styles.smallText}>Projected Completion Date: 9/14/19</Text>
+        </View>
+        <View style={{marginBottom: 10, marginLeft: -70}}>
+          <Text style={styles.largeText}>Money Saved: $248</Text>
+          <Text style={styles.largeText}>Current Streak: 79 days</Text>
+        </View>
+
+          <Text style={styles.smallTextLeft}>Relapses: 3</Text>
+          <Text style={styles.smallTextLeft}>Money Lost: $22.35</Text>
+          <Text style={styles.smallTextLeft}>Setback: 6 days</Text>
+        <Text style={styles.smallTextGreenLeft}>Savings Projection: $597.11</Text>
+        <Grid style={{width: '100%', marginTop: 10}}>
+            <Row style={{ width: '100%' }}>
+              <Col style={{ backgroundColor: '#fff', height: 60 }}>
+                <Button style={styles.transactionButton}><Text style={styles.buttonText}>3 months</Text></Button>
+              </Col>
+              <Col style={{ backgroundColor: '#fff', height: 60 }}>
+                <Button style={styles.transactionButton}><Text style={styles.buttonText}>6 months</Text></Button></Col>
+              <Col style={{ backgroundColor: '#fff', height: 60 }}>
+                <Button style={styles.transactionButton}><Text style={styles.buttonText}>1 year</Text></Button></Col>
+          </Row>
+        </Grid>
         </View>
         
+
         <Footer style={styles.footerbar}>
           <FooterTab style={{ backgroundColor: '#49d5b6' }}>
             <Button vertical>
-              <Icon style={{ fontSize: 30, color: '#fff' }} name="md-stats" />
-              <Text style={styles.buttonText}>Stats</Text>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('Stats')}>
+                <Icon style={{ fontSize: 30, color: '#fff' }} name="md-stats" />
+                <Text style={styles.buttonText}>Stats</Text>
+              </TouchableOpacity>
             </Button>
             <Button vertical>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('Games')}>
@@ -221,14 +243,14 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: 'bold',
-    fontSize: 30,
+    fontSize: 16,
     color: '#49d5b6',
   },
   heading: {
     fontWeight: 'bold',
     fontSize: 26,
     color: '#49d5b6',
-    marginBottom: 20,
+    marginTop: 10,
   },
   largeText: {
     fontWeight: 'bold',
@@ -249,6 +271,13 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     marginLeft: 0,
   },
+  smallTextGreenLeft: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    color: '#49d5b6',
+    alignSelf: 'flex-start',
+    marginTop: 10,
+  },
   message: {
     fontWeight: 'bold',
     fontSize: 20,
@@ -259,6 +288,15 @@ const styles = StyleSheet.create({
   buttonText: {
     fontWeight: 'bold',
     color: '#fff',
+    textAlign: 'center',
+    width: '100%',
+  },
+  transactionButton: {
+    backgroundColor: '#49d5b6',
+    height: 40,
+    alignSelf: 'flex-start',
+    maxWidth: '98%',
+    width: '98%',
   },
   footerbar: {
     backgroundColor: '#49d5b6',
@@ -270,7 +308,7 @@ const styles = StyleSheet.create({
     height: 200,
     backgroundColor: '#49d5b6',
     margin: 10,
-    borderRadius: '100%',
+    borderRadius: 100,
     borderWidth: 4,
     borderColor: '#49d5b6',
   },

@@ -1,18 +1,31 @@
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react';
 import { StyleSheet, View, Alert, TouchableOpacity } from 'react-native';
-import { Container, Footer, FooterTab, Icon, Content, Button, Text, Item, Input, Grid, Row, Col } from 'native-base';
-
-
+import {
+  Container,
+  Footer,
+  FooterTab,
+  Icon,
+  Content,
+  Button,
+  Text,
+  Item,
+  Input,
+  Grid,
+  Row,
+  Col,
+  Thumbnail,
+} from 'native-base';
 
 class GamesScreen extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-  
+    this.state = {};
   }
 
   render() {
+    const { navigate } = this.props.navigation;
+
     return (
       <Container style={styles.container}>
         <View style={styles.viewport}>
@@ -21,28 +34,38 @@ class GamesScreen extends React.Component {
           <Grid style={{ width: 260, marginTop: 20 }}>
             <Row style={{ width: '100%' }}>
               <Col style={{ backgroundColor: '#fff', height: 120 }}>
-                <Container style={styles.gameContainer}></Container>
+                <TouchableOpacity onPress={() => navigate('DK')}>
+                  <Thumbnail
+                    square
+                    style={styles.gameImg}
+                    source={require('../assets/images/DK.jpg')}
+                  />
+                </TouchableOpacity>
               </Col>
               <Col style={{ backgroundColor: '#fff', height: 120 }}>
-                <Container style={styles.gameContainer}></Container></Col>
+                <Container style={styles.gameContainer} />
+              </Col>
             </Row>
-            <Row style={{ width: '100%', marginBottom: 10 }}><Text style={styles.smallText}>Stick with your goals to unlock more games</Text></Row>
+            <Row style={{ width: '100%', marginBottom: 10 }}>
+              <Text style={styles.smallText}>Stick with your goals to unlock more games</Text>
+            </Row>
             <Row style={{ width: '100%' }}>
               <Col style={{ backgroundColor: '#fff', height: 120 }}>
-                <Container style={styles.gameContainer}></Container>
+                <Container style={styles.gameContainer} />
               </Col>
               <Col style={{ backgroundColor: '#fff', height: 120 }}>
-                <Container style={styles.gameContainer}></Container></Col>
+                <Container style={styles.gameContainer} />
+              </Col>
             </Row>
             <Row style={{ width: '100%' }}>
               <Col style={{ backgroundColor: '#fff', height: 120 }}>
-                <Container style={styles.gameContainer}></Container>
+                <Container style={styles.gameContainer} />
               </Col>
               <Col style={{ backgroundColor: '#fff', height: 120 }}>
-                <Container style={styles.gameContainer}></Container></Col>
+                <Container style={styles.gameContainer} />
+              </Col>
             </Row>
           </Grid>
-          
         </View>
         <Footer style={styles.footerbar}>
           <FooterTab style={{ backgroundColor: '#49d5b6' }}>
@@ -176,6 +199,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#49d5b6',
     width: 120,
     height: 120,
+    marginBottom: 10,
+    borderRadius: 8,
+  },
+  gameImg: {
+    width: 120,
+    height: 110,
     marginBottom: 10,
     borderRadius: 8,
   },

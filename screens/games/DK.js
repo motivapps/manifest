@@ -1,8 +1,15 @@
-import React { Component } from 'react';
+import React from 'react';
 import DonkeyKong from 'react-native-donkey-kong';
 
-export default class Games extends Component<{}> {
+class DKScreen extends React.Component<{}> {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
   render() {
     return <DonkeyKong />;
   }
-};
+}
+
+export default DKScreen;

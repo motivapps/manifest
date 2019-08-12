@@ -1,21 +1,31 @@
 import React from 'react';
 import { AppLoading, Notifications } from 'expo';
-import { Container, Text, Button, Footer, FooterTab, Icon, Content, Grid, Row, Col } from 'native-base';
+import {
+  Container,
+  Text,
+  Button,
+  Footer,
+  FooterTab,
+  Icon,
+  Content,
+  Grid,
+  Row,
+  Col,
+} from 'native-base';
 import * as Permissions from 'expo-permissions';
 import axios from 'axios';
-import {
-  Platform,
-  StatusBar,
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
+import { Platform, StatusBar, StyleSheet, View, TouchableOpacity, Image } from 'react-native';
 
 import * as Font from 'expo-font';
 import * as Progress from 'react-native-progress';
 import { kayak } from '../assets/images/kayak.jpg';
-import { FOURSQUARE_CLIENT_ID, FOURSQUARE_CLIENT_SECRET, NGROK, GOOGLE_OAUTH_ID, PUSH_TOKEN } from '../app.config.json';
+import {
+  FOURSQUARE_CLIENT_ID,
+  FOURSQUARE_CLIENT_SECRET,
+  NGROK,
+  GOOGLE_OAUTH_ID,
+  PUSH_TOKEN,
+} from '../app.config.json';
 // import { MonoText } from '../components/StyledText';
 
 class HomeScreen extends React.Component {
@@ -41,24 +51,23 @@ class HomeScreen extends React.Component {
       const { status, permissions } = await Permissions.askAsync(Permissions.LOCATION);
       if (status === 'granted') {
         return navigator.geolocation.watchPosition(
-          (position) => {
+          position => {
             console.log(position);
           },
-          (err) => console.error(err),
+          err => console.error(err),
           { timeout: 2000, maximumAge: 2000, enableHighAccuracy: true, distanceFilter: 1 }
-          );
-        } 
-          throw new Error('Location permission not granted');
-        
+        );
       }
+      throw new Error('Location permission not granted');
+    }
 
     // setInterval(() => {
     navigator.geolocation.watchPosition(
       position => {
         // console.log('position outside of permissions', position);
         // console.log('authID', this.state.authID);
-        const {latitude} = position.coords;
-        const {longitude} = position.coords;
+        const { latitude } = position.coords;
+        const { longitude } = position.coords;
         this.setState({
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
@@ -88,7 +97,7 @@ class HomeScreen extends React.Component {
     getLocationAsync();
 
     // PUSH NOTIFICATION PERMISSIONS
-    const {authID} = this.state;
+    const { authID } = this.state;
     async function registerForPushNotificationsAsync() {
       const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
       let finalStatus = existingStatus;
@@ -158,40 +167,50 @@ class HomeScreen extends React.Component {
     }
     return (
       <Container style={styles.container}>
-      <View style={styles.viewport}>
-        <Text style={styles.heading}>Goal: Fancy Pants Kayak</Text>
+        <View style={styles.viewport}>
+          <Text style={styles.heading}>Goal: Fancy Pants Kayak</Text>
 
-        <Image
-          style={styles.mainImage}
-          source={require('../assets/images/kayak.jpg')}
-        />
+          <Image style={styles.mainImage} source={require('../assets/images/kayak.jpg')} />
 
-          <Progress.Bar progress={0.66} width={240} color={'#49d5b6'} unfilledColor={'#cccccc'} height={24} />
-        <View style={{marginTop: 10, marginBottom: 10}}>
-          <Text style={styles.smallText}>Projected Completion Date: 9/14/19</Text>
-        </View>
-        <View style={{marginBottom: 10, marginLeft: -70}}>
-          <Text style={styles.largeText}>Money Saved: $248</Text>
-          <Text style={styles.largeText}>Current Streak: 79 days</Text>
-        </View>
+          <Progress.Bar
+            progress={0.66}
+            width={240}
+            color={'#49d5b6'}
+            unfilledColor={'#cccccc'}
+            height={24}
+          />
+          <View style={{ marginTop: 10, marginBottom: 10 }}>
+            <Text style={styles.smallText}>Projected Completion Date: 9/14/19</Text>
+          </View>
+          <View style={{ marginBottom: 10, marginLeft: -70 }}>
+            <Text style={styles.largeText}>Money Saved: $248</Text>
+            <Text style={styles.largeText}>Current Streak: 79 days</Text>
+          </View>
 
           <Text style={styles.smallTextLeft}>Relapses: 3</Text>
           <Text style={styles.smallTextLeft}>Money Lost: $22.35</Text>
           <Text style={styles.smallTextLeft}>Setback: 6 days</Text>
-        <Text style={styles.smallTextGreenLeft}>Savings Projection: $597.11</Text>
-        <Grid style={{width: '100%', marginTop: 10}}>
+          <Text style={styles.smallTextGreenLeft}>Savings Projection: $597.11</Text>
+          <Grid style={{ width: '100%', marginTop: 10 }}>
             <Row style={{ width: '100%' }}>
               <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                <Button style={styles.transactionButton}><Text style={styles.buttonText}>3 months</Text></Button>
+                <Button style={styles.transactionButton}>
+                  <Text style={styles.buttonText}>3 months</Text>
+                </Button>
               </Col>
               <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                <Button style={styles.transactionButton}><Text style={styles.buttonText}>6 months</Text></Button></Col>
+                <Button style={styles.transactionButton}>
+                  <Text style={styles.buttonText}>6 months</Text>
+                </Button>
+              </Col>
               <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                <Button style={styles.transactionButton}><Text style={styles.buttonText}>1 year</Text></Button></Col>
-          </Row>
-        </Grid>
+                <Button style={styles.transactionButton}>
+                  <Text style={styles.buttonText}>1 year</Text>
+                </Button>
+              </Col>
+            </Row>
+          </Grid>
         </View>
-        
 
         <Footer style={styles.footerbar}>
           <FooterTab style={{ backgroundColor: '#49d5b6' }}>

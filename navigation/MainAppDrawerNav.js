@@ -11,6 +11,7 @@ import TransactionsScreen from '../screens/TransactionsScreen';
 import StatsScreen from '../screens/StatsScreen';
 import LogOutScreen from '../screens/LogOutScreen';
 import GamesScreen from '../screens/GamesScreen';
+import DKScreen from '../screens/games/DK';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -82,6 +83,9 @@ const GamesStack = createStackNavigator(
   {
     Goals: {
       screen: GamesScreen,
+    },
+    DK: {
+      screen: DKScreen,
     },
   },
   config

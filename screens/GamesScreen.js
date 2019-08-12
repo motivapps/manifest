@@ -3,20 +3,13 @@ import React from 'react';
 import { StyleSheet, View, Alert, TouchableOpacity } from 'react-native';
 import { Container, Footer, FooterTab, Icon, Content, Button, Text, Item, Input, Grid, Row, Col } from 'native-base';
 
-import DonkeyKong from 'react-native-donkey-kong';
 
-// export default class Games extends Component<{}> {
-//   render() {
-//     return <DonkeyKong />;
-//   }
-// }
 
 class GamesScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
   
-    };
   }
 
   render() {

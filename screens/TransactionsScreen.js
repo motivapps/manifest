@@ -1,6 +1,14 @@
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react';
-import { Platform, StatusBar, StyleSheet, View, TouchableOpacity, ScrollView } from 'react-native';
+import {
+  Platform,
+  StatusBar,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  ScrollView,
+  AsyncStorage,
+} from 'react-native';
 import {
   Container,
   Text,
@@ -13,18 +21,21 @@ import {
   Col,
   Row,
 } from 'native-base';
+import axios from 'axios';
 import TransactionItem from './subViews/TransactionItem';
+import { NGROK } from '../app.config.json';
 
 export default class Transactions extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      userToken: null,
       transactions: [
         {
           id: 1,
           id_user: 4,
           status: 'pending',
-          name: 'Starbucks',
+          name: 'BlashBfashja',
           day: '2019-07-17T11:00:00.000Z',
           amount: '4.33',
           transaction_id: 'P3voBrVXlBFqMB7ya1bdFRko8nQo1pt7lBK8r',
@@ -46,7 +57,7 @@ export default class Transactions extends React.Component {
           id: 1,
           id_user: 4,
           status: 'pending',
-          name: "Starbucks",
+          name: 'Starbucks',
           day: '2019-07-18T08:12:00.000Z',
           amount: '4.99',
           transaction_id: 'P3voBrVXlBFqMB7ya1bdFRko8nQo1pt7lBK8r',
@@ -55,6 +66,21 @@ export default class Transactions extends React.Component {
         },
       ],
     };
+  }
+
+  async componentWillMount() {
+    try {
+      const userToken = await AsyncStorage.getItem('userToken');
+      if (userToken !== null) {
+        console.log(userToken);
+        this.setState({ userToken });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    axios.get(`${NGROK}/transactions/${this.state.userToken}`).then(transactions => {
+      this.setState({ transactions });
+    });
   }
 
   render() {
@@ -67,12 +93,12 @@ export default class Transactions extends React.Component {
           <Text style={styles.smallTextGreen}>
             These transactions look a little suspicious... Still sticking to your goals?
           </Text>
-            {transactions.map(transaction => (
-              <TransactionItem transaction={transaction} />
-            ))}
+          {transactions.map(transaction => (
+            <TransactionItem transaction={transaction} />
+          ))}
         </View>
         <Footer style={styles.footerbar}>
-          <FooterTab>
+          <FooterTab style={{ backgroundColor: '#49d5b6' }}>
             <Button vertical>
               <Icon style={{ fontSize: 30, color: '#fff' }} name="md-stats" />
               <Text style={styles.buttonText}>Stats</Text>

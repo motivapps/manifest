@@ -1,26 +1,7 @@
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react';
-import {
-  Platform,
-  StatusBar,
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  ScrollView,
-  AsyncStorage,
-} from 'react-native';
-import {
-  Container,
-  Text,
-  Button,
-  Footer,
-  FooterTab,
-  Icon,
-  Content,
-  Grid,
-  Col,
-  Row,
-} from 'native-base';
+import { StyleSheet, View, TouchableOpacity, ScrollView, AsyncStorage } from 'react-native';
+import { Container, Text, Button, Footer, FooterTab, Icon } from 'native-base';
 import axios from 'axios';
 import TransactionItem from './subViews/TransactionItem';
 import { NGROK } from '../app.config.json';
@@ -66,6 +47,7 @@ export default class Transactions extends React.Component {
         },
       ],
     };
+    this.onDenyGuilt = this.onDenyGuilt.bind(this);
   }
 
   async componentWillMount() {
@@ -79,42 +61,71 @@ export default class Transactions extends React.Component {
       console.error(error);
     }
     axios.get(`${NGROK}/transactions/${this.state.userToken}`).then(transactions => {
-      this.setState({ transactions });
+      this.setState({ transactions: transactions.data });
+    });
+  }
+
+  onDenyGuilt() {
+    // NOT CURRENTLY WORKING
+    console.log('guilt denied!');
+    this.setState(prevState => {
+      return { transactions: prevState.transactions.slice(0, 1) };
     });
   }
 
   render() {
     const { transactions } = this.state;
+    console.log('inner transactions:', transactions);
+    const {
+      container,
+      viewport,
+      title,
+      heading,
+      largeText,
+      smallText,
+      smallTextGreen,
+      smallTextLeft,
+      transactionButton,
+      buttonText,
+      transactionColumns,
+      footerbar,
+    } = styles;
 
     return (
-      <Container style={styles.container}>
-        <View style={styles.viewport}>
-          <Text style={styles.heading}>Transactions</Text>
-          <Text style={styles.smallTextGreen}>
+      <Container style={container}>
+        <View style={viewport}>
+          <Text style={heading}>Transactions</Text>
+          <Text style={smallTextGreen}>
             These transactions look a little suspicious... Still sticking to your goals?
           </Text>
-          {transactions.map(transaction => (
-            <TransactionItem transaction={transaction} />
+          {transactions.map((transaction, i) => (
+            <TransactionItem transaction={transaction} key={i} onDeny={this.onDenyGuilt} />
           ))}
         </View>
-        <Footer style={styles.footerbar}>
+        <Footer style={footerbar}>
           <FooterTab style={{ backgroundColor: '#49d5b6' }}>
             <Button vertical>
-              <Icon style={{ fontSize: 30, color: '#fff' }} name="md-stats" />
-              <Text style={styles.buttonText}>Stats</Text>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('Stats')}>
+                <Icon style={{ fontSize: 30, color: '#fff' }} name="md-stats" />
+                <Text style={buttonText}>Stats</Text>
+              </TouchableOpacity>
             </Button>
             <Button vertical>
-              <Icon style={{ fontSize: 30, color: '#fff' }} name="logo-game-controller-a" />
-              <Text style={styles.buttonText}>Games</Text>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('Games')}>
+                <Icon style={{ fontSize: 30, color: '#fff' }} name="logo-game-controller-a" />
+                <Text style={buttonText}>Games</Text>
+              </TouchableOpacity>
             </Button>
             <Button vertical>
-              <Icon style={{ fontSize: 30, color: '#fff' }} name="md-ribbon" />
-              <Text style={styles.buttonText}>Goals</Text>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('Goals')}>
+                <Icon style={{ fontSize: 30, color: '#fff' }} name="md-ribbon" />
+                <Text style={buttonText}>Goals</Text>
+              </TouchableOpacity>
             </Button>
             <Button vertical>
               <TouchableOpacity onPress={this.props.navigation.openDrawer}>
                 <Icon style={{ fontSize: 30, color: '#fff' }} name="md-menu" />
-                <Text style={styles.buttonText}>Menu</Text>
+                <Text style={buttonText}>Menu</Text>
               </TouchableOpacity>
             </Button>
           </FooterTab>

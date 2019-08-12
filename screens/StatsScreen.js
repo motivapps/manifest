@@ -74,7 +74,7 @@ export default class StatsScreen extends React.Component {
 
         </View>
         <Footer style={styles.footerbar}>
-          <FooterTab>
+          <FooterTab style={{ backgroundColor: '#49d5b6' }}>
             <Button vertical>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('Stats')}>
                 <Icon style={{ fontSize: 30, color: '#fff' }} name="md-stats" />

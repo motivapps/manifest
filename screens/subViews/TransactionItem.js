@@ -1,28 +1,59 @@
 import React from 'react';
 import { Platform, StatusBar, StyleSheet, View, TouchableOpacity } from 'react-native';
-import { Container, Text, Button, Footer, FooterTab, Icon, Content, Grid, Col, Row } from 'native-base';
+import {
+  Container,
+  Text,
+  Button,
+  Footer,
+  FooterTab,
+  Icon,
+  Content,
+  Grid,
+  Col,
+  Row,
+} from 'native-base';
+import axios from 'axios';
+import { NGROK } from '../../app.config.json';
 
-const TransactionItem = (props) => {
+const TransactionItem = props => {
   const { transaction } = props;
+  const handleDeny = (transaction) => {
+    const { userToken } = this.state;
+    axios.patch(`${NGROK}/deny_transaction/${userToken}`, {
+        transaction_id: transaction.transaction_id,
+      })
+      .then(response => {
+        console.log(response);
+      });
+  };
+  return (
+    <Grid style={{ marginBottom: 0, width: '100%', padding: 0 }}>
+      <Row style={{ backgroundColor: '#fff', height: 20 }} />
+      <Text style={styles.smallTextLeft}>
+        {transaction.day.slice(5, 10)}-{transaction.day.slice(0, 4)} -{' '}
+        {transaction.day.slice(11, 16)}
+      </Text>
 
-    return (
-      <Grid style={{ marginBottom: 0, width: '100%', padding: 0 }}>
-            <Row style={{ backgroundColor: '#fff', height: 20 }}></Row>
-        <Text style={styles.smallTextLeft}>{transaction.day.slice(5, 10)}-{transaction.day.slice(0, 4)} - {transaction.day.slice(11, 16)}</Text>
+      <Text style={styles.smallTextLeft}>
+        {transaction.name} - ${transaction.amount} - {transaction.status}
+      </Text>
 
-        <Text style={styles.smallTextLeft}>{transaction.name} - ${transaction.amount} - {transaction.status}</Text>
-
-            <Row style={{ backgroundColor: '#fff', height: 20 }}></Row>
-            <Row style={{ marginBottom: 0, width: '100%' }}>
-              <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                <Button style={styles.transactionButton}><Text style={styles.buttonText}>It's not what it looks like</Text></Button>
-              </Col>
-              <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                <Button style={styles.transactionButton}><Text style={styles.buttonText}>Oops, I relapsed</Text></Button></Col>
-            </Row>
-      </Grid>
-    );
-}
+      <Row style={{ backgroundColor: '#fff', height: 20 }} />
+      <Row style={{ marginBottom: 0, width: '100%' }}>
+        <Col style={{ backgroundColor: '#fff', height: 60 }}>
+          <Button style={styles.transactionButton} onPress={handleDeny(transaction)}>
+            <Text style={styles.buttonText}>It's not what it looks like</Text>
+          </Button>
+        </Col>
+        <Col style={{ backgroundColor: '#fff', height: 60 }}>
+          <Button style={styles.transactionButton}>
+            <Text style={styles.buttonText}>Oops, I relapsed</Text>
+          </Button>
+        </Col>
+      </Row>
+    </Grid>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {

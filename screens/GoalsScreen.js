@@ -9,13 +9,20 @@ class GoalsScreen extends React.Component {
     super(props);
     this.state = {
       selected2: undefined,
+      goalName: null,
     };
+    this.onValueChange2 = this.onValueChange2.bind(this);
+    this.onHandleSubmit = this.onHandleSubmit.bind(this);
   }
 
   onValueChange2(value: string) {
     this.setState({
       selected2: value
     });
+  }
+
+  onHandleSubmit() {
+    console.log('submitted:', this.state.goalName);
   }
 
   render() {
@@ -35,7 +42,7 @@ class GoalsScreen extends React.Component {
           </Grid>
           <Text style={styles.smallTextLeft}>Goal Name:</Text>
           <Item floatingLabel style={{marginBottom: 10, height: 36 }}>
-            <Input placeholder="Ex. Clyde's New Kayak" />
+            <Input placeholder="Ex. Clyde's New Kayak" name="goalName" value={this.state.goalName} />
           </Item>
           <Text style={styles.smallTextLeft}>What are you saving up to purchase?</Text>
           <Item floatingLabel style={{ marginBottom: 10, height: 36 }}>
@@ -55,7 +62,7 @@ class GoalsScreen extends React.Component {
               placeholderStyle={{ color: "#4c4c4c" }}
               placeholderIconColor="#49d5b6"
               selectedValue={this.state.selected2}
-              onValueChange={this.onValueChange2.bind(this)} >
+              onValueChange={this.onValueChange2} >
               <Picker.Item label="Coffee" value="key0" />
               <Picker.Item label="Smoking" value="key1" />
               <Picker.Item label="Fast Food" value="key2" />
@@ -75,13 +82,15 @@ class GoalsScreen extends React.Component {
               placeholderStyle={{ color: "#4c4c4c" }}
               placeholderIconColor="#49d5b6"
               selectedValue={this.state.selected2}
-              onValueChange={this.onValueChange2.bind(this)} >
+              onValueChange={this.onValueChange2} >
               <Picker.Item label="Daily" value="key0" />
               <Picker.Item label="Twice per Week" value="key1" />
               <Picker.Item label="Once per Week" value="key2" />
             </Picker>
           </Item>
-          <Button style={styles.saveButton}><Text style={styles.buttonText}>Save Goal</Text></Button>
+          <Button style={styles.saveButton} onPress={this.onHandleSubmit}>
+            <Text style={styles.buttonText}>Save Goal</Text>
+          </Button>
         </View>
         <Footer style={styles.footerbar}>
           <FooterTab style={{ backgroundColor: '#49d5b6' }}>

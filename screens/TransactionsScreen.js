@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react';
 import { StyleSheet, View, TouchableOpacity, ScrollView, AsyncStorage } from 'react-native';
@@ -11,43 +12,10 @@ export default class Transactions extends React.Component {
     super(props);
     this.state = {
       userToken: null,
-      transactions: [
-        {
-          id: 1,
-          id_user: 4,
-          status: 'pending',
-          name: 'BlashBfashja',
-          day: '2019-07-17T11:00:00.000Z',
-          amount: '4.33',
-          transaction_id: 'P3voBrVXlBFqMB7ya1bdFRko8nQo1pt7lBK8r',
-          createdAt: '2019-08-10T17:22:55.904Z',
-          updatedAt: '2019-08-10T17:22:55.904Z',
-        },
-        {
-          id: 1,
-          id_user: 4,
-          status: 'pending',
-          name: "CC's",
-          day: '2019-07-18T02:37:00.000Z',
-          amount: '3.99',
-          transaction_id: 'P3voBrVXlBFqMB7ya1bdFRko8nQo1pt7lBK8r',
-          createdAt: '2019-08-10T17:22:55.904Z',
-          updatedAt: '2019-08-10T17:22:55.904Z',
-        },
-        {
-          id: 1,
-          id_user: 4,
-          status: 'pending',
-          name: 'Starbucks',
-          day: '2019-07-18T08:12:00.000Z',
-          amount: '4.99',
-          transaction_id: 'P3voBrVXlBFqMB7ya1bdFRko8nQo1pt7lBK8r',
-          createdAt: '2019-08-10T17:22:55.904Z',
-          updatedAt: '2019-08-10T17:22:55.904Z',
-        },
-      ],
+      transactions: [],
     };
     this.onDenyGuilt = this.onDenyGuilt.bind(this);
+    this.renderTransactions = this.renderTransactions.bind(this);
   }
 
   async componentWillMount() {
@@ -60,8 +28,9 @@ export default class Transactions extends React.Component {
     } catch (error) {
       console.error(error);
     }
-    axios.get(`${NGROK}/transactions/${this.state.userToken}`).then(transactions => {
-      this.setState({ transactions: transactions.data });
+
+    axios.get(`${NGROK}/transactions/${this.state.userToken}`).then(({ data: transactions }) => {
+      this.setState({ transactions });
     });
   }
 
@@ -70,26 +39,39 @@ export default class Transactions extends React.Component {
     console.log('guilt denied!');
     this.setState(prevState => {
       return { transactions: prevState.transactions.slice(0, 1) };
-    });
+    })
+  }
+
+  renderTransactions() {
+    const { transactions } = this.state;
+
+    if (transactions.length) {
+      return transactions.map(transaction => (
+        <TransactionItem
+          key={transaction.transaction_id}
+          transaction={transaction} onDeny={this.onDenyGuilt}
+        />
+      ));
+    }
+    return null;
   }
 
   render() {
-    const { transactions } = this.state;
-    console.log('inner transactions:', transactions);
-    const {
-      container,
-      viewport,
-      title,
-      heading,
-      largeText,
-      smallText,
-      smallTextGreen,
-      smallTextLeft,
-      transactionButton,
-      buttonText,
-      transactionColumns,
-      footerbar,
-    } = styles;
+
+        const {
+          container,
+          viewport,
+          title,
+          heading,
+          largeText,
+          smallText,
+          smallTextGreen,
+          smallTextLeft,
+          transactionButton,
+          buttonText,
+          transactionColumns,
+          footerbar,
+        } = styles;
 
     return (
       <Container style={container}>
@@ -98,9 +80,7 @@ export default class Transactions extends React.Component {
           <Text style={smallTextGreen}>
             These transactions look a little suspicious... Still sticking to your goals?
           </Text>
-          {transactions.map((transaction, i) => (
-            <TransactionItem transaction={transaction} key={i} onDeny={this.onDenyGuilt} />
-          ))}
+          {this.renderTransactions()}
         </View>
         <Footer style={footerbar}>
           <FooterTab style={{ backgroundColor: '#49d5b6' }}>

@@ -38,6 +38,7 @@ class HomeScreen extends React.Component {
       latitude: null,
       longitude: null,
       dangerDistance: null,
+      pushToken: null,
       authID: GOOGLE_OAUTH_ID,
     };
     this.onToggleButton = this.onToggleButton.bind(this);
@@ -72,22 +73,30 @@ class HomeScreen extends React.Component {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
         });
-        // fetch(`https://api.foursquare.com/v2/venues/search?client_id=${FOURSQUARE_CLIENT_ID}&client_secret=${FOURSQUARE_CLIENT_SECRET}&ll=${this.state.latitude},${this.state.longitude}&intent=checkin&radius=60&categoryId=4bf58dd8d48988d1e0931735&v=20190425`)
-        //   .then(result => {
-        //     //console.log('get location result from front:', result);
-        //     return result.json();
-        //   })
-        //   .then(response => {
-        //     //console.log('response:', response);
-        //     console.log('location distance:', response.response.venues[0].location.distance);
-        //     let distance = response.response.venues[0].location.distance;
-        //     this.setState({
-        //       dangerDistance: response.response.venues[0].location.distance,
-        //     })
-        //   })
-        //   .catch(err => {
-        //     console.log('get location error from front:', err);
-        //   })
+        axios
+          .get(
+            `https://api.foursquare.com/v2/venues/search?client_id=${FOURSQUARE_CLIENT_ID}
+          &client_secret=${FOURSQUARE_CLIENT_SECRET}
+          &ll=${this.state.latitude},${this.state.longitude}
+          &intent=checkin&radius=300&categoryId=4bf58dd8d48988d1e0931735&v=20190812`
+          )
+          .then(result => {
+            // console.log('get location result from front:', result);
+
+            return result;
+          })
+          .then(response => {
+            console.log('response:', response.data);
+            console.log('location distance:', response.data.response.venues[0].location.distance);
+            const { distance } = response.data.response.venues[0].location;
+            this.setState({
+              dangerDistance: response.data.response.venues[0].location.distance,
+            });
+            console.log('dangerDistance: ', this.state.dangerDistance);
+          })
+          .catch(err => {
+            console.log('get location error from front:', err);
+          });
       },
       err => console.error(err),
       { enableHighAccuracy: true, timeout: 2000, maximumAge: 2000, distanceFilter: 0 }
@@ -104,15 +113,17 @@ class HomeScreen extends React.Component {
 
       // only ask if permissions have not already been determined, because
       if (existingStatus !== 'granted') {
+        console.log('permission granted');
         const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
         finalStatus = status;
       }
       if (finalStatus !== 'granted') {
+        console.log('permission NOT granted');
         return;
       }
       // Get the token that uniquely identifies this device
       const token = await Notifications.getExpoPushTokenAsync();
-      console.log('token:', token);
+      this.setState({ pushToken: token });
 
       axios
         .post(`${NGROK}/pushtoken`, { pushToken: token, authID })
@@ -126,28 +137,41 @@ class HomeScreen extends React.Component {
 
     registerForPushNotificationsAsync();
 
-    sendPushNotification = () => {
-      const response = fetch('https://exp.host/--/api/v2/push/send', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          to: PUSH_TOKEN,
-          sound: 'default',
-          title: 'Manifest',
-          body: "Don't you even think about going inside that CC's...",
-        }),
-      });
+    const sendPushNotification = () => {
+      const { pushToken } = this.state;
+      axios
+        .post(
+          'https://exp.host/--/api/v2/push/send',
+          {
+            to: pushToken,
+            sound: 'default',
+            title: 'Manifest',
+            body: "Don't you even think about going inside that CC's...",
+          },
+          {
+            headers: {
+              host: 'exp.host',
+              Accept: 'application/json',
+              'Accept-Encoding': 'deflate',
+              'Content-Type': 'application/json',
+            },
+          }
+        )
+        .then(res => {
+          console.log('notif sent: ', res);
+        })
+        .catch(err => console.error('notif not sent: ', err));
     };
 
-    if (this.state.dangerDistance < 60) {
-      console.log('dangerDistance:', this.state.dangerDistance);
-      sendPushNotification();
-    } else {
-      console.log('did not fire:', this.state.dangerDistance);
-    }
+    sendPushNotification();
+
+    // if (this.state.dangerDistance < 300) {
+    //   console.log('dangerDistance:', this.state.dangerDistance);
+    //   sendPushNotification();
+    // } else {
+    //   console.log('did not fire:', this.state.dangerDistance);
+    // }
+
     await Font.loadAsync({
       Roboto: require('../node_modules/native-base/Fonts/Roboto.ttf'),
       Roboto_medium: require('../node_modules/native-base/Fonts/Roboto_medium.ttf'),
@@ -175,8 +199,8 @@ class HomeScreen extends React.Component {
           <Progress.Bar
             progress={0.66}
             width={240}
-            color={'#49d5b6'}
-            unfilledColor={'#cccccc'}
+            color="#49d5b6"
+            unfilledColor="#cccccc"
             height={24}
           />
           <View style={{ marginTop: 10, marginBottom: 10 }}>

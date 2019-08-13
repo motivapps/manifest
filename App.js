@@ -1,8 +1,11 @@
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react';
 import { AppLoading, Notifications } from 'expo';
+import { AsyncStorage } from 'react-native';
 import axios from 'axios';
-import { Container, Text, Button, Footer, FooterTab, Icon, Content } from 'native-base';
+import {
+  Container, Text, Button, Footer, FooterTab, Icon, Content,
+} from 'native-base';
 import * as Permissions from 'expo-permissions';
 import AppContainer from './navigation/AppNavigator.js';
 import {
@@ -42,11 +45,13 @@ class App extends React.Component {
       const { status, permissions } = await Permissions.askAsync(Permissions.LOCATION);
       if (status === 'granted') {
         return navigator.geolocation.watchPosition(
-          position => {
+          (position) => {
             console.log(position);
           },
           err => console.error(err),
-          { timeout: 2000, maximumAge: 2000, enableHighAccuracy: true, distanceFilter: 1 }
+          {
+            timeout: 2000, maximumAge: 2000, enableHighAccuracy: true, distanceFilter: 1,
+          },
         );
       }
       throw new Error('Location permission not granted');
@@ -54,7 +59,7 @@ class App extends React.Component {
 
     // setInterval(() => {
     navigator.geolocation.watchPosition(
-      position => {
+      (position) => {
         // console.log('position outside of permissions', position);
         // console.log('authID', this.state.authID);
         const { latitude } = position.coords;
@@ -63,32 +68,29 @@ class App extends React.Component {
           latitude,
           longitude,
         });
-        
+
         axios
           .get(
             `https://api.foursquare.com/v2/venues/search?client_id=${FOURSQUARE_CLIENT_ID}
           &client_secret=${FOURSQUARE_CLIENT_SECRET}
           &ll=${this.state.latitude},${this.state.longitude}
-          &intent=checkin&radius=300&categoryId=4bf58dd8d48988d1e0931735&v=20190812`
+          &intent=checkin&radius=300&categoryId=4bf58dd8d48988d1e0931735&v=20190812`,
           )
-          .then(result => {
-            // console.log('get location result from front:', result);
-
-            return result;
-          })
-          .then(response => {
+          .then((response) => {
             const { distance } = response.data.response.venues[0].location;
             this.setState({
               dangerDistance: distance,
             });
             console.log('dangerDistance: ', this.state.dangerDistance);
           })
-          .catch(err => {
+          .catch((err) => {
             console.log('get location error from front:', err);
           });
       },
       err => console.error(err),
-      { enableHighAccuracy: true, timeout: 2000, maximumAge: 2000, distanceFilter: 0 }
+      {
+        enableHighAccuracy: true, timeout: 2000, maximumAge: 2000, distanceFilter: 0,
+      },
     );
     // }, 20000);
 
@@ -116,10 +118,10 @@ class App extends React.Component {
 
       axios
         .post(`${NGROK}/pushtoken`, { pushToken, authID })
-        .then(result => {
+        .then((result) => {
           console.log('device token post result:', result.config.data);
         })
-        .catch(err => {
+        .catch((err) => {
           console.log('device token post error:', err);
         });
     }
@@ -127,7 +129,6 @@ class App extends React.Component {
     await registerForPushNotificationsAsync();
 
     const sendPushNotification = () => {
-      
       axios
         .post(
           'https://exp.host/--/api/v2/push/send',
@@ -144,15 +145,15 @@ class App extends React.Component {
               'Accept-Encoding': 'deflate',
               'Content-Type': 'application/json',
             },
-          }
+          },
         )
-        .then(res => {
+        .then((res) => {
           console.log('notif sent: ', res);
         })
         .catch(err => console.error('notif not sent: ', err));
     };
 
-    //sendPushNotification();
+    // sendPushNotification();
 
     if (this.state.dangerDistance < 300) {
       console.log('dangerDistance:', this.state.dangerDistance);
@@ -160,6 +161,7 @@ class App extends React.Component {
     } else {
       console.log('did not fire:', this.state.dangerDistance);
     }
+
     this.setState({ isReady: true });
   }
 

@@ -29,7 +29,7 @@ class Link extends React.Component {
     } catch (error) {
       console.error(error);
     }
-  };
+  }
 
   onMessage = data => {
     console.log(data);

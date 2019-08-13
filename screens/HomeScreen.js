@@ -26,6 +26,8 @@ import {
   GOOGLE_OAUTH_ID,
   PUSH_TOKEN,
 } from '../app.config.json';
+import { storeData, getData, storeMulti, getMulti } from './helpers/asyncHelpers';
+
 // import { MonoText } from '../components/StyledText';
 
 class HomeScreen extends React.Component {
@@ -40,6 +42,7 @@ class HomeScreen extends React.Component {
       dangerDistance: null,
       pushToken: null,
       authID: GOOGLE_OAUTH_ID,
+      primaryGoal: {},
     };
     this.onToggleButton = this.onToggleButton.bind(this);
     this.setState = this.setState.bind(this);
@@ -51,11 +54,27 @@ class HomeScreen extends React.Component {
       Roboto_medium: require('../node_modules/native-base/Fonts/Roboto_medium.ttf'),
     });
     this.setState({ isReady: true });
+    this.getGoal();
   }
 
   onToggleButton() {
     this.setState({
       buttonToggle: !this.state.buttonToggle,
+    });
+  }
+
+  async getGoal() {
+    const auth0_id = await getData('userToken');
+    let primaryGoal = await getData('primaryGoal');
+
+    if (!primaryGoal) {
+      primaryGoal = await axios.get(`${NGROK}/goals/${auth0_id}`);
+      storeData('primaryGoal', primaryGoal);
+    }
+
+    this.setState({
+      auth0_id,
+      primaryGoal,
     });
   }
 

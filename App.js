@@ -1,3 +1,6 @@
+/* eslint-disable class-methods-use-this */
+/* eslint-disable no-undef */
+/* eslint-disable no-console */
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react';
 import { AppLoading, Notifications } from 'expo';
@@ -163,6 +166,22 @@ class App extends React.Component {
     }
 
     this.setState({ isReady: true });
+  }
+
+  // GET LOCATION PERMISSIONS:
+  async getLocationAsync() {
+    // permissions returns only for location permissions on iOS and under certain conditions, see Permissions.LOCATION
+    const { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status === 'granted') {
+      return navigator.geolocation.watchPosition(
+        position => {
+          console.log(position);
+        },
+        err => console.error(err),
+        { timeout: 2000, maximumAge: 2000, enableHighAccuracy: true, distanceFilter: 1 }
+      );
+    }
+    throw new Error('Location permission not granted');
   }
 
   render() {

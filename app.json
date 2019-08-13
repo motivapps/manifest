@@ -24,7 +24,16 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "UIBackgroundModes": [
+          "location",
+          "fetch"
+        ],
+        "NSLocationWhenInUseUsageDescription": "This app uses location to see if you are close to your vices",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "This app uses location to see if you are close to your vices",
+        "NSLocationAlwaysUsageDescription": "This app uses location to see if you are close to your vices",
+      }
     }
   }
 }

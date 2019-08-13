@@ -19,7 +19,6 @@ import {
 } from './app.config.json';
 
 let pushToken = '';
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -34,8 +33,9 @@ class App extends React.Component {
     this.getLocationAsync = this.getLocationAsync.bind(this);
     this.registerForPushNotificationsAsync = this.registerForPushNotificationsAsync.bind(this);
   }
-
+  
   async componentDidMount() {
+    
     try {
       const userToken = await AsyncStorage.getItem('userToken');
       if (userToken !== null) {
@@ -67,12 +67,9 @@ class App extends React.Component {
     if (locationGranted) {
       await Location.startLocationUpdatesAsync('callFoursquare', {
         accuracy: Location.Accuracy.Highest,
-        // distanceInterval: 50, // update every 50 meters, will want a bigger number eventually but this is nice for testing
+        distanceInterval: 10, // update every 10 meters, will want a bigger number eventually but this is nice for testing
         showsBackgroundLocationIndicator: true,
-      })
-        .then((distance) => {
-          console.log('Distance coming from foursquare: ', distance);
-        });
+      });
     }
   }
 
@@ -127,6 +124,7 @@ TaskManager.defineTask('callFoursquare', ({ data: { locations }, error }) => {
   // Unsure which to use... locations.length - 1 or locations[0]? Which is newest?
   const lat = locations[0].coords.latitude;
   const log = locations[0].coords.longitude;
+  
   // THIS IS STILL ONLY LOOKING FOR COFFEE SHOPS WITHIN 300 METER RADIUS
   axios
     .get(
@@ -137,8 +135,11 @@ TaskManager.defineTask('callFoursquare', ({ data: { locations }, error }) => {
     )
     .then((response) => {
       const { distance } = response.data.response.venues[0].location;
+      const { name } = response.data.response.venues[0];
       console.log('Foursquare worked!', response.data.response.venues[0]);
-
+      return { distance, name };
+    })
+    .then(({ distance, name }) => {
       if (distance < 100) {
       // User is close to coffee shop, send notification
         axios
@@ -148,7 +149,7 @@ TaskManager.defineTask('callFoursquare', ({ data: { locations }, error }) => {
               to: pushToken,
               sound: 'default',
               title: 'Manifest',
-              body: "Don't you even think about going inside that CC's...",
+              body: `Don't you even think about going inside that ${name}`,
             },
             {
               headers: {

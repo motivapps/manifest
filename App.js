@@ -16,24 +16,28 @@ import {
 } from './app.config.json';
 
 TaskManager.defineTask('callFoursquare', ({ data: { locations }, error }) => {
-  // THIS IS STILL ONLY LOOKING FOR COFFEE SHOPS WITHIN 300 METER RADIUS
-  // axios
-  //   .get(
-  //     `https://api.foursquare.com/v2/venues/search?client_id=${FOURSQUARE_CLIENT_ID}
-  //         &client_secret=${FOURSQUARE_CLIENT_SECRET}
-  //         &ll=${lat},${log}
-  //         &intent=checkin&radius=300&categoryId=4bf58dd8d48988d1e0931735&v=20190812`,
-  //   )
-  //   .then((response) => {
-  //     const { distance } = response.data.response.venues[0].location;
-  //     return distance;
-  //   })
-  //   .catch(err => console.error('get location error from front:', err));
   if (error) {
     console.error(error);
     return;
   }
   console.log('NEW LOCATIONS: ', locations);
+  // Unsure which to use... locations.length - 1 or locations[0]? Which is newest?
+  const lat = locations[0].coords.latitude;
+  const log = locations[0].coords.longitude;
+  // THIS IS STILL ONLY LOOKING FOR COFFEE SHOPS WITHIN 300 METER RADIUS
+  axios
+    .get(
+      `https://api.foursquare.com/v2/venues/search?client_id=USVL34WDRM322JXRDHU4EQW1QREZGPXOMTZSNJKYQUIGKE5O
+          &client_secret=2KGK1VOONWZ1T0OMNFKWXFHDOP0JYXPIVYXQ5KKUDXA55ZHQ
+          &ll=${lat},${log}
+          &intent=checkin&radius=300&categoryId=4bf58dd8d48988d1e0931735&v=20190812`,
+    )
+    .then((response) => {
+      const { distance } = response.data.response.venues[0].location;
+      console.log('Foursquare worked!');
+      return distance;
+    })
+    .catch(err => console.error('get location error from front:', err));
 });
 
 class App extends React.Component {
@@ -60,7 +64,7 @@ class App extends React.Component {
     } catch (error) {
       console.error(error);
     }
-    
+
     this.getLocationAsync();
 
 
@@ -181,16 +185,14 @@ class App extends React.Component {
     }
     const { locationGranted } = this.state;
     if (locationGranted) {
-      Location.startLocationUpdatesAsync('callFoursquare', {
+      await Location.startLocationUpdatesAsync('callFoursquare', {
         accuracy: Location.Accuracy.Highest,
         // distanceInterval: 50, // update every 50 meters, will want a bigger number eventually but this is nice for testing
-        timeInterval: 500,
         showsBackgroundLocationIndicator: true,
-        foregroundService: {
-          notificationTitle: 'We are always watching',
-          notificationBody: 'Dont sleep alone',
-        },
-      });
+      })
+        .then((distance) => {
+          console.log('Distance coming from foursquare: ', distance);
+        });
     }
   }
 

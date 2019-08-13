@@ -12,20 +12,10 @@ import {
   Col,
   Row,
 } from 'native-base';
-import axios from 'axios';
-import { NGROK } from '../../app.config.json';
 
 const TransactionItem = props => {
-  const { transaction } = props;
-  const handleDeny = (transaction) => {
-    const { userToken } = this.state;
-    axios.patch(`${NGROK}/deny_transaction/${userToken}`, {
-        transaction_id: transaction.transaction_id,
-      })
-      .then(response => {
-        console.log(response);
-      });
-  };
+  const { transaction, onDeny } = props;
+
   return (
     <Grid style={{ marginBottom: 0, width: '100%', padding: 0 }}>
       <Row style={{ backgroundColor: '#fff', height: 20 }} />
@@ -41,9 +31,11 @@ const TransactionItem = props => {
       <Row style={{ backgroundColor: '#fff', height: 20 }} />
       <Row style={{ marginBottom: 0, width: '100%' }}>
         <Col style={{ backgroundColor: '#fff', height: 60 }}>
-          <Button style={styles.transactionButton} onPress={handleDeny(transaction)}>
+          <TouchableOpacity onPress={onDeny}>
+          <Button style={styles.transactionButton}>
             <Text style={styles.buttonText}>It's not what it looks like</Text>
           </Button>
+          </TouchableOpacity>
         </Col>
         <Col style={{ backgroundColor: '#fff', height: 60 }}>
           <Button style={styles.transactionButton}>

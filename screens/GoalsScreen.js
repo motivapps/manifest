@@ -1,87 +1,168 @@
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react';
-import { StyleSheet, View, Alert, TouchableOpacity } from 'react-native';
-import { Container, Footer, FooterTab, Icon, Content, Button, Text, Item, Input, Grid, Row, Col, Picker } from 'native-base';
+import {
+  StyleSheet,
+  View,
+  Alert,
+  TouchableOpacity,
+  TextInput,
+  Text,
+  Picker,
+  Item,
+  ScrollView,
+} from 'react-native';
+import { Container, Footer, FooterTab, Icon, Content, Button, Grid, Row, Col } from 'native-base';
+import axios from 'axios';
 import Link from './subViews/PlaidLink';
+import { NGROK, GOOGLE_OAUTH_ID } from '../app.config.json';
 
 class GoalsScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selected2: undefined,
+      goalName: '',
+      goalItem: '',
+      goalAmount: '',
+      vicePrice: '',
+      viceFrequency: '',
+      viceName: '',
     };
+
+    this.onHandleSubmit = this.onHandleSubmit.bind(this);
   }
 
-  onValueChange2(value: string) {
-    this.setState({
-      selected2: value
-    });
+  onHandleSubmit() {
+    const { goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName } = this.state;
+    console.log('goalName:', goalName);
+    console.log('goalItem:', goalItem);
+    console.log('goalAmount:', goalAmount);
+    console.log('vicePrice:', vicePrice);
+    console.log('viceFrequency:', viceFrequency);
+    console.log('viceName:', viceName);
+
+    axios
+      .post(`${NGROK}/user/goals`, { goalName, goalAmount, vicePrice, viceFrequency, viceName })
+      .then(response => {
+        console.log('goals post from front response:', response);
+      })
+      .catch(err => {
+        console.log('error from goals post front:', err);
+      });
   }
 
   render() {
-    return (
-       <Container style={styles.container}>
-        <View style={styles.viewport}>
-          <Text style={styles.heading}>My Goals</Text>
+    const { goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName } = this.state;
 
-          <Grid style={{ width: '100%', marginTop: 10 }}>
-            <Row style={{ width: '100%' }}>
-              <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                <Button style={styles.transactionButton}><Text style={styles.buttonText}>Current Goals</Text></Button>
-              </Col>
-              <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                <Button style={styles.transactionButton}><Text style={styles.buttonText}>Set New Goal</Text></Button></Col>
-            </Row>
-          </Grid>
-          <Text style={styles.smallTextLeft}>Goal Name:</Text>
-          <Item floatingLabel style={{marginBottom: 10, height: 36 }}>
-            <Input placeholder="Ex. Clyde's New Kayak" />
-          </Item>
-          <Text style={styles.smallTextLeft}>What are you saving up to purchase?</Text>
-          <Item floatingLabel style={{ marginBottom: 10, height: 36 }}>
-            <Input placeholder="Ex. Fancy Pants Kayak" />
-          </Item>
-          <Text style={styles.smallTextLeft}>Amount Needed to reach goal:</Text>
-          <Item floatingLabel style={{ marginBottom: 10, height: 36 }}>
-            <Input placeholder="Ex. $495.00" />
-          </Item>
-          <Text style={styles.smallTextLeft}>Select vice you want to quit:</Text>
-          <Item picker style={{ marginBottom: 10, height: 36 }}>
+    return (
+      <Container style={styles.container}>
+        <View style={styles.viewport}>
+          <ScrollView>
+            <Text style={styles.heading}>My Goals</Text>
+
+            <Grid style={{ width: '100%', marginTop: 10 }}>
+              <Row style={{ width: '100%' }}>
+                <Col style={{ backgroundColor: '#fff', height: 60 }}>
+                  <Button style={styles.transactionButton}>
+                    <Text style={styles.buttonText}>Current Goals</Text>
+                  </Button>
+                </Col>
+                <Col style={{ backgroundColor: '#fff', height: 60 }}>
+                  <Button style={styles.transactionButton}>
+                    <Text style={styles.buttonText}>Set New Goal</Text>
+                  </Button>
+                </Col>
+              </Row>
+            </Grid>
+
+            <Text style={styles.smallTextLeft}>Goal Name:</Text>
+            <TextInput
+              style={{
+                height: 36,
+                borderColor: '#cccccc',
+                borderWidth: 1,
+                width: 300,
+                borderRadius: 8,
+              }}
+              onChangeText={text => {
+                console.log('I work');
+                this.setState({ goalName: text });
+              }}
+              value={goalName}
+            />
+
+            <Text style={styles.smallTextLeft}>What are you saving up to purchase?</Text>
+            <TextInput
+              style={{
+                height: 36,
+                borderColor: '#cccccc',
+                borderWidth: 1,
+                width: 300,
+                borderRadius: 8,
+              }}
+              onChangeText={text => {
+                this.setState({ goalItem: text });
+              }}
+              value={goalItem}
+            />
+
+            <Text style={styles.smallTextLeft}>Amount Needed to reach goal:</Text>
+            <TextInput
+              style={{
+                height: 36,
+                borderColor: '#cccccc',
+                borderWidth: 1,
+                width: 300,
+                borderRadius: 8,
+              }}
+              onChangeText={text => {
+                this.setState({ goalAmount: text });
+              }}
+              value={goalAmount}
+            />
+
+            <Text style={styles.smallTextLeft}>Select vice you want to quit:</Text>
             <Picker
-              mode="dropdown"
-              iosIcon={<Icon name="arrow-down" />}
-              style={{ width: '75%' }}
-              placeholder="Ex. Coffee"
-              placeholderStyle={{ color: "#4c4c4c" }}
-              placeholderIconColor="#49d5b6"
-              selectedValue={this.state.selected2}
-              onValueChange={this.onValueChange2.bind(this)} >
-              <Picker.Item label="Coffee" value="key0" />
-              <Picker.Item label="Smoking" value="key1" />
-              <Picker.Item label="Fast Food" value="key2" />
+              selectedValue={viceName}
+              style={{ height: 100, width: 200, marginTop: -80, marginBottom: 120 }}
+              onValueChange={(itemValue, itemIndex) => this.setState({ viceName: itemValue })}
+            >
+              <Picker.Item label="Coffee" value="Coffee" />
+              <Picker.Item label="Smoking" value="Smoking" />
+              <Picker.Item label="Fast Food" value="Fast Food" />
             </Picker>
-          </Item>
-          <Text style={styles.smallTextLeft}>Price per vice purchase:</Text>
-          <Item floatingLabel style={{ marginBottom: 10, height: 36 }}>
-            <Input placeholder="Ex. $5.95" />
-          </Item>
-          <Text style={styles.smallTextLeft}>Vice purchase frequency:</Text>
-          <Item picker style={{ marginBottom: 10, height: 36 }}>
+
+            <Text style={styles.smallTextLeft}>Price per vice purchase:</Text>
+            <TextInput
+              style={{
+                height: 36,
+                borderColor: '#cccccc',
+                borderWidth: 1,
+                width: 300,
+                borderRadius: 8,
+              }}
+              onChangeText={text => {
+                this.setState({ vicePrice: text });
+              }}
+              value={vicePrice}
+            />
+
+            <Text style={styles.smallTextLeft}>Vice purchase frequency:</Text>
             <Picker
-              mode="dropdown"
-              iosIcon={<Icon name="arrow-down" />}
-              style={{ width: '74%' }}
-              placeholder="Ex. Daily"
-              placeholderStyle={{ color: "#4c4c4c" }}
-              placeholderIconColor="#49d5b6"
-              selectedValue={this.state.selected2}
-              onValueChange={this.onValueChange2.bind(this)} >
-              <Picker.Item label="Daily" value="key0" />
-              <Picker.Item label="Twice per Week" value="key1" />
-              <Picker.Item label="Once per Week" value="key2" />
+              selectedValue={viceFrequency}
+              style={{ height: 100, width: 200, marginTop: -80, marginBottom: 120 }}
+              onValueChange={(itemValue, itemIndex) => this.setState({ viceFrequency: itemValue })}
+            >
+              <Picker.Item label="Daily" value="Daily" />
+              <Picker.Item label="Twice per Week" value="Twice per Week" />
+              <Picker.Item label="Once per Week" value="Once per Week" />
             </Picker>
-          </Item>
-          <Button style={styles.saveButton}><Text style={styles.buttonText}>Save Goal</Text></Button>
+
+            <Button style={styles.saveButton}>
+              <Text style={styles.buttonText} onPress={this.onHandleSubmit}>
+                Save Goal
+              </Text>
+            </Button>
+          </ScrollView>
         </View>
         <Footer style={styles.footerbar}>
           <FooterTab style={{ backgroundColor: '#49d5b6' }}>

@@ -1,3 +1,6 @@
+/* eslint-disable class-methods-use-this */
+/* eslint-disable no-undef */
+/* eslint-disable no-console */
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react';
 import { AsyncStorage } from 'react-native';

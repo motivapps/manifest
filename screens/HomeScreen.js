@@ -137,12 +137,12 @@ class HomeScreen extends React.Component {
           to: PUSH_TOKEN,
           sound: 'default',
           title: 'Manifest',
-          body: "Don't you even think about going inside that CC's...",
+          body: "Whoa there, you're awfully close to a coffee shop right now. Don't forget about your goals!",
         }),
       });
     };
 
-    if (this.state.dangerDistance < 60) {
+    if (this.state.dangerDistance < 60 || this.state.dangerDistance === null) {
       console.log('dangerDistance:', this.state.dangerDistance);
       sendPushNotification();
     } else {

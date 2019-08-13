@@ -1,7 +1,7 @@
 {
   "hostType": "tunnel",
   "lanType": "ip",
-  "dev": false,
-  "minify": true,
-  "urlRandomness": "ck-r9w"
+  "dev": true,
+  "minify": false,
+  "urlRandomness": "ea-rvc"
 }

@@ -41,11 +41,24 @@ class HomeScreen extends React.Component {
       longitude: null,
       dangerDistance: null,
       pushToken: null,
-      authID: GOOGLE_OAUTH_ID,
-      primaryGoal: {},
+      // authID: GOOGLE_OAUTH_ID,
+      primaryGoal: null,
     };
     this.onToggleButton = this.onToggleButton.bind(this);
     this.setState = this.setState.bind(this);
+  }
+
+  async componentWillMount() {
+    const auth0_id = await getData('userToken');
+
+    axios.get(`${NGROK}/goals/${auth0_id}`).then((response) => {
+      this.setState({
+        auth0_id,
+        primaryGoal: response.data[0],
+      });
+
+      storeData('primaryGoal', JSON.stringify(response.data[0]));
+    }).catch(error => console.log(error));
   }
 
   async componentDidMount() {
@@ -53,28 +66,22 @@ class HomeScreen extends React.Component {
       Roboto: require('../node_modules/native-base/Fonts/Roboto.ttf'),
       Roboto_medium: require('../node_modules/native-base/Fonts/Roboto_medium.ttf'),
     });
+
     this.setState({ isReady: true });
-    this.getGoal();
   }
+
+  async componentDidUpdate() {
+    const primaryGoal = await getData('primaryGoal');
+    const auth0_id = await getData('userToken');
+
+    this.state.auth0_id = auth0_id;
+    this.state.primaryGoal = JSON.parse(primaryGoal);
+  }
+
 
   onToggleButton() {
     this.setState({
       buttonToggle: !this.state.buttonToggle,
-    });
-  }
-
-  async getGoal() {
-    const auth0_id = await getData('userToken');
-    let primaryGoal = await getData('primaryGoal');
-
-    if (!primaryGoal) {
-      primaryGoal = await axios.get(`${NGROK}/goals/${auth0_id}`);
-      storeData('primaryGoal', primaryGoal);
-    }
-
-    this.setState({
-      auth0_id,
-      primaryGoal,
     });
   }
 

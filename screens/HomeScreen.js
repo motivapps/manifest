@@ -70,9 +70,10 @@ class HomeScreen extends React.Component {
         const { latitude } = position.coords;
         const { longitude } = position.coords;
         this.setState({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
+          latitude,
+          longitude,
         });
+        
         axios
           .get(
             `https://api.foursquare.com/v2/venues/search?client_id=${FOURSQUARE_CLIENT_ID}
@@ -86,11 +87,9 @@ class HomeScreen extends React.Component {
             return result;
           })
           .then(response => {
-            console.log('response:', response.data);
-            console.log('location distance:', response.data.response.venues[0].location.distance);
             const { distance } = response.data.response.venues[0].location;
             this.setState({
-              dangerDistance: response.data.response.venues[0].location.distance,
+              dangerDistance: distance,
             });
             console.log('dangerDistance: ', this.state.dangerDistance);
           })
@@ -106,6 +105,7 @@ class HomeScreen extends React.Component {
     getLocationAsync();
 
     // PUSH NOTIFICATION PERMISSIONS
+    let pushToken = '';
     const { authID } = this.state;
     async function registerForPushNotificationsAsync() {
       const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
@@ -123,7 +123,7 @@ class HomeScreen extends React.Component {
       }
       // Get the token that uniquely identifies this device
       const token = await Notifications.getExpoPushTokenAsync();
-      this.setState({ pushToken: token });
+      pushToken = token;
 
       axios
         .post(`${NGROK}/pushtoken`, { pushToken: token, authID })
@@ -135,10 +135,10 @@ class HomeScreen extends React.Component {
         });
     }
 
-    registerForPushNotificationsAsync();
+    await registerForPushNotificationsAsync();
 
     const sendPushNotification = () => {
-      const { pushToken } = this.state;
+      
       axios
         .post(
           'https://exp.host/--/api/v2/push/send',
@@ -163,14 +163,14 @@ class HomeScreen extends React.Component {
         .catch(err => console.error('notif not sent: ', err));
     };
 
-    sendPushNotification();
+    //sendPushNotification();
 
-    // if (this.state.dangerDistance < 300) {
-    //   console.log('dangerDistance:', this.state.dangerDistance);
-    //   sendPushNotification();
-    // } else {
-    //   console.log('did not fire:', this.state.dangerDistance);
-    // }
+    if (this.state.dangerDistance < 300) {
+      console.log('dangerDistance:', this.state.dangerDistance);
+      sendPushNotification();
+    } else {
+      console.log('did not fire:', this.state.dangerDistance);
+    }
 
     await Font.loadAsync({
       Roboto: require('../node_modules/native-base/Fonts/Roboto.ttf'),

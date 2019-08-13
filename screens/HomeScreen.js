@@ -38,7 +38,6 @@ class HomeScreen extends React.Component {
       latitude: null,
       longitude: null,
       dangerDistance: null,
-      pushToken: null,
       authID: GOOGLE_OAUTH_ID,
     };
     this.onToggleButton = this.onToggleButton.bind(this);
@@ -46,6 +45,109 @@ class HomeScreen extends React.Component {
   }
 
   async componentDidMount() {
+    // GET LOCATION PERMISSIONS:
+    async function getLocationAsync() {
+      // permissions returns only for location permissions on iOS and under certain conditions, see Permissions.LOCATION
+      const { status, permissions } = await Permissions.askAsync(Permissions.LOCATION);
+      if (status === 'granted') {
+        return navigator.geolocation.watchPosition(
+          position => {
+            console.log(position);
+          },
+          err => console.error(err),
+          { timeout: 2000, maximumAge: 2000, enableHighAccuracy: true, distanceFilter: 1 }
+        );
+      }
+      throw new Error('Location permission not granted');
+    }
+
+    // setInterval(() => {
+    navigator.geolocation.watchPosition(
+      position => {
+        // console.log('position outside of permissions', position);
+        // console.log('authID', this.state.authID);
+        const { latitude } = position.coords;
+        const { longitude } = position.coords;
+        this.setState({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+        // fetch(`https://api.foursquare.com/v2/venues/search?client_id=${FOURSQUARE_CLIENT_ID}&client_secret=${FOURSQUARE_CLIENT_SECRET}&ll=${this.state.latitude},${this.state.longitude}&intent=checkin&radius=60&categoryId=4bf58dd8d48988d1e0931735&v=20190425`)
+        //   .then(result => {
+        //     //console.log('get location result from front:', result);
+        //     return result.json();
+        //   })
+        //   .then(response => {
+        //     //console.log('response:', response);
+        //     console.log('location distance:', response.response.venues[0].location.distance);
+        //     let distance = response.response.venues[0].location.distance;
+        //     this.setState({
+        //       dangerDistance: response.response.venues[0].location.distance,
+        //     })
+        //   })
+        //   .catch(err => {
+        //     console.log('get location error from front:', err);
+        //   })
+      },
+      err => console.error(err),
+      { enableHighAccuracy: true, timeout: 2000, maximumAge: 2000, distanceFilter: 0 }
+    );
+    // }, 20000);
+
+    getLocationAsync();
+
+    // PUSH NOTIFICATION PERMISSIONS
+    const { authID } = this.state;
+    async function registerForPushNotificationsAsync() {
+      const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+      let finalStatus = existingStatus;
+
+      // only ask if permissions have not already been determined, because
+      if (existingStatus !== 'granted') {
+        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+        finalStatus = status;
+      }
+      if (finalStatus !== 'granted') {
+        return;
+      }
+      // Get the token that uniquely identifies this device
+      const token = await Notifications.getExpoPushTokenAsync();
+      console.log('token:', token);
+
+      axios
+        .post(`${NGROK}/pushtoken`, { pushToken: token, authID })
+        .then(result => {
+          console.log('device token post result:', result.config.data);
+        })
+        .catch(err => {
+          console.log('device token post error:', err);
+        });
+    }
+
+    registerForPushNotificationsAsync();
+
+    sendPushNotification = () => {
+      const response = fetch('https://exp.host/--/api/v2/push/send', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          to: PUSH_TOKEN,
+          sound: 'default',
+          title: 'Manifest',
+          body: "Whoa there, you're awfully close to a coffee shop right now. Don't forget about your goals!",
+        }),
+      });
+    };
+
+    if (this.state.dangerDistance < 60 || this.state.dangerDistance === null) {
+      console.log('dangerDistance:', this.state.dangerDistance);
+      sendPushNotification();
+    } else {
+      console.log('did not fire:', this.state.dangerDistance);
+    }
     await Font.loadAsync({
       Roboto: require('../node_modules/native-base/Fonts/Roboto.ttf'),
       Roboto_medium: require('../node_modules/native-base/Fonts/Roboto_medium.ttf'),
@@ -73,8 +175,8 @@ class HomeScreen extends React.Component {
           <Progress.Bar
             progress={0.66}
             width={240}
-            color="#49d5b6"
-            unfilledColor="#cccccc"
+            color={'#49d5b6'}
+            unfilledColor={'#cccccc'}
             height={24}
           />
           <View style={{ marginTop: 10, marginBottom: 10 }}>

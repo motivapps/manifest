@@ -12,24 +12,20 @@ class PlaidScreen extends React.Component {
         <Link />
         <Content />
         <Footer style={styles.footerbar}>
-          <FooterTab style={{ backgroundColor: '#49d5b6' }}>
+          <FooterTab style={{backgroundColor: '#49d5b6'}}>
             <Button vertical>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Stats')}>
-                <Icon style={{ fontSize: 30, color: '#fff' }} name="md-stats" />
-                <Text style={styles.buttonText}>Stats</Text>
-              </TouchableOpacity>
+              <Icon style={{ fontSize: 30, color: '#fff' }} name="md-stats" />
+              <Text style={styles.buttonText}>Stats</Text>
             </Button>
             <Button vertical>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Games')}>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
                 <Icon style={{ fontSize: 30, color: '#fff' }} name="logo-game-controller-a" />
                 <Text style={styles.buttonText}>Games</Text>
               </TouchableOpacity>
             </Button>
             <Button vertical>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Goals')}>
-                <Icon style={{ fontSize: 30, color: '#fff' }} name="md-ribbon" />
-                <Text style={styles.buttonText}>Goals</Text>
-              </TouchableOpacity>
+              <Icon style={{ fontSize: 30, color: '#fff' }} name="md-ribbon" />
+              <Text style={styles.buttonText}>Goals</Text>
             </Button>
             <Button vertical>
               <TouchableOpacity onPress={this.props.navigation.openDrawer}>

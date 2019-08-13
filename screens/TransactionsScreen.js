@@ -28,8 +28,8 @@ export default class Transactions extends React.Component {
     } catch (error) {
       console.error(error);
     }
-    const { userToken } = this.state;
-    axios.get(`${NGROK}/transactions/${userToken}`).then(({ data: transactions }) => {
+
+    axios.get(`${NGROK}/transactions/${this.state.userToken}`).then(({ data: transactions }) => {
       this.setState({ transactions });
     });
   }

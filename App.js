@@ -1,12 +1,12 @@
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react';
-import { AppLoading, Notifications } from 'expo';
 import { AsyncStorage } from 'react-native';
-import axios from 'axios';
-import {
-  Container, Text, Button, Footer, FooterTab, Icon, Content,
-} from 'native-base';
+import * as TaskManager from 'expo-task-manager';
+import { AppLoading, Notifications } from 'expo';
 import * as Permissions from 'expo-permissions';
+import * as Location from 'expo-location';
+import axios from 'axios';
+import { Container } from 'native-base';
 import AppContainer from './navigation/AppNavigator.js';
 import {
   FOURSQUARE_CLIENT_ID,
@@ -15,18 +15,39 @@ import {
   GOOGLE_OAUTH_ID,
 } from './app.config.json';
 
+TaskManager.defineTask('callFoursquare', ({ data: { locations }, error }) => {
+  // THIS IS STILL ONLY LOOKING FOR COFFEE SHOPS WITHIN 300 METER RADIUS
+  // axios
+  //   .get(
+  //     `https://api.foursquare.com/v2/venues/search?client_id=${FOURSQUARE_CLIENT_ID}
+  //         &client_secret=${FOURSQUARE_CLIENT_SECRET}
+  //         &ll=${lat},${log}
+  //         &intent=checkin&radius=300&categoryId=4bf58dd8d48988d1e0931735&v=20190812`,
+  //   )
+  //   .then((response) => {
+  //     const { distance } = response.data.response.venues[0].location;
+  //     return distance;
+  //   })
+  //   .catch(err => console.error('get location error from front:', err));
+  if (error) {
+    console.error(error);
+    return;
+  }
+  console.log('NEW LOCATIONS: ', locations);
+});
+
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isReady: false,
-      isAuthenticated: false,
+      locationGranted: false,
+      dangerDistance: null,
       latitude: null,
       longitude: null,
       authID: null,
-      picture: null,
-      name: null,
     };
+    this.getLocationAsync = this.getLocationAsync.bind(this);
   }
 
   async componentDidMount() {
@@ -39,62 +60,46 @@ class App extends React.Component {
     } catch (error) {
       console.error(error);
     }
-    // GET LOCATION PERMISSIONS:
-    async function getLocationAsync() {
-      // permissions returns only for location permissions on iOS and under certain conditions, see Permissions.LOCATION
-      const { status, permissions } = await Permissions.askAsync(Permissions.LOCATION);
-      if (status === 'granted') {
-        return navigator.geolocation.watchPosition(
-          (position) => {
-            console.log(position);
-          },
-          err => console.error(err),
-          {
-            timeout: 2000, maximumAge: 2000, enableHighAccuracy: true, distanceFilter: 1,
-          },
-        );
-      }
-      throw new Error('Location permission not granted');
-    }
+    
+    this.getLocationAsync();
+
 
     // setInterval(() => {
-    navigator.geolocation.watchPosition(
-      (position) => {
-        // console.log('position outside of permissions', position);
-        // console.log('authID', this.state.authID);
-        const { latitude } = position.coords;
-        const { longitude } = position.coords;
-        this.setState({
-          latitude,
-          longitude,
-        });
+    // navigator.geolocation.watchPosition(
+    //   (position) => {
+    //     // console.log('position outside of permissions', position);
+    //     // console.log('authID', this.state.authID);
+    //     const { latitude } = position.coords;
+    //     const { longitude } = position.coords;
+    //     this.setState({
+    //       latitude,
+    //       longitude,
+    //     });
 
-        axios
-          .get(
-            `https://api.foursquare.com/v2/venues/search?client_id=${FOURSQUARE_CLIENT_ID}
-          &client_secret=${FOURSQUARE_CLIENT_SECRET}
-          &ll=${this.state.latitude},${this.state.longitude}
-          &intent=checkin&radius=300&categoryId=4bf58dd8d48988d1e0931735&v=20190812`,
-          )
-          .then((response) => {
-            const { distance } = response.data.response.venues[0].location;
-            this.setState({
-              dangerDistance: distance,
-            });
-            console.log('dangerDistance: ', this.state.dangerDistance);
-          })
-          .catch((err) => {
-            console.log('get location error from front:', err);
-          });
-      },
-      err => console.error(err),
-      {
-        enableHighAccuracy: true, timeout: 2000, maximumAge: 2000, distanceFilter: 0,
-      },
-    );
+    //     axios
+    //       .get(
+    //         `https://api.foursquare.com/v2/venues/search?client_id=${FOURSQUARE_CLIENT_ID}
+    //       &client_secret=${FOURSQUARE_CLIENT_SECRET}
+    //       &ll=${this.state.latitude},${this.state.longitude}
+    //       &intent=checkin&radius=300&categoryId=4bf58dd8d48988d1e0931735&v=20190812`,
+    //       )
+    //       .then((response) => {
+    //         const { distance } = response.data.response.venues[0].location;
+    //         this.setState({
+    //           dangerDistance: distance,
+    //         });
+    //         console.log('dangerDistance: ', this.state.dangerDistance);
+    //       })
+    //       .catch((err) => {
+    //         console.log('get location error from front:', err);
+    //       });
+    //   },
+    //   err => console.error(err),
+    //   {
+    //     enableHighAccuracy: true, timeout: 2000, maximumAge: 2000, distanceFilter: 0,
+    //   },
+    // );
     // }, 20000);
-
-    getLocationAsync();
 
     // PUSH NOTIFICATION PERMISSIONS
     let pushToken = '';
@@ -148,21 +153,45 @@ class App extends React.Component {
           },
         )
         .then((res) => {
-          console.log('notif sent: ', res);
+          console.log('notif sent:');
         })
         .catch(err => console.error('notif not sent: ', err));
     };
 
     // sendPushNotification();
 
-    if (this.state.dangerDistance < 300) {
-      console.log('dangerDistance:', this.state.dangerDistance);
-      sendPushNotification();
-    } else {
-      console.log('did not fire:', this.state.dangerDistance);
-    }
+    // if (this.state.dangerDistance < 300) {
+    //   console.log('dangerDistance:', this.state.dangerDistance);
+    //   sendPushNotification();
+    // } else {
+    //   console.log('did not fire:', this.state.dangerDistance);
+    // }
 
     this.setState({ isReady: true });
+  }
+
+  // GET LOCATION PERMISSIONS:
+  async getLocationAsync() {
+    // permissions returns only for location permissions on iOS and under certain conditions, see Permissions.LOCATION
+    const { status, permissions } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== 'granted') {
+      console.error('Location permissions not granted');
+    } else {
+      this.setState({ locationGranted: true });
+    }
+    const { locationGranted } = this.state;
+    if (locationGranted) {
+      Location.startLocationUpdatesAsync('callFoursquare', {
+        accuracy: Location.Accuracy.Highest,
+        // distanceInterval: 50, // update every 50 meters, will want a bigger number eventually but this is nice for testing
+        timeInterval: 500,
+        showsBackgroundLocationIndicator: true,
+        foregroundService: {
+          notificationTitle: 'We are always watching',
+          notificationBody: 'Dont sleep alone',
+        },
+      });
+    }
   }
 
   render() {

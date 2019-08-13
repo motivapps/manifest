@@ -75,7 +75,7 @@ class HomeScreen extends React.Component {
     const auth0_id = await getData('userToken');
 
     this.state.auth0_id = auth0_id;
-    this.state.primaryGoal = JSON.parse(primaryGoal);
+    this.state.primaryGoal = primaryGoal;
   }
 
 

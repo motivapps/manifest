@@ -76,6 +76,19 @@ class HomeScreen extends React.Component {
         storeData('primaryGoal', JSON.stringify(response.data[0]));
       }
     }).catch(error => console.log(error));
+
+    let targetDate = new Date();
+    targetDate.setDate(targetDate.getDate() + 10);
+
+    // So you can see the date we have created
+    console.log('targetDate:', targetDate);
+
+    let dd = targetDate.getDate();
+    let mm = targetDate.getMonth() + 1; // 0 is January, so we must add 1
+    let yyyy = targetDate.getFullYear();
+
+    var dateString = dd + "/" + mm + "/" + yyyy;
+    console.log('date:', dateString);
   }
 
   async componentDidMount() {

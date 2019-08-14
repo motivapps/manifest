@@ -43,9 +43,16 @@ class HomeScreen extends React.Component {
       pushToken: null,
       // authID: GOOGLE_OAUTH_ID,
       primaryGoal: null,
+      threeMonthSavings: null,
+      sixMonthSavings: null,
+      oneYearSavings: null,
+      displayedSavings: 0,
     };
-    this.onToggleButton = this.onToggleButton.bind(this);
+    // this.onToggleButton = this.onToggleButton.bind(this);
     this.setState = this.setState.bind(this);
+    // this.onToggleThreeMonths = this.onToggleThreeMonths.bind(this);
+    // this.onToggleSixMonths = this.onToggleSixMonths.bind(this);
+    // this.onToggleOneYear = this.onToggleOneYear.bind(this);
   }
 
   async componentWillMount() {
@@ -56,8 +63,18 @@ class HomeScreen extends React.Component {
         auth0_id,
         primaryGoal: response.data[0],
       });
-
-      storeData('primaryGoal', JSON.stringify(response.data[0]));
+      console.log('primaryGoal:', this.state.primaryGoal);
+     // if (response.data[0].vice_freq === 'Daily') {
+        // this.setState({
+        //   threeMonthSavings: (response.data[0].vice_price * 91.25).toFixed(2),
+        //   sixMonthSavings: (response.data[0].vice_price * 182.5).toFixed(2),
+        //   oneYearSavings: (response.data[0].vice_price * 365).toFixed(2),
+        //   displayedSavings: (response.data[0].vice_price * 91.25).toFixed(2),
+        // });
+     // }
+      if (response.data[0]) {
+        storeData('primaryGoal', JSON.stringify(response.data[0]));
+      }
     }).catch(error => console.log(error));
   }
 
@@ -78,26 +95,40 @@ class HomeScreen extends React.Component {
     this.state.primaryGoal = primaryGoal;
   }
 
+  // onToggleThreeMonths() {
+  //   this.setState({
+  //     displayedSavings: this.state.threeMonthSavings,
+  //   });
+  // }
 
-  onToggleButton() {
-    this.setState({
-      buttonToggle: !this.state.buttonToggle,
-    });
-  }
+  // onToggleSixMonths() {
+  //   this.setState({
+  //     displayedSavings: this.state.sixMonthSavings,
+  //   });
+  // }
+
+  // onToggleOneYear() {
+  //   this.setState({
+  //     displayedSavings: this.state.oneYearSavings,
+  //   });
+  // }
 
   render() {
-    if (!this.state.isReady) {
+    console.log('state:', this.state);
+    const { primaryGoal, isReady, displayedSavings } = this.state;
+
+    if (!isReady) {
       return <AppLoading />;
     }
     return (
       <Container style={styles.container}>
         <View style={styles.viewport}>
-          <Text style={styles.heading}>Goal: Fancy Pants Kayak</Text>
+          <Text style={styles.heading}>Goal: {primaryGoal ? primaryGoal.goal_name : 'No goal set'} </Text>
 
           <Image style={styles.mainImage} source={require('../assets/images/kayak.jpg')} />
 
           <Progress.Bar
-            progress={0.66}
+            progress={primaryGoal ? primaryGoal.amount_saved / primaryGoal.goal_cost : 0}
             width={240}
             color="#49d5b6"
             unfilledColor="#cccccc"
@@ -107,14 +138,14 @@ class HomeScreen extends React.Component {
             <Text style={styles.smallText}>Projected Completion Date: 9/14/19</Text>
           </View>
           <View style={{ marginBottom: 10, marginLeft: -70 }}>
-            <Text style={styles.largeText}>Money Saved: $248</Text>
-            <Text style={styles.largeText}>Current Streak: 79 days</Text>
+            <Text style={styles.largeText}>Money Saved: ${primaryGoal ? primaryGoal.amount_saved : 0}</Text>
+            <Text style={styles.largeText}>Current Streak: {primaryGoal ? primaryGoal.streak_days : 0}</Text>
           </View>
 
-          <Text style={styles.smallTextLeft}>Relapses: 3</Text>
-          <Text style={styles.smallTextLeft}>Money Lost: $22.35</Text>
-          <Text style={styles.smallTextLeft}>Setback: 6 days</Text>
-          <Text style={styles.smallTextGreenLeft}>Savings Projection: $597.11</Text>
+          <Text style={styles.smallTextLeft}>Relapses: {primaryGoal ? primaryGoal.relapse_count : 0}</Text>
+          <Text style={styles.smallTextLeft}>Money Lost: ${primaryGoal ? primaryGoal.relapse_costTotal : 0}</Text>
+          <Text style={styles.smallTextLeft}>Setback: {primaryGoal ? primaryGoal.relapse_count : 0} days</Text>
+          <Text style={styles.smallTextGreenLeft}>Savings Projection: $0</Text>
           <Grid style={{ width: '100%', marginTop: 10 }}>
             <Row style={{ width: '100%' }}>
               <Col style={{ backgroundColor: '#fff', height: 60 }}>

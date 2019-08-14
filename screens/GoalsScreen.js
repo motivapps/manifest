@@ -10,8 +10,11 @@ import {
   Picker,
   Item,
   ScrollView,
+  AsyncStorage,
 } from 'react-native';
-import { Container, Footer, FooterTab, Icon, Content, Button, Grid, Row, Col } from 'native-base';
+import {
+ Container, Footer, FooterTab, Icon, Content, Button, Grid, Row, Col 
+} from 'native-base';
 import axios from 'axios';
 import Link from './subViews/PlaidLink';
 import { NGROK, GOOGLE_OAUTH_ID } from '../app.config.json';
@@ -26,32 +29,61 @@ class GoalsScreen extends React.Component {
       vicePrice: '',
       viceFrequency: '',
       viceName: '',
+      userToken: null,
+      userId: null,
     };
 
     this.onHandleSubmit = this.onHandleSubmit.bind(this);
   }
 
+  async componentWillMount() {
+    try {
+      const userToken = await AsyncStorage.getItem('userToken');
+      if (userToken !== null) {
+        console.log(userToken);
+        this.setState({ userToken });
+        axios.get(`${NGROK}/user/${userToken}`)
+          .then((response) => {
+            console.log('userId from front :', response.data);
+            this.setState({ userId: response.data.id });
+          })
+          .catch((err) => {
+            console.log('userId get error:', err);
+          });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   onHandleSubmit() {
-    const { goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName } = this.state;
+    const {
+ goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName, userId 
+} = this.state;
     console.log('goalName:', goalName);
     console.log('goalItem:', goalItem);
     console.log('goalAmount:', goalAmount);
     console.log('vicePrice:', vicePrice);
     console.log('viceFrequency:', viceFrequency);
     console.log('viceName:', viceName);
+    console.log('userId:', userId);
 
     axios
-      .post(`${NGROK}/user/goals`, { goalName, goalAmount, vicePrice, viceFrequency, viceName })
-      .then(response => {
+      .post(`${NGROK}/user/goals`, {
+ goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName, userId 
+})
+      .then((response) => {
         console.log('goals post from front response:', response);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('error from goals post front:', err);
       });
   }
 
   render() {
-    const { goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName } = this.state;
+    const {
+ goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName 
+} = this.state;
 
     return (
       <Container style={styles.container}>
@@ -83,8 +115,7 @@ class GoalsScreen extends React.Component {
                 width: 300,
                 borderRadius: 8,
               }}
-              onChangeText={text => {
-                console.log('I work');
+              onChangeText={(text) => {
                 this.setState({ goalName: text });
               }}
               value={goalName}
@@ -99,7 +130,7 @@ class GoalsScreen extends React.Component {
                 width: 300,
                 borderRadius: 8,
               }}
-              onChangeText={text => {
+              onChangeText={(text) => {
                 this.setState({ goalItem: text });
               }}
               value={goalItem}
@@ -114,8 +145,12 @@ class GoalsScreen extends React.Component {
                 width: 300,
                 borderRadius: 8,
               }}
-              onChangeText={text => {
+              onChangeText={(text) => {
+                if (text[0] === '$') {
+                  this.setState({ goalAmount: text.slice(1, text.length) });
+                } else {
                 this.setState({ goalAmount: text });
+                }
               }}
               value={goalAmount}
             />
@@ -123,7 +158,9 @@ class GoalsScreen extends React.Component {
             <Text style={styles.smallTextLeft}>Select vice you want to quit:</Text>
             <Picker
               selectedValue={viceName}
-              style={{ height: 100, width: 200, marginTop: -80, marginBottom: 120 }}
+              style={{
+ height: 100, width: 200, marginTop: -80, marginBottom: 120 
+}}
               onValueChange={(itemValue, itemIndex) => this.setState({ viceName: itemValue })}
             >
               <Picker.Item label="Coffee" value="Coffee" />
@@ -140,8 +177,12 @@ class GoalsScreen extends React.Component {
                 width: 300,
                 borderRadius: 8,
               }}
-              onChangeText={text => {
-                this.setState({ vicePrice: text });
+              onChangeText={(text) => {
+                if (text[0] === '$') {
+                  this.setState({ vicePrice: text.slice(1, text.length) });
+                } else {
+                  this.setState({ vicePrice: text });
+                }
               }}
               value={vicePrice}
             />
@@ -149,7 +190,9 @@ class GoalsScreen extends React.Component {
             <Text style={styles.smallTextLeft}>Vice purchase frequency:</Text>
             <Picker
               selectedValue={viceFrequency}
-              style={{ height: 100, width: 200, marginTop: -80, marginBottom: 120 }}
+              style={{
+ height: 100, width: 200, marginTop: -80, marginBottom: 120 
+}}
               onValueChange={(itemValue, itemIndex) => this.setState({ viceFrequency: itemValue })}
             >
               <Picker.Item label="Daily" value="Daily" />

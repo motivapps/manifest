@@ -14,7 +14,7 @@ import {
 } from 'native-base';
 import * as Permissions from 'expo-permissions';
 import axios from 'axios';
-import { Platform, StatusBar, StyleSheet, View, TouchableOpacity, Image } from 'react-native';
+import { Platform, StatusBar, StyleSheet, View, TouchableOpacity, Image, ScrollView } from 'react-native';
 
 import * as Font from 'expo-font';
 import * as Progress from 'react-native-progress';
@@ -142,6 +142,7 @@ class HomeScreen extends React.Component {
     return (
       <Container style={styles.container}>
         <View style={styles.viewport}>
+        <ScrollView>
           <Text style={styles.heading}>Goal: {primaryGoal ? primaryGoal.goal_name : 'No goal set'} </Text>
 
           <Image style={styles.mainImage} source={require('../assets/images/kayak.jpg')} />
@@ -152,11 +153,12 @@ class HomeScreen extends React.Component {
             color="#49d5b6"
             unfilledColor="#cccccc"
             height={24}
+            style={{ alignSelf: 'center' }}
           />
           <View style={{ marginTop: 10, marginBottom: 10 }}>
             <Text style={styles.smallText}>Projected Completion Date: {completionDate ? completionDate : 'Loading...'}</Text>
           </View>
-          <View style={{ marginBottom: 10, marginLeft: -70 }}>
+          <View style={{ marginBottom: 10, marginLeft: 0 }}>
             <Text style={styles.largeText}>Money Saved: ${primaryGoal ? primaryGoal.amount_saved : 0}</Text>
             <Text style={styles.largeText}>Current Streak: {primaryGoal ? primaryGoal.streak_days : 0} Days</Text>
           </View>
@@ -184,6 +186,7 @@ class HomeScreen extends React.Component {
               </Col>
             </Row>
           </Grid>
+          </ScrollView>
         </View>
 
         <Footer style={styles.footerbar}>
@@ -244,6 +247,7 @@ const styles = StyleSheet.create({
     fontSize: 26,
     color: '#49d5b6',
     marginTop: 10,
+    textAlign: 'center',
   },
   largeText: {
     fontWeight: 'bold',
@@ -304,6 +308,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     borderWidth: 4,
     borderColor: '#49d5b6',
+    alignSelf: 'center',
   },
 });
 

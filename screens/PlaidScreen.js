@@ -1,15 +1,34 @@
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react';
-import { StyleSheet, View, Alert, TouchableOpacity, AsyncStorage } from 'react-native';
-import { Container, Footer, FooterTab, Icon, Content, Button, Text } from 'native-base';
+import {
+ StyleSheet, View, Alert, TouchableOpacity, AsyncStorage 
+} from 'react-native';
+import {
+ Container, Footer, FooterTab, Icon, Content, Button, Text 
+} from 'native-base';
+import {
+ storeData, getData, storeMulti, getMulti 
+} from './helpers/asyncHelpers';
 import Link from './subViews/PlaidLink';
-import console from 'console';
 
 class PlaidScreen extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      auth0_id: '',
+    };
+    this.redirect = this.redirect.bind(this);
+  }
+
+  redirect() {
+    const { navigation } = this.props;
+    navigation.navigate('Home');
+  }
+
   render() {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Link />
+        <Link redirect={this.redirect} />
         <Content />
         <Footer style={styles.footerbar}>
           <FooterTab style={{ backgroundColor: '#49d5b6' }}>

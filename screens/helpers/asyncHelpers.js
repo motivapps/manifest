@@ -10,7 +10,7 @@ const storeData = async (key, value, errCB) => {
   }
 };
 
-const getData = async key => {
+const getData = async (key) => {
   try {
     const value = await AsyncStorage.getItem(key);
     if (value !== null) {
@@ -49,4 +49,6 @@ const getMulti = async (array, CB, errCB) => {
   }
 };
 
-export { storeData, getData, storeMulti, getMulti };
+export {
+ storeData, getData, storeMulti, getMulti 
+};

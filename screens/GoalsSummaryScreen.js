@@ -27,6 +27,7 @@ import {
   PUSH_TOKEN,
 } from '../app.config.json';
 import { storeData, getData, storeMulti, getMulti } from './helpers/asyncHelpers';
+import PropTypes from 'prop-types';
 
 // import { MonoText } from '../components/StyledText';
 
@@ -158,8 +159,21 @@ class GoalsSummaryScreen extends React.Component {
                 </Col>
               </Row>
             </Grid>
-
+ 
             <Text style={styles.heading}>Goal: {primaryGoal ? primaryGoal.goal_name : 'No goal set'} </Text>
+            <Text style={styles.headingGray}>Category: {primaryGoal ? primaryGoal.vice : 'No vice selected'}</Text>
+
+            <Progress.Circle 
+              size={30}
+              progress={primaryGoal ? primaryGoal.amount_saved / primaryGoal.goal_cost : 0}
+              color="#49d5b6"
+              unfilledColor="#cccccc"
+              size={250}
+              showsText={true}
+              style={{ alignSelf: 'center', margin: 10 }}
+              textStyle={{ fontWeight: 'bold' }}
+              thickness={8}
+              />
 
             <Image style={styles.mainImage} source={require('../assets/images/kayak.jpg')} />
 
@@ -265,6 +279,13 @@ const styles = StyleSheet.create({
     marginTop: 10,
     textAlign: 'center',
   },
+  headingGray: {
+    fontWeight: 'bold',
+    fontSize: 26,
+    color: '#4c4c4c',
+    marginTop: 10,
+    textAlign: 'center',
+  },
   largeText: {
     fontWeight: 'bold',
     fontSize: 22,
@@ -317,14 +338,17 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   mainImage: {
-    width: 200,
-    height: 200,
+    width: 250,
+    height: 250,
     backgroundColor: '#49d5b6',
     margin: 10,
-    borderRadius: 100,
+    borderRadius: 125,
     borderWidth: 4,
     borderColor: '#49d5b6',
     alignSelf: 'center',
+    marginTop: -260,
+    zIndex: -100,
+    opacity: 0.15,
   },
 });
 

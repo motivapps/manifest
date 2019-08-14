@@ -50,9 +50,9 @@ class HomeScreen extends React.Component {
     };
     // this.onToggleButton = this.onToggleButton.bind(this);
     this.setState = this.setState.bind(this);
-    // this.onToggleThreeMonths = this.onToggleThreeMonths.bind(this);
-    // this.onToggleSixMonths = this.onToggleSixMonths.bind(this);
-    // this.onToggleOneYear = this.onToggleOneYear.bind(this);
+    this.onToggleThreeMonths = this.onToggleThreeMonths.bind(this);
+    this.onToggleSixMonths = this.onToggleSixMonths.bind(this);
+    this.onToggleOneYear = this.onToggleOneYear.bind(this);
   }
 
   async componentWillMount() {
@@ -64,14 +64,14 @@ class HomeScreen extends React.Component {
         primaryGoal: response.data[0],
       });
       console.log('primaryGoal:', this.state.primaryGoal);
-     // if (response.data[0].vice_freq === 'Daily') {
-        // this.setState({
-        //   threeMonthSavings: (response.data[0].vice_price * 91.25).toFixed(2),
-        //   sixMonthSavings: (response.data[0].vice_price * 182.5).toFixed(2),
-        //   oneYearSavings: (response.data[0].vice_price * 365).toFixed(2),
-        //   displayedSavings: (response.data[0].vice_price * 91.25).toFixed(2),
-        // });
-     // }
+     if (response.data[0].vice_freq === 'Daily') {
+        this.setState({
+          threeMonthSavings: (response.data[0].vice_price * 91.25).toFixed(2),
+          sixMonthSavings: (response.data[0].vice_price * 182.5).toFixed(2),
+          oneYearSavings: (response.data[0].vice_price * 365).toFixed(2),
+          displayedSavings: (response.data[0].vice_price * 91.25).toFixed(2),
+        });
+     }
       if (response.data[0]) {
         storeData('primaryGoal', JSON.stringify(response.data[0]));
       }
@@ -87,35 +87,36 @@ class HomeScreen extends React.Component {
     this.setState({ isReady: true });
   }
 
-  async componentDidUpdate() {
-    const primaryGoal = await getData('primaryGoal');
-    const auth0_id = await getData('userToken');
+  // async componentDidUpdate() {
+  //   const primaryGoal = await getData('primaryGoal');
+  //   const auth0_id = await getData('userToken');
 
-    this.state.auth0_id = auth0_id;
-    this.state.primaryGoal = primaryGoal;
+  //   this.state.auth0_id = auth0_id;
+  //   this.state.primaryGoal = primaryGoal;
+  // }
+
+  onToggleThreeMonths(amount) {
+    this.setState({
+      displayedSavings: amount,
+    });
   }
 
-  // onToggleThreeMonths() {
-  //   this.setState({
-  //     displayedSavings: this.state.threeMonthSavings,
-  //   });
-  // }
+  onToggleSixMonths(amount) {
+    console.log(amount);
+    this.setState({
+      displayedSavings: amount,
+    });
+  }
 
-  // onToggleSixMonths() {
-  //   this.setState({
-  //     displayedSavings: this.state.sixMonthSavings,
-  //   });
-  // }
-
-  // onToggleOneYear() {
-  //   this.setState({
-  //     displayedSavings: this.state.oneYearSavings,
-  //   });
-  // }
+  onToggleOneYear(amount) {
+    this.setState({
+      displayedSavings: amount,
+    });
+  }
 
   render() {
     console.log('state:', this.state);
-    const { primaryGoal, isReady, displayedSavings } = this.state;
+    const { primaryGoal, isReady, displayedSavings, threeMonthSavings, sixMonthSavings, oneYearSavings } = this.state;
 
     if (!isReady) {
       return <AppLoading />;
@@ -145,21 +146,21 @@ class HomeScreen extends React.Component {
           <Text style={styles.smallTextLeft}>Relapses: {primaryGoal ? primaryGoal.relapse_count : 0}</Text>
           <Text style={styles.smallTextLeft}>Money Lost: ${primaryGoal ? primaryGoal.relapse_costTotal : 0}</Text>
           <Text style={styles.smallTextLeft}>Setback: {primaryGoal ? primaryGoal.relapse_count : 0} days</Text>
-          <Text style={styles.smallTextGreenLeft}>Savings Projection: $0</Text>
+          <Text style={styles.smallTextGreenLeft}>Savings Projection: ${displayedSavings}</Text>
           <Grid style={{ width: '100%', marginTop: 10 }}>
             <Row style={{ width: '100%' }}>
               <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                <Button style={styles.transactionButton}>
+                <Button style={styles.transactionButton} onPress={() => this.onToggleThreeMonths(threeMonthSavings)}>
                   <Text style={styles.buttonText}>3 months</Text>
                 </Button>
               </Col>
               <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                <Button style={styles.transactionButton}>
+                <Button style={styles.transactionButton} onPress={() => this.onToggleSixMonths(sixMonthSavings)}>
                   <Text style={styles.buttonText}>6 months</Text>
                 </Button>
               </Col>
               <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                <Button style={styles.transactionButton}>
+                <Button style={styles.transactionButton} onPress={() => this.onToggleOneYear(oneYearSavings)}>
                   <Text style={styles.buttonText}>1 year</Text>
                 </Button>
               </Col>

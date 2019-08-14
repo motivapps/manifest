@@ -144,7 +144,7 @@ class HomeScreen extends React.Component {
           </View>
 
           <Text style={styles.smallTextLeft}>Relapses: {primaryGoal ? primaryGoal.relapse_count : 0}</Text>
-          <Text style={styles.smallTextLeft}>Money Lost: ${primaryGoal ? primaryGoal.relapse_costTotal : 0}</Text>
+          <Text style={styles.smallTextLeft}>Money Lost: ${primaryGoal ? primaryGoal.relapse_cost_total : 0}</Text>
           <Text style={styles.smallTextLeft}>Setback: {primaryGoal ? primaryGoal.relapse_count : 0} days</Text>
           <Text style={styles.smallTextGreenLeft}>Savings Projection: ${displayedSavings}</Text>
           <Grid style={{ width: '100%', marginTop: 10 }}>

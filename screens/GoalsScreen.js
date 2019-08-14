@@ -69,16 +69,16 @@ class GoalsScreen extends React.Component {
     console.log('viceName:', viceName);
     console.log('userId:', userId);
 
-    axios
-      .post(`${NGROK}/user/goals`, {
-        goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName, userId,
-      })
-      .then((response) => {
-        console.log('goals post from front response:', response);
-      })
-      .catch((err) => {
-        console.log('error from goals post front:', err);
-      });
+    // axios
+    //   .post(`${NGROK}/user/goals`, {
+    //     goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName, userId,
+    //   })
+    //   .then((response) => {
+    //     console.log('goals post from front response:', response);
+    //   })
+    //   .catch((err) => {
+    //     console.log('error from goals post front:', err);
+    //   });
   }
 
   render() {
@@ -86,7 +86,7 @@ class GoalsScreen extends React.Component {
       goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName,
     } = this.state;
 
-    const placeholder = {
+    const placeholderVices = {
       label: 'Select a vice...',
       value: null,
       color: '#9EA0A4',
@@ -95,15 +95,36 @@ class GoalsScreen extends React.Component {
     const vices = [
       {
         label: 'Coffee',
-        value: 'coffee',
+        value: 'Coffee',
       },
       {
         label: 'Smoking',
-        value: 'smoking',
+        value: 'Smoking',
       },
       {
         label: 'Fast Food',
-        value: 'fast food',
+        value: 'Fast Food',
+      },
+    ];
+
+    const placeholderFrequency = {
+      label: 'Ex. Daily',
+      value: null,
+      color: '#9EA0A4',
+    };
+
+    const frequencies = [
+      {
+        label: 'Daily',
+        value: 'Daily',
+      },
+      {
+        label: 'Twice Per Week',
+        value: 'Twice Per Week',
+      },
+      {
+        label: 'Once Per Week',
+        value: 'Once Per Week',
       },
     ];
 
@@ -179,27 +200,16 @@ class GoalsScreen extends React.Component {
 
             <Text style={styles.smallTextLeft}>Select vice you want to quit:</Text>
 
-
             <RNPickerSelect
-              placeholder={placeholder}
+              placeholder={placeholderVices}
               items={vices}
               onValueChange={(value) => {
                 this.setState({
                   viceName: value,
                 });
               }}
-              // onUpArrow={() => {
-              //   // this.inputRefs.firstTextInput.focus();
-              // }}
-              // onDownArrow={() => {
-              //   // this.inputRefs.favSport1.togglePicker();
-              // }}
               style={pickerSelectStyles}
               value={viceName}
-
-              // ref={el => {
-              //   this.inputRefs.favSport0 = el;
-              // }}
             />
 
             <Text style={styles.smallTextLeft}>Price per vice purchase:</Text>
@@ -222,17 +232,27 @@ class GoalsScreen extends React.Component {
             />
 
             <Text style={styles.smallTextLeft}>Vice purchase frequency:</Text>
-            <Picker
-              selectedValue={viceFrequency}
-              style={{
-                height: 100, width: 200, marginTop: -80, marginBottom: 120,
+            <RNPickerSelect
+              placeholder={placeholderFrequency}
+              items={frequencies}
+              onValueChange={(value) => {
+                this.setState({
+                  viceFrequency: value,
+                });
               }}
-              onValueChange={(itemValue, itemIndex) => this.setState({ viceFrequency: itemValue })}
-            >
-              <Picker.Item label="Daily" value="Daily" />
-              <Picker.Item label="Twice per Week" value="Twice per Week" />
-              <Picker.Item label="Once per Week" value="Once per Week" />
-            </Picker>
+              // onUpArrow={() => {
+              //   // this.inputRefs.firstTextInput.focus();
+              // }}
+              // onDownArrow={() => {
+              //   // this.inputRefs.favSport1.togglePicker();
+              // }}
+              style={pickerSelectStyles}
+              value={viceFrequency}
+
+            // ref={el => {
+            //   this.inputRefs.favSport0 = el;
+            // }}
+            />
 
             <Button style={styles.saveButton}>
               <Text style={styles.buttonText} onPress={this.onHandleSubmit}>
@@ -273,16 +293,6 @@ class GoalsScreen extends React.Component {
     );
   }
 }
-
-// <Picker
-//   selectedValue={viceName}
-//   style={{ height: 100, width: 200, marginTop: -80, marginBottom: 120 }}
-//   onValueChange={(itemValue, itemIndex) => this.setState({ viceName: itemValue })}
-// >
-//   <Picker.Item label="Coffee" value="Coffee" />
-//   <Picker.Item label="Smoking" value="Smoking" />
-//   <Picker.Item label="Fast Food" value="Fast Food" />
-// </Picker>
 
 const styles = StyleSheet.create({
   container: {
@@ -364,6 +374,7 @@ const styles = StyleSheet.create({
     maxWidth: '98%',
     width: '98%',
     marginBottom: 10,
+    marginTop: 10,
   },
   footerbar: {
     backgroundColor: '#49d5b6',

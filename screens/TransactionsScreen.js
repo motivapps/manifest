@@ -97,11 +97,13 @@ export default class Transactions extends React.Component {
     return (
       <Container style={container}>
         <View style={viewport}>
-          <Text style={heading}>Transactions</Text>
-          <Text style={smallTextGreen}>
+          <ScrollView>
+            <Text style={heading}>Transactions</Text>
+            <Text style={smallTextGreen}>
             These transactions look a little suspicious... Still sticking to your goals?
           </Text>
-          {this.renderTransactions()}
+            {this.renderTransactions()}
+          </ScrollView>
         </View>
         <Footer style={footerbar}>
           <FooterTab style={{ backgroundColor: '#49d5b6' }}>
@@ -162,6 +164,7 @@ const styles = StyleSheet.create({
     color: '#49d5b6',
     marginBottom: 10,
     marginTop: 12,
+    textAlign: "center",
   },
   largeText: {
     fontWeight: 'bold',

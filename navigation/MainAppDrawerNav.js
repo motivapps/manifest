@@ -12,6 +12,7 @@ import StatsScreen from '../screens/StatsScreen';
 import LogOutScreen from '../screens/LogOutScreen';
 import GamesScreen from '../screens/GamesScreen';
 import DKScreen from '../screens/games/DK';
+import Link from '../screens/subViews/PlaidLink';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -47,6 +48,9 @@ const PlaidStack = createStackNavigator(
   {
     Plaid: {
       screen: PlaidScreen,
+    },
+    PlaidLink: {
+      screen: Link,
     },
   },
   config

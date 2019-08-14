@@ -1,7 +1,7 @@
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react';
 import {
- StyleSheet, View, Alert, TouchableOpacity, AsyncStorage 
+ StyleSheet, View, Alert, TouchableOpacity, AppState,
 } from 'react-native';
 import {
  Container, Footer, FooterTab, Icon, Content, Button, Text 
@@ -9,26 +9,81 @@ import {
 import {
  storeData, getData, storeMulti, getMulti 
 } from './helpers/asyncHelpers';
-import Link from './subViews/PlaidLink';
+// import Link from './subViews/PlaidLink';
+import PlaidAuthenticator from 'react-native-plaid-link';
+import { NGROK } from '../app.config.json';
+import axios from 'axios';
 
 class PlaidScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      auth0_id: '',
+      data: {},
+      status: '',
+      userToken: null,
+      appState: AppState.currentState
     };
-    this.redirect = this.redirect.bind(this);
+
+    // this.redirect = this.redirect.bind(this);
   }
 
-  redirect() {
-    const { navigation } = this.props;
-    navigation.navigate('Home');
+  async componentWillMount() {
+    try {
+      const userToken = await getData('userToken');
+      if (userToken !== null) {
+        console.log(userToken);
+        this.setState({ userToken });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  componentDidUpdate() {
+    this.doStuff();
+  }
+
+  onMessage = (data) => {
+    console.log(data);
+    this.setState({
+      data,
+      status: data.action.substr(data.action.lastIndexOf(':') + 1).toUpperCase(),
+    });
+  };
+
+  async doStuff() {
+    const { status } = this.state;
+    console.log(status, 'status');
+    if (status === 'CONNECTED') {
+      const { userToken, data: { metadata: { public_token } } } = this.state;
+      const { navigation } = this.props;
+
+      await axios.post(`${NGROK}/get_access_token`, {
+        public_token,
+        userToken,
+      });
+
+      await axios.post(`${NGROK}/auth`, {
+        userToken,
+      });
+
+      navigation.navigate('Home');
+    }
   }
 
   render() {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Link redirect={this.redirect} />
+        <View style={{ marginTop: 10, marginBottom: 5, height: '90%', width: '100%' }}>
+          <PlaidAuthenticator
+            onMessage={this.onMessage}
+            publicKey="a35fead643ab95153802609fa5c0a2"
+            env="sandbox"
+            product="auth,transactions"
+            clientName="Manifest"
+            webhook={`${NGROK}/transaction_hook`}
+          />
+        </View>
         <Content />
         <Footer style={styles.footerbar}>
           <FooterTab style={{ backgroundColor: '#49d5b6' }}>

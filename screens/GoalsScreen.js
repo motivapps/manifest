@@ -7,8 +7,6 @@ import {
   TouchableOpacity,
   TextInput,
   Text,
-  Picker,
-  Item,
   ScrollView,
   AsyncStorage,
 } from 'react-native';
@@ -36,6 +34,7 @@ class GoalsScreen extends React.Component {
 
     this.onHandleSubmit = this.onHandleSubmit.bind(this);
   }
+  
 
   async componentWillMount() {
     try {
@@ -69,16 +68,16 @@ class GoalsScreen extends React.Component {
     console.log('viceName:', viceName);
     console.log('userId:', userId);
 
-    // axios
-    //   .post(`${NGROK}/user/goals`, {
-    //     goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName, userId,
-    //   })
-    //   .then((response) => {
-    //     console.log('goals post from front response:', response);
-    //   })
-    //   .catch((err) => {
-    //     console.log('error from goals post front:', err);
-    //   });
+    axios
+      .post(`${NGROK}/user/goals`, {
+        goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName, userId,
+      })
+      .then((response) => {
+        console.log('goals post from front response:', response);
+      })
+      .catch((err) => {
+        console.log('error from goals post front:', err);
+      });
   }
 
   render() {
@@ -138,12 +137,12 @@ class GoalsScreen extends React.Component {
               <Row style={{ width: '100%' }}>
                 <Col style={{ backgroundColor: '#fff', height: 60 }}>
                   <Button style={styles.transactionButton}>
-                    <Text style={styles.buttonText}>Current Goals</Text>
+                    <Text style={styles.buttonText}>Set New Goal</Text>
                   </Button>
                 </Col>
                 <Col style={{ backgroundColor: '#fff', height: 60 }}>
                   <Button style={styles.transactionButton}>
-                    <Text style={styles.buttonText}>Set New Goal</Text>
+                    <Text style={styles.buttonText} onPress={() => this.props.navigation.navigate('GoalsSummary')}>Current Goals</Text>
                   </Button>
                 </Col>
               </Row>
@@ -240,18 +239,8 @@ class GoalsScreen extends React.Component {
                   viceFrequency: value,
                 });
               }}
-              // onUpArrow={() => {
-              //   // this.inputRefs.firstTextInput.focus();
-              // }}
-              // onDownArrow={() => {
-              //   // this.inputRefs.favSport1.togglePicker();
-              // }}
               style={pickerSelectStyles}
               value={viceFrequency}
-
-            // ref={el => {
-            //   this.inputRefs.favSport0 = el;
-            // }}
             />
 
             <Button style={styles.saveButton}>

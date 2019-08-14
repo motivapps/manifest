@@ -30,7 +30,7 @@ import { storeData, getData, storeMulti, getMulti } from './helpers/asyncHelpers
 
 // import { MonoText } from '../components/StyledText';
 
-class HomeScreen extends React.Component {
+class GoalsSummaryScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -65,15 +65,15 @@ class HomeScreen extends React.Component {
         primaryGoal: response.data[0],
       });
       console.log('primaryGoal:', this.state.primaryGoal);
-     if (response.data[0].vice_freq === 'Daily') {
+      if (response.data[0].vice_freq === 'Daily') {
         this.setState({
           threeMonthSavings: (response.data[0].vice_price * 91.25).toFixed(2),
           sixMonthSavings: (response.data[0].vice_price * 182.5).toFixed(2),
           oneYearSavings: (response.data[0].vice_price * 365).toFixed(2),
           displayedSavings: (response.data[0].vice_price * 91.25).toFixed(2),
         });
-     }
-     
+      }
+
       const daysLeft = (response.data[0].goal_cost - response.data[0].amount_saved) / response.data[0].vice_price;
       console.log(daysLeft);
       const targetDate = new Date();
@@ -141,50 +141,67 @@ class HomeScreen extends React.Component {
     return (
       <Container style={styles.container}>
         <View style={styles.viewport}>
-        <ScrollView>
-          <Text style={styles.heading}>Goal: {primaryGoal ? primaryGoal.goal_name : 'No goal set'} </Text>
+          <ScrollView>
+            <Text style={styles.heading}>My Goals</Text>
 
-          <Image style={styles.mainImage} source={require('../assets/images/kayak.jpg')} />
+            <Grid style={{ width: '100%', marginTop: 10 }}>
+              <Row style={{ width: '100%' }}>
+                <Col style={{ backgroundColor: '#fff', height: 60 }}>
+                  <Button style={styles.transactionButton}>
+                    <Text style={styles.buttonText}>Set New Goal</Text>
+                  </Button>
+                </Col>
+                <Col style={{ backgroundColor: '#fff', height: 60 }}>
+                  <Button style={styles.transactionButton}>
+                    <Text style={styles.buttonText}>Current Goals</Text>
+                  </Button>
+                </Col>
+              </Row>
+            </Grid>
 
-          <Progress.Bar
-            progress={primaryGoal ? primaryGoal.amount_saved / primaryGoal.goal_cost : 0}
-            width={240}
-            color="#49d5b6"
-            unfilledColor="#cccccc"
-            height={24}
-            style={{ alignSelf: 'center' }}
-          />
-          <View style={{ marginTop: 10, marginBottom: 10 }}>
-            <Text style={styles.smallText}>Projected Completion Date: {completionDate ? completionDate : 'Loading...'}</Text>
-          </View>
-          <View style={{ marginBottom: 10, marginLeft: 0 }}>
-            <Text style={styles.largeText}>Money Saved: ${primaryGoal ? primaryGoal.amount_saved : 0}</Text>
-            <Text style={styles.largeText}>Current Streak: {primaryGoal ? primaryGoal.streak_days : 0} Days</Text>
-          </View>
+            <Text style={styles.heading}>Goal: {primaryGoal ? primaryGoal.goal_name : 'No goal set'} </Text>
 
-          <Text style={styles.smallTextLeft}>Relapses: {primaryGoal ? primaryGoal.relapse_count : 0}</Text>
-          <Text style={styles.smallTextLeft}>Money Lost: ${primaryGoal ? primaryGoal.relapse_cost_total : 0}</Text>
-          <Text style={styles.smallTextLeft}>Setback: {primaryGoal ? primaryGoal.relapse_count : 0} days</Text>
-          <Text style={styles.smallTextGreenLeft}>Savings Projection: ${displayedSavings}</Text>
-          <Grid style={{ width: '100%', marginTop: 10 }}>
-            <Row style={{ width: '100%' }}>
-              <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                <Button style={styles.transactionButton} onPress={() => this.onToggleThreeMonths(threeMonthSavings)}>
-                  <Text style={styles.buttonText}>3 months</Text>
-                </Button>
-              </Col>
-              <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                <Button style={styles.transactionButton} onPress={() => this.onToggleSixMonths(sixMonthSavings)}>
-                  <Text style={styles.buttonText}>6 months</Text>
-                </Button>
-              </Col>
-              <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                <Button style={styles.transactionButton} onPress={() => this.onToggleOneYear(oneYearSavings)}>
-                  <Text style={styles.buttonText}>1 year</Text>
-                </Button>
-              </Col>
-            </Row>
-          </Grid>
+            <Image style={styles.mainImage} source={require('../assets/images/kayak.jpg')} />
+
+            <Progress.Bar
+              progress={primaryGoal ? primaryGoal.amount_saved / primaryGoal.goal_cost : 0}
+              width={240}
+              color="#49d5b6"
+              unfilledColor="#cccccc"
+              height={24}
+              style={{ alignSelf: 'center' }}
+            />
+            <View style={{ marginTop: 10, marginBottom: 10 }}>
+              <Text style={styles.smallText}>Projected Completion Date: {completionDate ? completionDate : 'Loading...'}</Text>
+            </View>
+            <View style={{ marginBottom: 10, marginLeft: 0 }}>
+              <Text style={styles.largeText}>Money Saved: ${primaryGoal ? primaryGoal.amount_saved : 0}</Text>
+              <Text style={styles.largeText}>Current Streak: {primaryGoal ? primaryGoal.streak_days : 0} Days</Text>
+            </View>
+
+            <Text style={styles.smallTextLeft}>Relapses: {primaryGoal ? primaryGoal.relapse_count : 0}</Text>
+            <Text style={styles.smallTextLeft}>Money Lost: ${primaryGoal ? primaryGoal.relapse_cost_total : 0}</Text>
+            <Text style={styles.smallTextLeft}>Setback: {primaryGoal ? primaryGoal.relapse_count : 0} days</Text>
+            <Text style={styles.smallTextGreenLeft}>Savings Projection: ${displayedSavings}</Text>
+            <Grid style={{ width: '100%', marginTop: 10 }}>
+              <Row style={{ width: '100%' }}>
+                <Col style={{ backgroundColor: '#fff', height: 60 }}>
+                  <Button style={styles.transactionButton} onPress={() => this.onToggleThreeMonths(threeMonthSavings)}>
+                    <Text style={styles.buttonText}>3 months</Text>
+                  </Button>
+                </Col>
+                <Col style={{ backgroundColor: '#fff', height: 60 }}>
+                  <Button style={styles.transactionButton} onPress={() => this.onToggleSixMonths(sixMonthSavings)}>
+                    <Text style={styles.buttonText}>6 months</Text>
+                  </Button>
+                </Col>
+                <Col style={{ backgroundColor: '#fff', height: 60 }}>
+                  <Button style={styles.transactionButton} onPress={() => this.onToggleOneYear(oneYearSavings)}>
+                    <Text style={styles.buttonText}>1 year</Text>
+                  </Button>
+                </Col>
+              </Row>
+            </Grid>
           </ScrollView>
         </View>
 
@@ -311,4 +328,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+export default GoalsSummaryScreen;

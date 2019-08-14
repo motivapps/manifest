@@ -7,6 +7,7 @@ import HomeScreen from '../screens/HomeScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import PlaidScreen from '../screens/PlaidScreen';
 import GoalsScreen from '../screens/GoalsScreen';
+import GoalsSummaryScreen from '../screens/GoalsSummaryScreen';
 import TransactionsScreen from '../screens/TransactionsScreen';
 import StatsScreen from '../screens/StatsScreen';
 import LogOutScreen from '../screens/LogOutScreen';
@@ -82,6 +83,24 @@ GoalsStack.navigationOptions = {
 };
 
 GoalsStack.path = 'app/goals';
+
+const GoalsSummaryStack = createStackNavigator(
+  {
+    Goals: {
+      screen: GoalsSummaryScreen,
+    },
+  },
+  config
+);
+
+GoalsSummaryStack.navigationOptions = {
+  tabBarLabel: 'Goals Summary',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
+  ),
+};
+
+GoalsSummaryStack.path = 'app/goals-summary';
 
 const GamesStack = createStackNavigator(
   {
@@ -164,6 +183,7 @@ const drawerNavigator = createDrawerNavigator(
     Plaid: PlaidStack,
     Stats: StatsStack,
     Goals: GoalsStack,
+    GoalsSummary: GoalsSummaryStack,
     Games: GamesStack,
     Transactions: TransactionsStack,
     Settings: SettingsStack,

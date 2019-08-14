@@ -47,6 +47,7 @@ class HomeScreen extends React.Component {
       sixMonthSavings: null,
       oneYearSavings: null,
       displayedSavings: 0,
+      completionDate: null,
     };
     // this.onToggleButton = this.onToggleButton.bind(this);
     this.setState = this.setState.bind(this);
@@ -72,23 +73,27 @@ class HomeScreen extends React.Component {
           displayedSavings: (response.data[0].vice_price * 91.25).toFixed(2),
         });
      }
+     
+      const daysLeft = (response.data[0].goal_cost - response.data[0].amount_saved) / response.data[0].vice_price;
+      console.log(daysLeft);
+      const targetDate = new Date();
+      targetDate.setDate(targetDate.getDate() + daysLeft);
+
+      // So you can see the date we have created
+      console.log('targetDate:', targetDate);
+
+      const dd = targetDate.getDate();
+      const mm = targetDate.getMonth() + 1; // 0 is January, so we must add 1
+      const yyyy = targetDate.getFullYear();
+
+      var dateString = mm + "/" + dd + "/" + yyyy;
+      console.log('date:', dateString);
+      this.setState({ completionDate: dateString });
+
       if (response.data[0]) {
         storeData('primaryGoal', JSON.stringify(response.data[0]));
       }
     }).catch(error => console.log(error));
-
-    let targetDate = new Date();
-    targetDate.setDate(targetDate.getDate() + 10);
-
-    // So you can see the date we have created
-    console.log('targetDate:', targetDate);
-
-    let dd = targetDate.getDate();
-    let mm = targetDate.getMonth() + 1; // 0 is January, so we must add 1
-    let yyyy = targetDate.getFullYear();
-
-    var dateString = dd + "/" + mm + "/" + yyyy;
-    console.log('date:', dateString);
   }
 
   async componentDidMount() {
@@ -129,7 +134,7 @@ class HomeScreen extends React.Component {
 
   render() {
     console.log('state:', this.state);
-    const { primaryGoal, isReady, displayedSavings, threeMonthSavings, sixMonthSavings, oneYearSavings } = this.state;
+    const { primaryGoal, isReady, displayedSavings, threeMonthSavings, sixMonthSavings, oneYearSavings, completionDate } = this.state;
 
     if (!isReady) {
       return <AppLoading />;
@@ -149,11 +154,11 @@ class HomeScreen extends React.Component {
             height={24}
           />
           <View style={{ marginTop: 10, marginBottom: 10 }}>
-            <Text style={styles.smallText}>Projected Completion Date: 9/14/19</Text>
+            <Text style={styles.smallText}>Projected Completion Date: {completionDate ? completionDate : 'Loading...'}</Text>
           </View>
           <View style={{ marginBottom: 10, marginLeft: -70 }}>
             <Text style={styles.largeText}>Money Saved: ${primaryGoal ? primaryGoal.amount_saved : 0}</Text>
-            <Text style={styles.largeText}>Current Streak: {primaryGoal ? primaryGoal.streak_days : 0}</Text>
+            <Text style={styles.largeText}>Current Streak: {primaryGoal ? primaryGoal.streak_days : 0} Days</Text>
           </View>
 
           <Text style={styles.smallTextLeft}>Relapses: {primaryGoal ? primaryGoal.relapse_count : 0}</Text>

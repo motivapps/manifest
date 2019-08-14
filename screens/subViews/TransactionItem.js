@@ -16,7 +16,7 @@ import {
 } from 'native-base';
 
 const TransactionItem = (props) => {
-  const { transaction, onDeny } = props;
+  const { transaction, onDeny, onRelapse } = props;
 
   return (
     <Grid style={{ marginBottom: 0, width: '100%', padding: 0 }}>
@@ -45,14 +45,14 @@ const TransactionItem = (props) => {
       <Row style={{ backgroundColor: '#fff', height: 20 }} />
       <Row style={{ marginBottom: 0, width: '100%' }}>
         <Col style={{ backgroundColor: '#fff', height: 60 }}>
-          <TouchableOpacity onPress={onDeny}>
-            <Button style={styles.transactionButton}>
+          <TouchableOpacity>
+            <Button style={styles.transactionButton} onPress={() => onDeny(transaction)}>
               <Text style={styles.buttonText}>It's not what it looks like</Text>
             </Button>
           </TouchableOpacity>
         </Col>
         <Col style={{ backgroundColor: '#fff', height: 60 }}>
-          <Button style={styles.transactionButton}>
+          <Button style={styles.transactionButton} onPress={() => onRelapse(transaction)}>
             <Text style={styles.buttonText}>Oops, I relapsed</Text>
           </Button>
         </Col>

@@ -1,8 +1,12 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react';
-import { StyleSheet, View, TouchableOpacity, ScrollView, AsyncStorage } from 'react-native';
-import { Container, Text, Button, Footer, FooterTab, Icon } from 'native-base';
+import {
+  StyleSheet, View, TouchableOpacity, ScrollView, AsyncStorage,
+} from 'react-native';
+import {
+  Container, Text, Button, Footer, FooterTab, Icon,
+} from 'native-base';
 import axios from 'axios';
 import TransactionItem from './subViews/TransactionItem';
 import { NGROK } from '../app.config.json';
@@ -16,6 +20,8 @@ export default class Transactions extends React.Component {
     };
     this.onDenyGuilt = this.onDenyGuilt.bind(this);
     this.renderTransactions = this.renderTransactions.bind(this);
+    this.getTransactions = this.getTransactions.bind(this);
+    this.onRelapse = this.onRelapse.bind(this);
   }
 
   async componentWillMount() {
@@ -28,18 +34,32 @@ export default class Transactions extends React.Component {
     } catch (error) {
       console.error(error);
     }
-    const { userToken } = this.state;
-    axios.get(`${NGROK}/transactions/${userToken}`).then(({ data: transactions }) => {
-      this.setState({ transactions });
-    });
+    this.getTransactions();
   }
 
-  onDenyGuilt() {
+
+  onDenyGuilt(transaction) {
     // NOT CURRENTLY WORKING
-    console.log('guilt denied!');
-    this.setState(prevState => {
-      return { transactions: prevState.transactions.slice(0, 1) };
-    })
+    // this.setState(prevState => ({ transactions: prevState.transactions.slice(0, 1) }));
+    axios.patch(`${NGROK}/deny_transaction`, transaction)
+      .then((response) => {
+        this.getTransactions();
+      });
+  }
+
+  onRelapse(transaction) {
+    axios.patch(`${NGROK}/accept_transaction`, transaction)
+      .then((response) => {
+        this.getTransactions();
+      });
+  }
+
+  getTransactions() {
+    const { userToken } = this.state;
+    axios.get(`${NGROK}/transactions/${userToken}`).then(({ data: transactions }) => {
+      const pending = transactions.filter(transaction => transaction.status === 'pending');
+      this.setState({ transactions: pending });
+    });
   }
 
   renderTransactions() {
@@ -49,7 +69,9 @@ export default class Transactions extends React.Component {
       return transactions.map(transaction => (
         <TransactionItem
           key={transaction.transaction_id}
-          transaction={transaction} onDeny={this.onDenyGuilt}
+          transaction={transaction}
+          onDeny={this.onDenyGuilt}
+          onRelapse={this.onRelapse}
         />
       ));
     }
@@ -57,21 +79,20 @@ export default class Transactions extends React.Component {
   }
 
   render() {
-
-        const {
-          container,
-          viewport,
-          title,
-          heading,
-          largeText,
-          smallText,
-          smallTextGreen,
-          smallTextLeft,
-          transactionButton,
-          buttonText,
-          transactionColumns,
-          footerbar,
-        } = styles;
+    const {
+      container,
+      viewport,
+      title,
+      heading,
+      largeText,
+      smallText,
+      smallTextGreen,
+      smallTextLeft,
+      transactionButton,
+      buttonText,
+      transactionColumns,
+      footerbar,
+    } = styles;
 
     return (
       <Container style={container}>

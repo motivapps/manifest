@@ -35,7 +35,6 @@ class App extends React.Component {
   }
   
   async componentDidMount() {
-    
     try {
       const userToken = await AsyncStorage.getItem('userToken');
       if (userToken !== null) {
@@ -67,7 +66,7 @@ class App extends React.Component {
     if (locationGranted) {
       await Location.startLocationUpdatesAsync('callFoursquare', {
         accuracy: Location.Accuracy.Highest,
-        distanceInterval: 10, // update every 10 meters, will want a bigger number eventually but this is nice for testing
+        distanceInterval: 50, // update every 50 meters, will want a bigger number eventually but this is nice for testing
         showsBackgroundLocationIndicator: true,
       });
     }

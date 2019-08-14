@@ -18,6 +18,7 @@ import {
 import axios from 'axios';
 import Link from './subViews/PlaidLink';
 import { NGROK, GOOGLE_OAUTH_ID } from '../app.config.json';
+import RNPickerSelect, { defaultStyles } from 'react-native-picker-select';
 
 class GoalsScreen extends React.Component {
   constructor(props) {
@@ -158,9 +159,7 @@ class GoalsScreen extends React.Component {
             <Text style={styles.smallTextLeft}>Select vice you want to quit:</Text>
             <Picker
               selectedValue={viceName}
-              style={{
- height: 100, width: 200, marginTop: -80, marginBottom: 120 
-}}
+              style={{ height: 100, width: 200, marginTop: -80, marginBottom: 120 }}
               onValueChange={(itemValue, itemIndex) => this.setState({ viceName: itemValue })}
             >
               <Picker.Item label="Coffee" value="Coffee" />

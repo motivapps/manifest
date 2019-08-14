@@ -35,7 +35,6 @@ class App extends React.Component {
   }
   
   async componentDidMount() {
-    
     try {
       const userToken = await AsyncStorage.getItem('userToken');
       if (userToken !== null) {
@@ -64,6 +63,7 @@ class App extends React.Component {
       this.setState({ locationGranted: true });
     }
     const { locationGranted } = this.state;
+<<<<<<< HEAD
     // if (locationGranted) {
     //   await Location.startLocationUpdatesAsync('callFoursquare', {
     //     accuracy: Location.Accuracy.Highest,
@@ -71,6 +71,15 @@ class App extends React.Component {
     //     showsBackgroundLocationIndicator: true,
     //   });
     // }
+=======
+    if (locationGranted) {
+      await Location.startLocationUpdatesAsync('callFoursquare', {
+        accuracy: Location.Accuracy.Highest,
+        distanceInterval: 50, // update every 50 meters, will want a bigger number eventually but this is nice for testing
+        showsBackgroundLocationIndicator: true,
+      });
+    }
+>>>>>>> c1f85fb33c197ae3678d037230c580d75e16bb9e
   }
 
   // GET NOTIF PERMISSIONS:

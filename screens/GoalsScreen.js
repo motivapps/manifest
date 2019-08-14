@@ -13,12 +13,12 @@ import {
   AsyncStorage,
 } from 'react-native';
 import {
- Container, Footer, FooterTab, Icon, Content, Button, Grid, Row, Col 
+  Container, Footer, FooterTab, Icon, Content, Button, Grid, Row, Col,
 } from 'native-base';
 import axios from 'axios';
+import RNPickerSelect, { defaultStyles } from 'react-native-picker-select';
 import Link from './subViews/PlaidLink';
 import { NGROK, GOOGLE_OAUTH_ID } from '../app.config.json';
-import RNPickerSelect, { defaultStyles } from 'react-native-picker-select';
 
 class GoalsScreen extends React.Component {
   constructor(props) {
@@ -59,8 +59,8 @@ class GoalsScreen extends React.Component {
 
   onHandleSubmit() {
     const {
- goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName, userId 
-} = this.state;
+      goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName, userId,
+    } = this.state;
     console.log('goalName:', goalName);
     console.log('goalItem:', goalItem);
     console.log('goalAmount:', goalAmount);
@@ -71,8 +71,8 @@ class GoalsScreen extends React.Component {
 
     axios
       .post(`${NGROK}/user/goals`, {
- goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName, userId 
-})
+        goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName, userId,
+      })
       .then((response) => {
         console.log('goals post from front response:', response);
       })
@@ -83,8 +83,29 @@ class GoalsScreen extends React.Component {
 
   render() {
     const {
- goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName 
-} = this.state;
+      goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName,
+    } = this.state;
+
+    const placeholder = {
+      label: 'Select a vice...',
+      value: null,
+      color: '#9EA0A4',
+    };
+
+    const vices = [
+      {
+        label: 'Coffee',
+        value: 'coffee',
+      },
+      {
+        label: 'Smoking',
+        value: 'smoking',
+      },
+      {
+        label: 'Fast Food',
+        value: 'fast food',
+      },
+    ];
 
     return (
       <Container style={styles.container}>
@@ -150,22 +171,36 @@ class GoalsScreen extends React.Component {
                 if (text[0] === '$') {
                   this.setState({ goalAmount: text.slice(1, text.length) });
                 } else {
-                this.setState({ goalAmount: text });
+                  this.setState({ goalAmount: text });
                 }
               }}
               value={goalAmount}
             />
 
             <Text style={styles.smallTextLeft}>Select vice you want to quit:</Text>
-            <Picker
-              selectedValue={viceName}
-              style={{ height: 100, width: 200, marginTop: -80, marginBottom: 120 }}
-              onValueChange={(itemValue, itemIndex) => this.setState({ viceName: itemValue })}
-            >
-              <Picker.Item label="Coffee" value="Coffee" />
-              <Picker.Item label="Smoking" value="Smoking" />
-              <Picker.Item label="Fast Food" value="Fast Food" />
-            </Picker>
+
+
+            <RNPickerSelect
+              placeholder={placeholder}
+              items={vices}
+              onValueChange={(value) => {
+                this.setState({
+                  viceName: value,
+                });
+              }}
+              // onUpArrow={() => {
+              //   // this.inputRefs.firstTextInput.focus();
+              // }}
+              // onDownArrow={() => {
+              //   // this.inputRefs.favSport1.togglePicker();
+              // }}
+              style={pickerSelectStyles}
+              value={viceName}
+
+              // ref={el => {
+              //   this.inputRefs.favSport0 = el;
+              // }}
+            />
 
             <Text style={styles.smallTextLeft}>Price per vice purchase:</Text>
             <TextInput
@@ -190,8 +225,8 @@ class GoalsScreen extends React.Component {
             <Picker
               selectedValue={viceFrequency}
               style={{
- height: 100, width: 200, marginTop: -80, marginBottom: 120 
-}}
+                height: 100, width: 200, marginTop: -80, marginBottom: 120,
+              }}
               onValueChange={(itemValue, itemIndex) => this.setState({ viceFrequency: itemValue })}
             >
               <Picker.Item label="Daily" value="Daily" />
@@ -239,6 +274,16 @@ class GoalsScreen extends React.Component {
   }
 }
 
+// <Picker
+//   selectedValue={viceName}
+//   style={{ height: 100, width: 200, marginTop: -80, marginBottom: 120 }}
+//   onValueChange={(itemValue, itemIndex) => this.setState({ viceName: itemValue })}
+// >
+//   <Picker.Item label="Coffee" value="Coffee" />
+//   <Picker.Item label="Smoking" value="Smoking" />
+//   <Picker.Item label="Fast Food" value="Fast Food" />
+// </Picker>
+
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
@@ -283,7 +328,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#4c4c4c',
     alignSelf: 'flex-start',
-    marginLeft: 0,
+    marginTop: 10,
   },
   smallTextGreenLeft: {
     fontWeight: 'bold',
@@ -333,6 +378,31 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     borderWidth: 4,
     borderColor: '#49d5b6',
+  },
+});
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 2,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    height: 36,
+    width: 300,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    color: 'black',
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
+  inputAndroid: {
+    fontSize: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderWidth: 0.5,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    color: 'black',
+    paddingRight: 30, // to ensure the text is never behind the icon
   },
 });
 

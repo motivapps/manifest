@@ -64,13 +64,13 @@ class App extends React.Component {
       this.setState({ locationGranted: true });
     }
     const { locationGranted } = this.state;
-    if (locationGranted) {
-      await Location.startLocationUpdatesAsync('callFoursquare', {
-        accuracy: Location.Accuracy.Highest,
-        distanceInterval: 10, // update every 10 meters, will want a bigger number eventually but this is nice for testing
-        showsBackgroundLocationIndicator: true,
-      });
-    }
+    // if (locationGranted) {
+    //   await Location.startLocationUpdatesAsync('callFoursquare', {
+    //     accuracy: Location.Accuracy.Highest,
+    //     distanceInterval: 10, // update every 10 meters, will want a bigger number eventually but this is nice for testing
+    //     showsBackgroundLocationIndicator: true,
+    //   });
+    // }
   }
 
   // GET NOTIF PERMISSIONS:

@@ -1,7 +1,11 @@
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react';
 import {
- StyleSheet, View, Alert, TouchableOpacity 
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  ScrollView,
+  AsyncStorage,
 } from 'react-native';
 import {
   Container,
@@ -19,6 +23,9 @@ import {
   Thumbnail,
 } from 'native-base';
 
+import axios from 'axios';
+import { NGROK } from '../app.config.json';
+
 class MyAccountScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -28,6 +35,29 @@ class MyAccountScreen extends React.Component {
     };
   }
 
+  async componentWillMount() {
+    try {
+      const userToken = await AsyncStorage.getItem('userToken');
+      if (userToken !== null) {
+        console.log(userToken);
+        this.setState({ userToken });
+        axios.get(`${NGROK}/user/${userToken}`)
+          .then((response) => {
+            console.log('userId from front :', response.data);
+            this.setState({ 
+              profilePic: response.data.picture,
+              name: response.data.name 
+            });
+          })
+          .catch((err) => {
+            console.log('userId get error:', err);
+          });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   render() {
     const { navigate } = this.props.navigation;
     const { name, profilePic } = this.state;
@@ -35,6 +65,7 @@ class MyAccountScreen extends React.Component {
     return (
       <Container style={styles.container}>
         <View style={styles.viewport}>
+        <ScrollView>
           <Text style={styles.heading}>My Account</Text>
 
           <Grid style={{ width: 260, marginTop: 20 }}>
@@ -42,28 +73,29 @@ class MyAccountScreen extends React.Component {
               <Col style={{ backgroundColor: '#fff', height: 120 }}>
                 <Thumbnail
                     square
-                    style={styles.gameImg}
-                    source={require('../assets/images/DK.jpg')}
+                    style={styles.profileImg}
+                    source={{uri: profilePic}}
                   />
               </Col>
               <Col style={{ backgroundColor: '#fff', height: 120 }}>
-                <Text>{name ? name : 'No user found'}</Text>
+                <Text style={styles.largeTextGray}>{name ? name : 'No user found'}</Text>
               </Col>
             </Row>
             <Row>
-              <Button>Connect Bank</Button>
+              <Button style={styles.transactionButton}><Text style={styles.buttonText}>Connect Bank</Text></Button>
             </Row>
             <Row style={{ width: '100%', marginBottom: 10 }}>
-              <Text style={styles.smallText}>Connect your bank account to be able to track your spending on vices and transfer money saved by staying on track to your savings account.</Text>
+              <Text style={styles.smallTextLeft}>Connect your bank account to be able to track your spending on vices and transfer money saved by staying on track to your savings account.</Text>
             </Row>
             <Row>
-              <Button>Delete Account</Button>
+              <Button style={styles.transactionButton}><Text style={styles.buttonText}>Delete Account</Text></Button>
             </Row>
             <Row style={{ width: '100%', marginBottom: 10 }}>
-              <Text style={styles.smallText}>Deleting your account will permanently delete all data and goals associated with your account.</Text>
+              <Text style={styles.smallTextLeft}>Deleting your account will permanently delete all data and goals associated with your account.</Text>
             </Row>
 
           </Grid>
+          </ScrollView>
         </View>
         <Footer style={styles.footerbar}>
           <FooterTab style={{ backgroundColor: '#49d5b6' }}>
@@ -110,8 +142,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    marginLeft: 30,
-    marginRight: 30,
+    marginLeft: 10,
+    marginRight: 10,
   },
   title: {
     fontWeight: 'bold',
@@ -123,6 +155,7 @@ const styles = StyleSheet.create({
     fontSize: 26,
     color: '#49d5b6',
     marginTop: 10,
+    textAlign: 'center',
   },
   largeText: {
     fontWeight: 'bold',
@@ -130,6 +163,14 @@ const styles = StyleSheet.create({
     color: '#49d5b6',
     alignSelf: 'flex-start',
     marginLeft: 0,
+  },
+  largeTextGray: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    color: '#4c4c4c',
+    alignSelf: 'flex-start',
+    marginLeft: 10,
+    marginTop: 30,
   },
   smallText: {
     fontWeight: 'bold',
@@ -170,6 +211,8 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     maxWidth: '98%',
     width: '98%',
+    marginTop: 20,
+    marginBottom: 10,
   },
   saveButton: {
     backgroundColor: '#49d5b6',
@@ -200,11 +243,14 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderRadius: 8,
   },
-  gameImg: {
+  profileImg: {
     width: 120,
-    height: 110,
-    marginBottom: 10,
-    borderRadius: 8,
+    height: 120,
+    marginRight: 5,
+    marginBottom: 100,
+    borderRadius: 60,
+    borderWidth: 4,
+    borderColor: '#49d5b6',
   },
 });
 

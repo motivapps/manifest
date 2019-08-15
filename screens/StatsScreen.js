@@ -44,14 +44,14 @@ export default class StatsScreen extends React.Component {
         console.log('amount:', parsedGoal.amount_saved);
         let savedTotal = parsedGoal.amount_saved / parsedGoal.goal_cost;
 
-        let dailySavings;
-        if (parsedGoal.vice_freq === 'Daily') {
-          dailySavings = parsedGoal.vice_price;
-        } else if (parsedGoal.vice_freq === 'Twice Per Week') {
-          dailySavings = (parsedGoal.vice_freq * 2) / 7;
-        } else if (parsedGoal.vice_freq === 'Once Per Week') {
-          dailySavings = parsedGoal.vice_freq / 7;
-        }
+        const dailySavings = parsedGoal.daily_savings;
+        // if (parsedGoal.vice_freq === 'Daily') {
+        //   dailySavings = parsedGoal.vice_price;
+        // } else if (parsedGoal.vice_freq === 'Twice Per Week') {
+        //   dailySavings = (parsedGoal.vice_price * 2) / 7;
+        // } else if (parsedGoal.vice_freq === 'Once Per Week') {
+        //   dailySavings = parsedGoal.vice_price / 7;
+        // }
         console.log('goal:', primaryGoal);
         this.setState({ 
           primaryGoal: parsedGoal,

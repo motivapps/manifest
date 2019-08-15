@@ -99,6 +99,8 @@ export default class StatsScreen extends React.Component {
             chartConfig={chartConfig}
           />
 
+          <Text style={styles.smallText}>Savings Potential Based on Daily Savings</Text>
+
           <Grid style={{ width: '100%', marginTop: 10 }}>
             <Row style={{ width: '100%' }}>
               <Col style={{ backgroundColor: '#fff', height: 60 }}>

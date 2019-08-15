@@ -26,9 +26,9 @@ export default class StatsScreen extends React.Component {
         data: [0.3, 0.6],
       },
       barchartData: {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+        labels: ['Daily Savings', 'Relapses Total', 'Total Saved', 'Goal Amount'],
         datasets: [{
-          data: [20, 45, 28, 80, 99, 43]
+          data: [20, 45, 28, 80]
         }]
       },
       primaryGoal: null,
@@ -43,12 +43,27 @@ export default class StatsScreen extends React.Component {
         let relapseTotal = parsedGoal.relapse_cost_total / parsedGoal.goal_cost;
         console.log('amount:', parsedGoal.amount_saved);
         let savedTotal = parsedGoal.amount_saved / parsedGoal.goal_cost;
+
+        let dailySavings;
+        if (parsedGoal.vice_freq === 'Daily') {
+          dailySavings = parsedGoal.vice_price;
+        } else if (parsedGoal.vice_freq === 'Twice Per Week') {
+          dailySavings = (parsedGoal.vice_freq * 2) / 7;
+        } else if (parsedGoal.vice_freq === 'Once Per Week') {
+          dailySavings = parsedGoal.vice_freq / 7;
+        }
         console.log('goal:', primaryGoal);
         this.setState({ 
           primaryGoal: parsedGoal,
           circleData: {
             labels: ['Relapses', parsedGoal.vice],
             data: [relapseTotal, savedTotal],
+          },
+          barchartData: {
+            labels: ['Daily', 'Weekly', 'Monthly'],
+            datasets: [{
+              data: [dailySavings, dailySavings * 7, dailySavings * 30],
+            }],
           },
         });
       }
@@ -138,7 +153,6 @@ const chartConfig = {
     alignItems: 'center',
     fontSize: 16,
     fontWeight: 'bold',
-    backgroundColor: 'red',
   },
 };
 

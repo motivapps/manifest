@@ -49,7 +49,7 @@ const TransactionItem = (props) => {
           </TouchableOpacity>
         </Col>
         <Col style={{ backgroundColor: '#fff', height: 60 }}>
-          <Button style={styles.transactionButton} onPress={() => onRelapse(transaction)}>
+          <Button style={styles.transactionButtonDark} onPress={() => onRelapse(transaction)}>
             <Text style={styles.buttonText}>Oops, I relapsed</Text>
           </Button>
         </Col>
@@ -118,6 +118,13 @@ const styles = StyleSheet.create({
   },
   transactionButton: {
     backgroundColor: '#49d5b6',
+    height: 60,
+    alignSelf: 'flex-start',
+    maxWidth: '96%',
+    width: '96%',
+  },
+  transactionButtonDark: {
+    backgroundColor: '#218771',
     height: 60,
     alignSelf: 'flex-start',
     maxWidth: '96%',

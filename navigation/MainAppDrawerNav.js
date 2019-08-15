@@ -177,6 +177,24 @@ SettingsStack.navigationOptions = {
 
 SettingsStack.path = 'app/settings';
 
+const SettingsStack = createStackNavigator(
+  {
+    Settings: {
+      screen: SettingsScreen,
+    },
+  },
+  config
+);
+
+MyAccountStack.navigationOptions = {
+  tabBarLabel: 'Account',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
+  ),
+};
+
+SettingsStack.path = 'app/my-account';
+
 const drawerNavigator = createDrawerNavigator(
   {
     Home: HomeStack,
@@ -187,6 +205,7 @@ const drawerNavigator = createDrawerNavigator(
     Games: GamesStack,
     Transactions: TransactionsStack,
     Settings: SettingsStack,
+    Account: MyAccountStack,
     LogOut: {
       screen: LogOutScreen,
     },

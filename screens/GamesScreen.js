@@ -51,18 +51,18 @@ class GamesScreen extends React.Component {
             </Row>
             <Row style={{ width: '100%' }}>
               <Col style={{ backgroundColor: '#fff', height: 120 }}>
-                <Container style={styles.gameContainer} />
+                <Container style={styles.gameContainer}><Icon style={{ fontSize: 90, color: '#fff', alignSelf: 'center', marginTop: 8 }} name="md-lock" /></Container>
               </Col>
               <Col style={{ backgroundColor: '#fff', height: 120 }}>
-                <Container style={styles.gameContainer} />
+                <Container style={styles.gameContainer}><Icon style={{ fontSize: 90, color: '#fff', alignSelf: 'center', marginTop: 8 }} name="md-lock" /></Container>
               </Col>
             </Row>
             <Row style={{ width: '100%' }}>
               <Col style={{ backgroundColor: '#fff', height: 120 }}>
-                <Container style={styles.gameContainer} />
+                <Container style={styles.gameContainer}><Icon style={{ fontSize: 90, color: '#fff', alignSelf: 'center', marginTop: 8 }} name="md-lock" /></Container>
               </Col>
               <Col style={{ backgroundColor: '#fff', height: 120 }}>
-                <Container style={styles.gameContainer} />
+                <Container style={styles.gameContainer}><Icon style={{ fontSize: 90, color: '#fff', alignSelf: 'center', marginTop: 8 }} name="md-lock" /></Container>
               </Col>
             </Row>
           </Grid>

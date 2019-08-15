@@ -7,18 +7,16 @@ import {
   TouchableOpacity,
   TextInput,
   Text,
-  Picker,
-  Item,
   ScrollView,
   AsyncStorage,
 } from 'react-native';
 import {
- Container, Footer, FooterTab, Icon, Content, Button, Grid, Row, Col 
+  Container, Footer, FooterTab, Icon, Content, Button, Grid, Row, Col,
 } from 'native-base';
 import axios from 'axios';
+import RNPickerSelect, { defaultStyles } from 'react-native-picker-select';
 import Link from './subViews/PlaidLink';
 import { NGROK, GOOGLE_OAUTH_ID } from '../app.config.json';
-import RNPickerSelect, { defaultStyles } from 'react-native-picker-select';
 
 class GoalsScreen extends React.Component {
   constructor(props) {
@@ -36,6 +34,7 @@ class GoalsScreen extends React.Component {
 
     this.onHandleSubmit = this.onHandleSubmit.bind(this);
   }
+
 
   async componentWillMount() {
     try {
@@ -59,8 +58,8 @@ class GoalsScreen extends React.Component {
 
   onHandleSubmit() {
     const {
- goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName, userId 
-} = this.state;
+      goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName, userId,
+    } = this.state;
     console.log('goalName:', goalName);
     console.log('goalItem:', goalItem);
     console.log('goalAmount:', goalAmount);
@@ -71,8 +70,8 @@ class GoalsScreen extends React.Component {
 
     axios
       .post(`${NGROK}/user/goals`, {
- goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName, userId 
-})
+        goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName, userId,
+      })
       .then((response) => {
         console.log('goals post from front response:', response);
       })
@@ -83,8 +82,50 @@ class GoalsScreen extends React.Component {
 
   render() {
     const {
- goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName 
-} = this.state;
+      goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName,
+    } = this.state;
+
+    const placeholderVices = {
+      label: 'Select a vice...',
+      value: null,
+      color: '#9EA0A4',
+    };
+
+    const vices = [
+      {
+        label: 'Coffee',
+        value: 'Coffee',
+      },
+      {
+        label: 'Smoking',
+        value: 'Smoking',
+      },
+      {
+        label: 'Fast Food',
+        value: 'Fast Food',
+      },
+    ];
+
+    const placeholderFrequency = {
+      label: 'Ex. Daily',
+      value: null,
+      color: '#9EA0A4',
+    };
+
+    const frequencies = [
+      {
+        label: 'Daily',
+        value: 'Daily',
+      },
+      {
+        label: 'Twice Per Week',
+        value: 'Twice Per Week',
+      },
+      {
+        label: 'Once Per Week',
+        value: 'Once Per Week',
+      },
+    ];
 
     return (
       <Container style={styles.container}>
@@ -95,13 +136,13 @@ class GoalsScreen extends React.Component {
             <Grid style={{ width: '100%', marginTop: 10 }}>
               <Row style={{ width: '100%' }}>
                 <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                  <Button style={styles.transactionButton}>
-                    <Text style={styles.buttonText}>Current Goals</Text>
+                  <Button style={styles.transactionButtonDark}>
+                    <Text style={styles.buttonText}>Set New Goal</Text>
                   </Button>
                 </Col>
                 <Col style={{ backgroundColor: '#fff', height: 60 }}>
                   <Button style={styles.transactionButton}>
-                    <Text style={styles.buttonText}>Set New Goal</Text>
+                    <Text style={styles.buttonText} onPress={() => this.props.navigation.navigate('GoalsSummary')}>Current Goals</Text>
                   </Button>
                 </Col>
               </Row>
@@ -150,22 +191,25 @@ class GoalsScreen extends React.Component {
                 if (text[0] === '$') {
                   this.setState({ goalAmount: text.slice(1, text.length) });
                 } else {
-                this.setState({ goalAmount: text });
+                  this.setState({ goalAmount: text });
                 }
               }}
               value={goalAmount}
             />
 
             <Text style={styles.smallTextLeft}>Select vice you want to quit:</Text>
-            <Picker
-              selectedValue={viceName}
-              style={{ height: 100, width: 200, marginTop: -80, marginBottom: 120 }}
-              onValueChange={(itemValue, itemIndex) => this.setState({ viceName: itemValue })}
-            >
-              <Picker.Item label="Coffee" value="Coffee" />
-              <Picker.Item label="Smoking" value="Smoking" />
-              <Picker.Item label="Fast Food" value="Fast Food" />
-            </Picker>
+
+            <RNPickerSelect
+              placeholder={placeholderVices}
+              items={vices}
+              onValueChange={(value) => {
+                this.setState({
+                  viceName: value,
+                });
+              }}
+              style={pickerSelectStyles}
+              value={viceName}
+            />
 
             <Text style={styles.smallTextLeft}>Price per vice purchase:</Text>
             <TextInput
@@ -187,17 +231,17 @@ class GoalsScreen extends React.Component {
             />
 
             <Text style={styles.smallTextLeft}>Vice purchase frequency:</Text>
-            <Picker
-              selectedValue={viceFrequency}
-              style={{
- height: 100, width: 200, marginTop: -80, marginBottom: 120 
-}}
-              onValueChange={(itemValue, itemIndex) => this.setState({ viceFrequency: itemValue })}
-            >
-              <Picker.Item label="Daily" value="Daily" />
-              <Picker.Item label="Twice per Week" value="Twice per Week" />
-              <Picker.Item label="Once per Week" value="Once per Week" />
-            </Picker>
+            <RNPickerSelect
+              placeholder={placeholderFrequency}
+              items={frequencies}
+              onValueChange={(value) => {
+                this.setState({
+                  viceFrequency: value,
+                });
+              }}
+              style={pickerSelectStyles}
+              value={viceFrequency}
+            />
 
             <Button style={styles.saveButton}>
               <Text style={styles.buttonText} onPress={this.onHandleSubmit}>
@@ -283,7 +327,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#4c4c4c',
     alignSelf: 'flex-start',
-    marginLeft: 0,
+    marginTop: 10,
   },
   smallTextGreenLeft: {
     fontWeight: 'bold',
@@ -312,6 +356,13 @@ const styles = StyleSheet.create({
     maxWidth: '98%',
     width: '98%',
   },
+  transactionButtonDark: {
+    backgroundColor: '#218771',
+    height: 40,
+    alignSelf: 'flex-start',
+    maxWidth: '98%',
+    width: '98%',
+  },
   saveButton: {
     backgroundColor: '#49d5b6',
     height: 40,
@@ -319,6 +370,7 @@ const styles = StyleSheet.create({
     maxWidth: '98%',
     width: '98%',
     marginBottom: 10,
+    marginTop: 10,
   },
   footerbar: {
     backgroundColor: '#49d5b6',
@@ -333,6 +385,31 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     borderWidth: 4,
     borderColor: '#49d5b6',
+  },
+});
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 2,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    height: 36,
+    width: 300,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    color: 'black',
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
+  inputAndroid: {
+    fontSize: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderWidth: 0.5,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    color: 'black',
+    paddingRight: 30, // to ensure the text is never behind the icon
   },
 });
 

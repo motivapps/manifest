@@ -34,7 +34,7 @@ class GoalsScreen extends React.Component {
 
     this.onHandleSubmit = this.onHandleSubmit.bind(this);
   }
-  
+
 
   async componentWillMount() {
     try {
@@ -136,7 +136,7 @@ class GoalsScreen extends React.Component {
             <Grid style={{ width: '100%', marginTop: 10 }}>
               <Row style={{ width: '100%' }}>
                 <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                  <Button style={styles.transactionButton}>
+                  <Button style={styles.transactionButtonDark}>
                     <Text style={styles.buttonText}>Set New Goal</Text>
                   </Button>
                 </Col>
@@ -351,6 +351,13 @@ const styles = StyleSheet.create({
   },
   transactionButton: {
     backgroundColor: '#49d5b6',
+    height: 40,
+    alignSelf: 'flex-start',
+    maxWidth: '98%',
+    width: '98%',
+  },
+  transactionButtonDark: {
+    backgroundColor: '#218771',
     height: 40,
     alignSelf: 'flex-start',
     maxWidth: '98%',

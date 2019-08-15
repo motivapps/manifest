@@ -52,9 +52,7 @@ class GoalsSummaryScreen extends React.Component {
     };
     // this.onToggleButton = this.onToggleButton.bind(this);
     this.setState = this.setState.bind(this);
-    this.onToggleThreeMonths = this.onToggleThreeMonths.bind(this);
-    this.onToggleSixMonths = this.onToggleSixMonths.bind(this);
-    this.onToggleOneYear = this.onToggleOneYear.bind(this);
+
   }
 
   async componentWillMount() {
@@ -114,23 +112,6 @@ class GoalsSummaryScreen extends React.Component {
   //   this.state.primaryGoal = primaryGoal;
   // }
 
-  onToggleThreeMonths(amount) {
-    this.setState({
-      displayedSavings: amount,
-    });
-  }
-
-  onToggleSixMonths(amount) {
-    this.setState({
-      displayedSavings: amount,
-    });
-  }
-
-  onToggleOneYear(amount) {
-    this.setState({
-      displayedSavings: amount,
-    });
-  }
 
   render() {
     // console.log('state:', this.state);
@@ -148,12 +129,12 @@ class GoalsSummaryScreen extends React.Component {
             <Grid style={{ width: '100%', marginTop: 10 }}>
               <Row style={{ width: '100%' }}>
                 <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                  <Button style={styles.transactionButton}>
+                  <Button style={styles.transactionButton} onPress={() => this.props.navigation.navigate('Goals')}>
                     <Text style={styles.buttonText}>Set New Goal</Text>
                   </Button>
                 </Col>
                 <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                  <Button style={styles.transactionButton}>
+                  <Button style={styles.transactionButtonDark}>
                     <Text style={styles.buttonText}>Current Goals</Text>
                   </Button>
                 </Col>
@@ -177,41 +158,26 @@ class GoalsSummaryScreen extends React.Component {
 
             <Image style={styles.mainImage} source={require('../assets/images/kayak.jpg')} />
 
-            <Progress.Bar
-              progress={primaryGoal ? primaryGoal.amount_saved / primaryGoal.goal_cost : 0}
-              width={240}
-              color="#49d5b6"
-              unfilledColor="#cccccc"
-              height={24}
-              style={{ alignSelf: 'center' }}
-            />
+            
             <View style={{ marginTop: 10, marginBottom: 10 }}>
               <Text style={styles.smallText}>Projected Completion Date: {completionDate ? completionDate : 'Loading...'}</Text>
+              <Text style={styles.smallTextLeft}>Daily Savings: ${primaryGoal ? primaryGoal.vice_price : 0}</Text>
             </View>
             <View style={{ marginBottom: 10, marginLeft: 0 }}>
+              <Text style={styles.largeText}>Goal Amount: ${primaryGoal ? primaryGoal.goal_cost : 0}</Text>
               <Text style={styles.largeText}>Money Saved: ${primaryGoal ? primaryGoal.amount_saved : 0}</Text>
-              <Text style={styles.largeText}>Current Streak: {primaryGoal ? primaryGoal.streak_days : 0} Days</Text>
             </View>
 
-            <Text style={styles.smallTextLeft}>Relapses: {primaryGoal ? primaryGoal.relapse_count : 0}</Text>
-            <Text style={styles.smallTextLeft}>Money Lost: ${primaryGoal ? primaryGoal.relapse_cost_total : 0}</Text>
-            <Text style={styles.smallTextLeft}>Setback: {primaryGoal ? primaryGoal.relapse_count : 0} days</Text>
-            <Text style={styles.smallTextGreenLeft}>Savings Projection: ${displayedSavings}</Text>
             <Grid style={{ width: '100%', marginTop: 10 }}>
               <Row style={{ width: '100%' }}>
                 <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                  <Button style={styles.transactionButton} onPress={() => this.onToggleThreeMonths(threeMonthSavings)}>
-                    <Text style={styles.buttonText}>3 months</Text>
+                  <Button style={styles.transactionButton}>
+                    <Text style={styles.buttonText}>Edit Goal</Text>
                   </Button>
                 </Col>
                 <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                  <Button style={styles.transactionButton} onPress={() => this.onToggleSixMonths(sixMonthSavings)}>
-                    <Text style={styles.buttonText}>6 months</Text>
-                  </Button>
-                </Col>
-                <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                  <Button style={styles.transactionButton} onPress={() => this.onToggleOneYear(oneYearSavings)}>
-                    <Text style={styles.buttonText}>1 year</Text>
+                  <Button style={styles.transactionButton}>
+                    <Text style={styles.buttonText}>Delete Goal</Text>
                   </Button>
                 </Col>
               </Row>
@@ -281,9 +247,10 @@ const styles = StyleSheet.create({
   },
   headingGray: {
     fontWeight: 'bold',
-    fontSize: 26,
+    fontSize: 22,
     color: '#4c4c4c',
-    marginTop: 10,
+    marginBottom: 4,
+    marginTop: 6,
     textAlign: 'center',
   },
   largeText: {
@@ -303,7 +270,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#4c4c4c',
     alignSelf: 'flex-start',
-    marginLeft: 0,
+    marginTop: 6,
   },
   smallTextGreenLeft: {
     fontWeight: 'bold',
@@ -332,6 +299,13 @@ const styles = StyleSheet.create({
     maxWidth: '98%',
     width: '98%',
   },
+  transactionButtonDark: {
+    backgroundColor: '#218771',
+    height: 40,
+    alignSelf: 'flex-start',
+    maxWidth: '98%',
+    width: '98%',
+  },
   footerbar: {
     backgroundColor: '#49d5b6',
     fontWeight: 'bold',
@@ -348,7 +322,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: -260,
     zIndex: -100,
-    opacity: 0.15,
+    opacity: 0.1,
   },
 });
 

@@ -39,16 +39,16 @@ export default class Transactions extends React.Component {
 
 
   onDenyGuilt(transaction) {
-    // NOT CURRENTLY WORKING
-    // this.setState(prevState => ({ transactions: prevState.transactions.slice(0, 1) }));
-    axios.patch(`${NGROK}/deny_transaction`, transaction)
+    const { userToken } = this.state;
+    axios.patch(`${NGROK}/deny_transaction/${userToken}`, transaction)
       .then((response) => {
         this.getTransactions();
       });
   }
 
   onRelapse(transaction) {
-    axios.patch(`${NGROK}/accept_transaction`, transaction)
+    const { userToken } = this.state;
+    axios.patch(`${NGROK}/accept_transaction/${userToken}`, transaction)
       .then((response) => {
         this.getTransactions();
       });

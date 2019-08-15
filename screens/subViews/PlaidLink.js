@@ -61,16 +61,7 @@ class Link extends React.Component {
 
   render() {
     return (
-      <View style={{ marginTop: 10, marginBottom: 5, height: '90%', width: '100%' }}>
-        <PlaidAuthenticator
-          onMessage={this.onMessage}
-          publicKey="a35fead643ab95153802609fa5c0a2"
-          env="sandbox"
-          product="auth,transactions"
-          clientName="Manifest"
-          webhook={`${NGROK}/transaction_hook`}
-        />
-      </View>
+      <></>
     );
   }
 

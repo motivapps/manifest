@@ -15,11 +15,26 @@ import GamesScreen from '../screens/GamesScreen';
 import MyAccountScreen from '../screens/MyAccountScreen';
 import DKScreen from '../screens/games/DK';
 import Link from '../screens/subViews/PlaidLink';
+import ManifestTitle from '../screens/Header';
+// import console = require('console');
+
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
   default: {},
 });
+
+const defaultHeader = {
+  defaultNavigationOptions: {
+    headerTitle: <ManifestTitle />,
+    headerTintColor: '#fff',
+    headerStyle: {
+      backgroundColor: '#4c4c4c',
+    },
+  },
+  headerLayoutPreset: 'center',
+  config,
+};
 
 const HomeStack = createStackNavigator(
   {
@@ -27,7 +42,7 @@ const HomeStack = createStackNavigator(
       screen: HomeScreen,
     },
   },
-  config
+  defaultHeader,
 );
 
 HomeStack.navigationOptions = {
@@ -55,7 +70,7 @@ const PlaidStack = createStackNavigator(
       screen: Link,
     },
   },
-  config
+  defaultHeader,
 );
 
 PlaidStack.navigationOptions = {
@@ -73,7 +88,7 @@ const GoalsStack = createStackNavigator(
       screen: GoalsScreen,
     },
   },
-  config
+  defaultHeader,
 );
 
 GoalsStack.navigationOptions = {
@@ -91,7 +106,7 @@ const GoalsSummaryStack = createStackNavigator(
       screen: GoalsSummaryScreen,
     },
   },
-  config
+  defaultHeader,
 );
 
 GoalsSummaryStack.navigationOptions = {
@@ -112,7 +127,7 @@ const GamesStack = createStackNavigator(
       screen: DKScreen,
     },
   },
-  config
+  defaultHeader,
 );
 
 GamesStack.navigationOptions = {
@@ -130,7 +145,7 @@ const StatsStack = createStackNavigator(
       screen: StatsScreen,
     },
   },
-  config
+  defaultHeader,
 );
 
 StatsStack.navigationOptions = {
@@ -148,7 +163,7 @@ const TransactionsStack = createStackNavigator(
       screen: TransactionsScreen,
     },
   },
-  config
+  defaultHeader,
 );
 
 TransactionsStack.navigationOptions = {
@@ -166,7 +181,7 @@ const SettingsStack = createStackNavigator(
       screen: SettingsScreen,
     },
   },
-  config
+  defaultHeader,
 );
 
 SettingsStack.navigationOptions = {
@@ -210,7 +225,6 @@ const drawerNavigator = createDrawerNavigator(
     LogOut: {
       screen: LogOutScreen,
     },
-    Games: GamesStack,
   },
   {
     initialRouteName: 'Home',
@@ -222,7 +236,7 @@ const drawerNavigator = createDrawerNavigator(
       activeBackgroundColor: '#49d5b6',
     },
     backBehavior: 'initialRoute',
-  }
+  },
 );
 
 drawerNavigator.path = 'app/';

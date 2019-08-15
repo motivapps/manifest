@@ -26,9 +26,6 @@ const TransactionItem = (props) => {
 -
         {transaction.day.slice(0, 4)}
         {' '}
--
-        {' '}
-        {transaction.day.slice(11, 16)}
       </Text>
 
       <Text style={styles.smallTextLeft}>

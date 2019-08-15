@@ -112,7 +112,7 @@ class SignupScreen extends React.Component {
 
       console.log('JWTotken data', jwtDecode(jwtToken));
 
-      axios.post(`${NGROK}/login`, { name, auth0_id: sub, picture })
+      axios.post(`${NGROK}/login`, { auth0_id: sub })
         .then((response) => {
           if (response.status === 449) {
             const { navigation } = this.props;
@@ -130,11 +130,11 @@ class SignupScreen extends React.Component {
 
       // Retrieve the JWT token and decode it
       const jwtToken = response.id_token;
-      const { name, sub } = jwtDecode(jwtToken);
+      const { name, sub, picture } = jwtDecode(jwtToken);
       
       console.log('JWTotken data', jwtDecode(jwtToken));
       
-      axios.post(`${NGROK}/signup`, { auth0_id: sub })
+      axios.post(`${NGROK}/signup`, { name, auth0_id: sub, picture })
         .then((response) => {
           if (response.status === 300) {
             const { navigation } = this.props;

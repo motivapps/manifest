@@ -12,6 +12,7 @@ import TransactionsScreen from '../screens/TransactionsScreen';
 import StatsScreen from '../screens/StatsScreen';
 import LogOutScreen from '../screens/LogOutScreen';
 import GamesScreen from '../screens/GamesScreen';
+import MyAccountScreen from '../screens/MyAccountScreen';
 import DKScreen from '../screens/games/DK';
 import Link from '../screens/subViews/PlaidLink';
 
@@ -177,10 +178,10 @@ SettingsStack.navigationOptions = {
 
 SettingsStack.path = 'app/settings';
 
-const SettingsStack = createStackNavigator(
+const MyAccountStack = createStackNavigator(
   {
-    Settings: {
-      screen: SettingsScreen,
+    MyAccount: {
+      screen: MyAccountScreen,
     },
   },
   config
@@ -193,7 +194,7 @@ MyAccountStack.navigationOptions = {
   ),
 };
 
-SettingsStack.path = 'app/my-account';
+MyAccountStack.path = 'app/my-account';
 
 const drawerNavigator = createDrawerNavigator(
   {

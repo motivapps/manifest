@@ -1,6 +1,8 @@
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react';
-import { StyleSheet, View, Alert, TouchableOpacity } from 'react-native';
+import {
+ StyleSheet, View, Alert, TouchableOpacity 
+} from 'react-native';
 import {
   Container,
   Footer,
@@ -20,11 +22,15 @@ import {
 class MyAccountScreen extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      profilePic: null,
+      name: null,
+    };
   }
 
   render() {
     const { navigate } = this.props.navigation;
+    const { name, profilePic } = this.state;
 
     return (
       <Container style={styles.container}>
@@ -34,22 +40,29 @@ class MyAccountScreen extends React.Component {
           <Grid style={{ width: 260, marginTop: 20 }}>
             <Row style={{ width: '100%' }}>
               <Col style={{ backgroundColor: '#fff', height: 120 }}>
-                <TouchableOpacity onPress={() => navigate('DK')}>
-                  <Thumbnail
+                <Thumbnail
                     square
                     style={styles.gameImg}
                     source={require('../assets/images/DK.jpg')}
                   />
-                </TouchableOpacity>
               </Col>
               <Col style={{ backgroundColor: '#fff', height: 120 }}>
-                <Container style={styles.gameContainer} />
+                <Text>{name ? name : 'No user found'}</Text>
               </Col>
             </Row>
-            <Row style={{ width: '100%', marginBottom: 10 }}>
-              <Text style={styles.smallText}>Stick with your goals to unlock more games</Text>
+            <Row>
+              <Button>Connect Bank</Button>
             </Row>
-            
+            <Row style={{ width: '100%', marginBottom: 10 }}>
+              <Text style={styles.smallText}>Connect your bank account to be able to track your spending on vices and transfer money saved by staying on track to your savings account.</Text>
+            </Row>
+            <Row>
+              <Button>Delete Account</Button>
+            </Row>
+            <Row style={{ width: '100%', marginBottom: 10 }}>
+              <Text style={styles.smallText}>Deleting your account will permanently delete all data and goals associated with your account.</Text>
+            </Row>
+
           </Grid>
         </View>
         <Footer style={styles.footerbar}>

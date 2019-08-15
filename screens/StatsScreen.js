@@ -1,6 +1,6 @@
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react';
-import { Platform, StatusBar, StyleSheet, View, TouchableOpacity, ScrollView } from 'react-native';
+import { Platform, StatusBar, StyleSheet, View, TouchableOpacity, ScrollView, AsyncStorage } from 'react-native';
 import {
   Container,
   Text,
@@ -15,14 +15,15 @@ import {
 } from 'native-base';
 
 import { ProgressChart, BarChart } from 'react-native-chart-kit';
+import { NGROK } from '../app.config.json';
 
 export default class StatsScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: {
-        labels: ['Relapse', 'Coffee', 'Smoking'], // optional
-        data: [0.3, 0.6, 0.8]
+      circleData: {
+        labels: ['Relapse', 'Coffee'], // optional
+        data: [0.3, 0.6],
       },
       barchartData: {
         labels: ['January', 'February', 'March', 'April', 'May', 'June'],
@@ -30,11 +31,34 @@ export default class StatsScreen extends React.Component {
           data: [20, 45, 28, 80, 99, 43]
         }]
       },
+      primaryGoal: null,
     };
   }
 
+  async componentWillMount() {
+    try {
+      const primaryGoal = await AsyncStorage.getItem('primaryGoal');
+      if (primaryGoal !== null) {
+        let parsedGoal = JSON.parse(primaryGoal);
+        let relapseTotal = parsedGoal.relapse_cost_total / parsedGoal.goal_cost;
+        console.log('amount:', parsedGoal.amount_saved);
+        let savedTotal = parsedGoal.amount_saved / parsedGoal.goal_cost;
+        console.log('goal:', primaryGoal);
+        this.setState({ 
+          primaryGoal: parsedGoal,
+          circleData: {
+            labels: ['Relapses', parsedGoal.vice],
+            data: [relapseTotal, savedTotal],
+          },
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   render() {
-    const { data, barchartData } = this.state;
+    const { circleData, barchartData, primaryGoal } = this.state;
 
     
     return (
@@ -42,15 +66,15 @@ export default class StatsScreen extends React.Component {
         <View style={styles.viewport}>
           <Text style={styles.heading}>My Progress</Text>
 
-          <ProgressChart style={{alignItems: 'center'}}
-            data={data}
+          <ProgressChart 
+            data={circleData}
             width={350}
             height={180}
             chartConfig={chartConfig}
           />
 
-          <Text style={styles.smallTextGreen}>Total Savings to Date: $$468.21</Text>
-          <Text style={styles.smallTextGreen}>Relapse Total to Date: $$87.16</Text>
+          <Text style={styles.smallText}>Total Savings to Date: ${primaryGoal ? primaryGoal.amount_saved : 0}</Text>
+          <Text style={styles.smallText}>Relapse Total to Date: ${primaryGoal ? primaryGoal.relapse_cost_total : 0}</Text>
 
           <BarChart
             data={barchartData}
@@ -109,8 +133,14 @@ const chartConfig = {
   backgroundGradientFrom: '#fff',
   backgroundGradientTo: '#fff',
   color: (opacity = 1) => `rgba(33, 135, 113, ${opacity})`,
-  strokeWidth: 2 // optional, default 3
-}
+  strokeWidth: 3, // optional, default 3
+  style: {
+    alignItems: 'center',
+    fontSize: 16,
+    fontWeight: 'bold',
+    backgroundColor: 'red',
+  },
+};
 
 const styles = StyleSheet.create({
   container: {

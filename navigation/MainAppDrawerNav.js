@@ -12,6 +12,7 @@ import TransactionsScreen from '../screens/TransactionsScreen';
 import StatsScreen from '../screens/StatsScreen';
 import LogOutScreen from '../screens/LogOutScreen';
 import GamesScreen from '../screens/GamesScreen';
+import MyAccountScreen from '../screens/MyAccountScreen';
 import DKScreen from '../screens/games/DK';
 import Link from '../screens/subViews/PlaidLink';
 
@@ -177,6 +178,24 @@ SettingsStack.navigationOptions = {
 
 SettingsStack.path = 'app/settings';
 
+const MyAccountStack = createStackNavigator(
+  {
+    MyAccount: {
+      screen: MyAccountScreen,
+    },
+  },
+  config
+);
+
+MyAccountStack.navigationOptions = {
+  tabBarLabel: 'Account',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
+  ),
+};
+
+MyAccountStack.path = 'app/my-account';
+
 const drawerNavigator = createDrawerNavigator(
   {
     Home: HomeStack,
@@ -187,6 +206,7 @@ const drawerNavigator = createDrawerNavigator(
     Games: GamesStack,
     Transactions: TransactionsStack,
     Settings: SettingsStack,
+    Account: MyAccountStack,
     LogOut: {
       screen: LogOutScreen,
     },

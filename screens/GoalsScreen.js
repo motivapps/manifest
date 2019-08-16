@@ -16,7 +16,7 @@ import {
 import axios from 'axios';
 import RNPickerSelect, { defaultStyles } from 'react-native-picker-select';
 import Link from './subViews/PlaidLink';
-import { NGROK, GOOGLE_OAUTH_ID } from '../app.config.json';
+import { NGROK, UNSPLASH_CLIENT_ID } from '../app.config.json';
 
 class GoalsScreen extends React.Component {
   constructor(props) {
@@ -68,15 +68,19 @@ class GoalsScreen extends React.Component {
     console.log('viceName:', viceName);
     console.log('userId:', userId);
 
-    axios
-      .post(`${NGROK}/user/goals`, {
-        goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName, userId,
+    axios.get(`https://api.unsplash.com/search/photos?page=1&query=${goalItem}
+&client_id=${UNSPLASH_CLIENT_ID}`)
+      .then((response) => {
+        console.log('unsplash response:', response.data.results[0].urls.thumb);
+        return axios.post(`${NGROK}/user/goals`, {
+          goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName, userId, goalPhoto: response.data.results[0].urls.thumb,
+        });
       })
       .then((response) => {
         console.log('goals post from front response:', response);
       })
       .catch((err) => {
-        console.log('error from goals post front:', err);
+        console.log('goals error:', err);
       });
   }
 

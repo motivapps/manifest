@@ -65,16 +65,14 @@ class HomeScreen extends React.Component {
         primaryGoal: response.data[0],
       });
       console.log('primaryGoal:', this.state.primaryGoal);
-     if (response.data[0].vice_freq === 'Daily') {
         this.setState({
-          threeMonthSavings: (response.data[0].vice_price * 91.25).toFixed(2),
-          sixMonthSavings: (response.data[0].vice_price * 182.5).toFixed(2),
-          oneYearSavings: (response.data[0].vice_price * 365).toFixed(2),
-          displayedSavings: (response.data[0].vice_price * 91.25).toFixed(2),
+          threeMonthSavings: (response.data[0].daily_savings * 91.25).toFixed(2),
+          sixMonthSavings: (response.data[0].daily_savings * 182.5).toFixed(2),
+          oneYearSavings: (response.data[0].daily_savings * 365).toFixed(2),
+          displayedSavings: (response.data[0].daily_savings * 91.25).toFixed(2),
         });
-     }
      
-      const daysLeft = (response.data[0].goal_cost - response.data[0].amount_saved) / response.data[0].vice_price;
+      const daysLeft = (response.data[0].goal_cost - response.data[0].amount_saved) / response.data[0].daily_savings;
       console.log(daysLeft);
       const targetDate = new Date();
       targetDate.setDate(targetDate.getDate() + daysLeft);

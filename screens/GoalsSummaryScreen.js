@@ -36,13 +36,6 @@ class GoalsSummaryScreen extends React.Component {
     super(props);
     this.state = {
       isReady: false,
-      buttonToggle: false,
-      isAuthenticated: false,
-      latitude: null,
-      longitude: null,
-      dangerDistance: null,
-      pushToken: null,
-      // authID: GOOGLE_OAUTH_ID,
       primaryGoal: null,
       threeMonthSavings: null,
       sixMonthSavings: null,
@@ -50,9 +43,7 @@ class GoalsSummaryScreen extends React.Component {
       displayedSavings: 0,
       completionDate: null,
     };
-    // this.onToggleButton = this.onToggleButton.bind(this);
     this.setState = this.setState.bind(this);
-
   }
 
   async componentWillMount() {
@@ -161,7 +152,7 @@ class GoalsSummaryScreen extends React.Component {
             
             <View style={{ marginTop: 10, marginBottom: 10 }}>
               <Text style={styles.smallText}>Projected Completion Date: {completionDate ? completionDate : 'Loading...'}</Text>
-              <Text style={styles.smallTextLeft}>Daily Savings: ${primaryGoal ? primaryGoal.vice_price : 0}</Text>
+              <Text style={styles.smallTextLeft}>Daily Savings: ${primaryGoal ? primaryGoal.daily_savings.toFixed(2) : 0}</Text>
             </View>
             <View style={{ marginBottom: 10, marginLeft: 0 }}>
               <Text style={styles.largeText}>Goal Amount: ${primaryGoal ? primaryGoal.goal_cost : 0}</Text>
@@ -176,7 +167,7 @@ class GoalsSummaryScreen extends React.Component {
                   </Button>
                 </Col>
                 <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                  <Button style={styles.transactionButton}>
+                  <Button style={styles.transactionButtonDark}>
                     <Text style={styles.buttonText}>Delete Goal</Text>
                   </Button>
                 </Col>

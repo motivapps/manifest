@@ -82,6 +82,7 @@ class GoalsScreen extends React.Component {
       .catch((err) => {
         console.log('goals error:', err);
       });
+      
 
     // axios
     //   .post(`${NGROK}/user/goals`, {

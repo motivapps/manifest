@@ -142,7 +142,7 @@ class HomeScreen extends React.Component {
         <ScrollView>
           <Text style={styles.heading}>Goal: {primaryGoal ? primaryGoal.goal_name : 'No goal set'} </Text>
 
-          <Image style={styles.mainImage} source={require('../assets/images/kayak.jpg')} />
+            <Image style={styles.mainImage} source={{ uri: primaryGoal ? primaryGoal.goal_photo : "http://cdn.shopify.com/s/files/1/0682/0839/products/Vibe-Yellowfin-100-Kayak-Caribbean_Journey_grande.jpg?v=1555360419" }} />
 
           <Progress.Bar
             progress={primaryGoal ? primaryGoal.amount_saved / primaryGoal.goal_cost : 0}

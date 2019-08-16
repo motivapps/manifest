@@ -61,7 +61,7 @@ typings/
 .next
 
 # something for expo
-.expo/
+.expo/*
 
 # app config secrets
-.app.config.json/
+app.config.json/

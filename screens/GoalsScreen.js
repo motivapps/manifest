@@ -82,18 +82,6 @@ class GoalsScreen extends React.Component {
       .catch((err) => {
         console.log('goals error:', err);
       });
-      
-
-    // axios
-    //   .post(`${NGROK}/user/goals`, {
-    //     goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName, userId,
-    //   })
-    //   .then((response) => {
-    //     console.log('goals post from front response:', response);
-    //   })
-    //   .catch((err) => {
-    //     console.log('error from goals post front:', err);
-    //   });
   }
 
   render() {

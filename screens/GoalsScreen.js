@@ -22,6 +22,7 @@ class GoalsScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      // auth:  
       goalName: '',
       goalItem: '',
       goalAmount: '',
@@ -84,6 +85,8 @@ class GoalsScreen extends React.Component {
     const {
       goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName,
     } = this.state;
+    
+    const { auth } = this.props;
 
     const placeholderVices = {
       label: 'Select a vice...',
@@ -133,20 +136,26 @@ class GoalsScreen extends React.Component {
           <ScrollView>
             <Text style={styles.heading}>My Goals</Text>
 
-            <Grid style={{ width: '100%', marginTop: 10 }}>
-              <Row style={{ width: '100%' }}>
-                <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                  <Button style={styles.transactionButtonDark}>
-                    <Text style={styles.buttonText}>Set New Goal</Text>
-                  </Button>
-                </Col>
-                <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                  <Button style={styles.transactionButton}>
-                    <Text style={styles.buttonText} onPress={() => this.props.navigation.navigate('GoalsSummary')}>Current Goals</Text>
-                  </Button>
-                </Col>
-              </Row>
-            </Grid>
+            {
+              auth ? (
+                <></>
+              ) : (
+                <Grid style={{ width: '100%', marginTop: 10 }}>
+                  <Row style={{ width: '100%' }}>
+                    <Col style={{ backgroundColor: '#fff', height: 60 }}>
+                      <Button style={styles.transactionButtonDark}>
+                        <Text style={styles.buttonText}>Set New Goal</Text>
+                      </Button>
+                    </Col>
+                    <Col style={{ backgroundColor: '#fff', height: 60 }}>
+                      <Button style={styles.transactionButton}>
+                        <Text style={styles.buttonText} onPress={() => this.props.navigation.navigate('GoalsSummary')}>Current Goals</Text>
+                      </Button>
+                    </Col>
+                  </Row>
+                </Grid>
+              )
+            }
 
             <Text style={styles.smallTextLeft}>Goal Name:</Text>
             <TextInput

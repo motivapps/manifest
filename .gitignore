@@ -64,4 +64,4 @@ typings/
 .expo/
 
 # app config secrets
-.app.config.json/
+app.config.json/

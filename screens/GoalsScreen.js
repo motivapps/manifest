@@ -21,8 +21,9 @@ import { NGROK, GOOGLE_OAUTH_ID } from '../app.config.json';
 class GoalsScreen extends React.Component {
   constructor(props) {
     super(props);
+    const { auth } = this.props.navigation.state.params;
     this.state = {
-      // auth:  
+      auth: auth,
       goalName: '',
       goalItem: '',
       goalAmount: '',
@@ -57,7 +58,7 @@ class GoalsScreen extends React.Component {
     }
   }
 
-  onHandleSubmit() {
+  onHandleSubmit(dest) {
     const {
       goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName, userId,
     } = this.state;
@@ -79,14 +80,18 @@ class GoalsScreen extends React.Component {
       .catch((err) => {
         console.log('error from goals post front:', err);
       });
+
+    if (dest) {
+      this.props.navigation.navigate('PlaidAuth');
+    }
   }
 
   render() {
     const {
-      goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName,
+      goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName, auth,
     } = this.state;
-    
-    const { auth } = this.props;
+
+    // const { auth } = this.props;
 
     const placeholderVices = {
       label: 'Select a vice...',
@@ -251,12 +256,22 @@ class GoalsScreen extends React.Component {
               style={pickerSelectStyles}
               value={viceFrequency}
             />
+            {
+              auth ? (
+                <Button style={styles.saveButton}>
+                  <Text style={styles.buttonText} onPress={() => this.onHandleSubmit('PlaidAuth')}>
+                    Save Goal
+                  </Text>
+                </Button>
+              ) : (
+                <Button style={styles.saveButton}>
+                  <Text style={styles.buttonText} onPress={this.onHandleSubmit}>
+                    Save Goal
+                  </Text>
+                </Button>
+              )
+            }
 
-            <Button style={styles.saveButton}>
-              <Text style={styles.buttonText} onPress={this.onHandleSubmit}>
-                Save Goal
-              </Text>
-            </Button>
           </ScrollView>
         </View>
         <Footer style={styles.footerbar}>

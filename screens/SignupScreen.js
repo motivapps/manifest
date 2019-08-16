@@ -143,7 +143,7 @@ class SignupScreen extends React.Component {
           } else {
             // this.setState({ name, auth0_id: sub });
             this.storeData(sub);
-            navigation.navigate('GoalAuth');
+            navigation.navigate('GoalAuth', { auth: true });
           }
         });
     }

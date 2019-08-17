@@ -3,7 +3,7 @@
 /* eslint-disable no-console */
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage, Platform } from 'react-native';
 import * as TaskManager from 'expo-task-manager';
 import { AppLoading, Notifications } from 'expo';
 import * as Permissions from 'expo-permissions';
@@ -19,6 +19,7 @@ import {
 } from './app.config.json';
 
 let pushToken = '';
+let primaryGoal = '';
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -35,6 +36,7 @@ class App extends React.Component {
   }
   
   async componentDidMount() {
+    primaryGoal = await AsyncStorage.getItem('primaryGoal');
     try {
       const userToken = await AsyncStorage.getItem('userToken');
       if (userToken !== null) {
@@ -63,13 +65,16 @@ class App extends React.Component {
       this.setState({ locationGranted: true });
     }
     const { locationGranted } = this.state;
-    // if (locationGranted) {
-    //   await Location.startLocationUpdatesAsync('callFoursquare', {
-    //     accuracy: Location.Accuracy.Highest,
-    //     distanceInterval: 10, // update every 10 meters, will want a bigger number eventually but this is nice for testing
-    //     showsBackgroundLocationIndicator: true,
-    //   });
-    // }
+    
+    if (Platform.OS === 'android' && primaryGoal !== null) {
+      if (locationGranted) {
+        await Location.startLocationUpdatesAsync('callFoursquare', {
+          accuracy: Location.Accuracy.Highest,
+          distanceInterval: 10, // update every 10 meters, will want a bigger number eventually but this is nice for testing
+          showsBackgroundLocationIndicator: true,
+        });
+      }
+    }
   }
 
   // GET NOTIF PERMISSIONS:
@@ -119,18 +124,32 @@ TaskManager.defineTask('callFoursquare', ({ data: { locations }, error }) => {
     console.error(error);
     return;
   }
-  console.log('NEW LOCATIONS: ', locations);
+  
   // Unsure which to use... locations.length - 1 or locations[0]? Which is newest?
   const lat = locations[0].coords.latitude;
   const log = locations[0].coords.longitude;
-  
+  let category = '';
+  let purchase = '';
+  if (primaryGoal.vice === 'Coffee') {
+    // coffee shops
+    category = '4bf58dd8d48988d1e0931735';
+    purchase = 'a cup';
+  } else if (primaryGoal.vice === 'Smoking') {
+    // smoke shops, vape shops, and convenience stores
+    category = '4bf58dd8d48988d123951735,56aa371be4b08b9a8d57355c,4d954b0ea243a5684a65b473';
+    purchase = 'cigarettes';
+  } else {
+    // fast food
+    category = '4bf58dd8d48988d16e941735';
+    purchase = 'that deadly food';
+  }
   // THIS IS STILL ONLY LOOKING FOR COFFEE SHOPS WITHIN 300 METER RADIUS
   axios
     .get(
-      `https://api.foursquare.com/v2/venues/search?client_id=USVL34WDRM322JXRDHU4EQW1QREZGPXOMTZSNJKYQUIGKE5O
-          &client_secret=2KGK1VOONWZ1T0OMNFKWXFHDOP0JYXPIVYXQ5KKUDXA55ZHQ
+      `https://api.foursquare.com/v2/venues/search?client_id=${FOURSQUARE_CLIENT_ID}
+          &client_secret=${FOURSQUARE_CLIENT_SECRET}
           &ll=${lat},${log}
-          &intent=checkin&radius=300&categoryId=4bf58dd8d48988d1e0931735&v=20190812`,
+          &intent=checkin&radius=300&categoryId=${category}&v=20190812`,
     )
     .then((response) => {
       const { distance } = response.data.response.venues[0].location;
@@ -139,7 +158,7 @@ TaskManager.defineTask('callFoursquare', ({ data: { locations }, error }) => {
       return { distance, name };
     })
     .then(({ distance, name }) => {
-      if (distance < 100) {
+      if (distance < 10) {
       // User is close to coffee shop, send notification
         axios
           .post(
@@ -148,7 +167,7 @@ TaskManager.defineTask('callFoursquare', ({ data: { locations }, error }) => {
               to: pushToken,
               sound: 'default',
               title: 'Manifest',
-              body: `Don't you even think about going inside that ${name}`,
+              body: `Be strong! Don't get ${purchase} from ${name}`,
             },
             {
               headers: {

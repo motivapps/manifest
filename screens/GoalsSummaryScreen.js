@@ -147,7 +147,7 @@ class GoalsSummaryScreen extends React.Component {
               thickness={8}
               />
 
-            <Image style={styles.mainImage} source={require('../assets/images/kayak.jpg')} />
+            <Image style={styles.mainImage} source={{ uri: primaryGoal ? primaryGoal.goal_photo : "http://cdn.shopify.com/s/files/1/0682/0839/products/Vibe-Yellowfin-100-Kayak-Caribbean_Journey_grande.jpg?v=1555360419" }} />
 
             
             <View style={{ marginTop: 10, marginBottom: 10 }}>
@@ -313,7 +313,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: -260,
     zIndex: -100,
-    opacity: 0.1,
+    opacity: 0.15,
   },
 });
 

@@ -101,18 +101,6 @@ export default class StatsScreen extends React.Component {
 
           <Text style={styles.smallText}>Savings Potential Based on Daily Savings</Text>
 
-          <Grid style={{ width: '100%', marginTop: 10 }}>
-            <Row style={{ width: '100%' }}>
-              <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                <Button style={styles.transactionButton}><Text style={styles.buttonText}>3 months</Text></Button>
-              </Col>
-              <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                <Button style={styles.transactionButton}><Text style={styles.buttonText}>6 months</Text></Button></Col>
-              <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                <Button style={styles.transactionButton}><Text style={styles.buttonText}>1 year</Text></Button></Col>
-            </Row>
-          </Grid>
-
         </View>
         <Footer style={styles.footerbar}>
           <FooterTab style={{ backgroundColor: '#49d5b6' }}>

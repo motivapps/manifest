@@ -23,7 +23,7 @@ class GoalsScreen extends React.Component {
     super(props);
     const { auth } = this.props.navigation.state.params;
     this.state = {
-      auth: auth,
+      auth,
       goalName: '',
       goalItem: '',
       goalAmount: '',
@@ -86,7 +86,7 @@ class GoalsScreen extends React.Component {
       });
 
     if (dest) {
-      this.props.navigation.navigate('PlaidAuth');
+      this.props.navigation.navigate('PlaidAuth', { auth: true });
     }
   }
 

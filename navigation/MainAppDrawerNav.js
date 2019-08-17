@@ -16,6 +16,7 @@ import MyAccountScreen from '../screens/MyAccountScreen';
 import DKScreen from '../screens/games/DK';
 import Link from '../screens/subViews/PlaidLink';
 import ManifestTitle from '../screens/Header';
+import GameTwo from '../screens/games/GameTwo/GameTwo';
 // import console = require('console');
 
 
@@ -139,6 +140,24 @@ GamesStack.navigationOptions = {
 
 GamesStack.path = 'app/games';
 
+const GameTwoStack = createStackNavigator(
+  {
+    GameTwo: {
+      screen: GameTwo,
+    },
+  },
+  defaultHeader,
+);
+
+GameTwoStack.navigationOptions = {
+  tabBarLabel: 'Stats',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
+  ),
+};
+
+GameTwoStack.path = 'app/game-two';
+
 const StatsStack = createStackNavigator(
   {
     Stats: {
@@ -219,6 +238,7 @@ const drawerNavigator = createDrawerNavigator(
     Goals: GoalsStack,
     GoalsSummary: GoalsSummaryStack,
     Games: GamesStack,
+    GameTwo: GameTwoStack,
     Transactions: TransactionsStack,
     Settings: SettingsStack,
     Account: MyAccountStack,

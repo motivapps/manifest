@@ -133,15 +133,15 @@ TaskManager.defineTask('callFoursquare', ({ data: { locations }, error }) => {
   if (primaryGoal.vice === 'Coffee') {
     // coffee shops
     category = '4bf58dd8d48988d1e0931735';
-    purchase = 'a cup';
+    purchase = 'a cup of joe.';
   } else if (primaryGoal.vice === 'Smoking') {
     // smoke shops, vape shops, and convenience stores
     category = '4bf58dd8d48988d123951735,56aa371be4b08b9a8d57355c,4d954b0ea243a5684a65b473';
-    purchase = 'cigarettes';
+    purchase = 'cancer sticks.';
   } else {
     // fast food
     category = '4bf58dd8d48988d16e941735';
-    purchase = 'that deadly food';
+    purchase = 'that deadly food.';
   }
   // THIS IS STILL ONLY LOOKING FOR COFFEE SHOPS WITHIN 300 METER RADIUS
   axios
@@ -167,7 +167,7 @@ TaskManager.defineTask('callFoursquare', ({ data: { locations }, error }) => {
               to: pushToken,
               sound: 'default',
               title: 'Manifest',
-              body: `Be strong! Don't get ${purchase} from ${name}`,
+              body: `Step away from ${name}. Don't go in there for ${purchase}`,
             },
             {
               headers: {

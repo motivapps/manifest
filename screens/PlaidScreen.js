@@ -19,7 +19,7 @@ class PlaidScreen extends React.Component {
     super(props);
     const { auth } = this.props.navigation.state.params;
     this.state = {
-      auth,
+      auth: (auth || false),
       data: {},
       status: '',
       userToken: null,

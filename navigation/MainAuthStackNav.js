@@ -3,7 +3,7 @@ import SignupScreen from '../screens/SignupScreen';
 import PlaidScreen from '../screens/PlaidScreen';
 import GoalsScreen from '../screens/GoalsScreen';
 // import GoalsSummaryScreen from '../screens/GoalsSummaryScreen';
-import MyAccountScreen from '../screens/MyAccountScreen';
+import AccountAssignScreen from '../screens/AccountAssignScreen';
 
 const AuthStack = createStackNavigator(
   {
@@ -18,7 +18,7 @@ const AuthStack = createStackNavigator(
       screen: PlaidScreen,
     },
     AccountAuth: {
-      screen: MyAccountScreen,
+      screen: AccountAssignScreen,
     },
   },
   {

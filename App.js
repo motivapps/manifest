@@ -3,7 +3,7 @@
 /* eslint-disable no-console */
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage, Platform } from 'react-native';
 import * as TaskManager from 'expo-task-manager';
 import { AppLoading, Notifications } from 'expo';
 import * as Permissions from 'expo-permissions';
@@ -63,13 +63,15 @@ class App extends React.Component {
       this.setState({ locationGranted: true });
     }
     const { locationGranted } = this.state;
-    // if (locationGranted) {
-    //   await Location.startLocationUpdatesAsync('callFoursquare', {
-    //     accuracy: Location.Accuracy.Highest,
-    //     distanceInterval: 10, // update every 10 meters, will want a bigger number eventually but this is nice for testing
-    //     showsBackgroundLocationIndicator: true,
-    //   });
-    // }
+    if (Platform.OS === 'android') {
+      if (locationGranted) {
+        await Location.startLocationUpdatesAsync('callFoursquare', {
+          accuracy: Location.Accuracy.Highest,
+          distanceInterval: 10, // update every 10 meters, will want a bigger number eventually but this is nice for testing
+          showsBackgroundLocationIndicator: true,
+        });
+      }
+    }
   }
 
   // GET NOTIF PERMISSIONS:
@@ -127,8 +129,8 @@ TaskManager.defineTask('callFoursquare', ({ data: { locations }, error }) => {
   // THIS IS STILL ONLY LOOKING FOR COFFEE SHOPS WITHIN 300 METER RADIUS
   axios
     .get(
-      `https://api.foursquare.com/v2/venues/search?client_id=USVL34WDRM322JXRDHU4EQW1QREZGPXOMTZSNJKYQUIGKE5O
-          &client_secret=2KGK1VOONWZ1T0OMNFKWXFHDOP0JYXPIVYXQ5KKUDXA55ZHQ
+      `https://api.foursquare.com/v2/venues/search?client_id=${FOURSQUARE_CLIENT_ID}
+          &client_secret=${FOURSQUARE_CLIENT_SECRET}
           &ll=${lat},${log}
           &intent=checkin&radius=300&categoryId=4bf58dd8d48988d1e0931735&v=20190812`,
     )

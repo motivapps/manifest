@@ -3,7 +3,6 @@ import {
   StyleSheet, Text, TouchableOpacity, View,
 } from 'react-native';
 import { AppLoading, Constants, ScreenOrientation } from 'expo';
-import Controls from './Controls';
 
 ScreenOrientation.lockAsync(ScreenOrientation.Orientation.PORTRAIT);
 
@@ -17,7 +16,24 @@ export default class GameTwo extends React.Component {
       score: 0,
       lives: 3,
     };
+    // this.loadAssetsAsync = this.loadAssetsAsync.bind(this);
     this.onPauseGame = this.onPauseGame.bind(this);
+    this.updateStats = this.updateStats.bind(this);
+  }
+
+  // async loadAssetsAsync() {
+  //   const imageAssets = func.cacheImages(images.files);
+
+  //   await Promise.all([...imageAssets]).then(() => {
+  //     this.setState({ isLoading: false });
+  //   });
+  // }
+
+  updateStats(data) {
+    this.setState({
+      score: data.score,
+      lives: data.lives,
+    });
   }
 
   onPauseGame() {
@@ -33,7 +49,7 @@ export default class GameTwo extends React.Component {
     //   return (
     //     <AppLoading
     //       onFinish={() => this.setState({ isLoading: false })}
-    //       // startAsync={this.preloadAssetsAsync}
+    //       startAsync={this.loadAssetsAsync}
     //     />
     //   );
     // }

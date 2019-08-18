@@ -27,6 +27,7 @@
     "expo-font": "~6.0.0",
     "expo-gl": "^6.0.0",
     "expo-location": "^6.0.0",
+    "expo-multi-touch": "0.0.0",
     "expo-permissions": "^6.0.0",
     "expo-phaser": "0.0.1-alpha.0",
     "expo-task-manager": "^6.0.0",

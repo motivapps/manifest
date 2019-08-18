@@ -21,7 +21,9 @@ import { NGROK, UNSPLASH_CLIENT_ID } from '../app.config.json';
 class GoalsScreen extends React.Component {
   constructor(props) {
     super(props);
+    const { auth } = this.props.navigation.state.params;
     this.state = {
+      auth: (auth || false),
       goalName: '',
       goalItem: '',
       goalAmount: '',
@@ -56,7 +58,7 @@ class GoalsScreen extends React.Component {
     }
   }
 
-  onHandleSubmit() {
+  onHandleSubmit(dest) {
     const {
       goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName, userId,
     } = this.state;
@@ -82,12 +84,18 @@ class GoalsScreen extends React.Component {
       .catch((err) => {
         console.log('goals error:', err);
       });
+
+    if (dest) {
+      this.props.navigation.navigate('PlaidAuth', { auth: true });
+    }
   }
 
   render() {
     const {
-      goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName,
+      goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName, auth,
     } = this.state;
+
+    // const { auth } = this.props;
 
     const placeholderVices = {
       label: 'Select a vice...',
@@ -137,20 +145,26 @@ class GoalsScreen extends React.Component {
           <ScrollView>
             <Text style={styles.heading}>My Goals</Text>
 
-            <Grid style={{ width: '100%', marginTop: 10 }}>
-              <Row style={{ width: '100%' }}>
-                <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                  <Button style={styles.transactionButtonDark}>
-                    <Text style={styles.buttonText}>Set New Goal</Text>
-                  </Button>
-                </Col>
-                <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                  <Button style={styles.transactionButton}>
-                    <Text style={styles.buttonText} onPress={() => this.props.navigation.navigate('GoalsSummary')}>Current Goals</Text>
-                  </Button>
-                </Col>
-              </Row>
-            </Grid>
+            {
+              auth ? (
+                <></>
+              ) : (
+                <Grid style={{ width: '100%', marginTop: 10 }}>
+                  <Row style={{ width: '100%' }}>
+                    <Col style={{ backgroundColor: '#fff', height: 60 }}>
+                      <Button style={styles.transactionButtonDark}>
+                        <Text style={styles.buttonText}>Set New Goal</Text>
+                      </Button>
+                    </Col>
+                    <Col style={{ backgroundColor: '#fff', height: 60 }}>
+                      <Button style={styles.transactionButton}>
+                        <Text style={styles.buttonText} onPress={() => this.props.navigation.navigate('GoalsSummary')}>Current Goals</Text>
+                      </Button>
+                    </Col>
+                  </Row>
+                </Grid>
+              )
+            }
 
             <Text style={styles.smallTextLeft}>Goal Name:</Text>
             <TextInput
@@ -246,12 +260,22 @@ class GoalsScreen extends React.Component {
               style={pickerSelectStyles}
               value={viceFrequency}
             />
+            {
+              auth ? (
+                <Button style={styles.saveButton}>
+                  <Text style={styles.buttonText} onPress={() => this.onHandleSubmit('PlaidAuth')}>
+                    Save Goal
+                  </Text>
+                </Button>
+              ) : (
+                <Button style={styles.saveButton}>
+                  <Text style={styles.buttonText} onPress={this.onHandleSubmit}>
+                    Save Goal
+                  </Text>
+                </Button>
+              )
+            }
 
-            <Button style={styles.saveButton}>
-              <Text style={styles.buttonText} onPress={this.onHandleSubmit}>
-                Save Goal
-              </Text>
-            </Button>
           </ScrollView>
         </View>
         <Footer style={styles.footerbar}>

@@ -136,12 +136,14 @@ class SignupScreen extends React.Component {
       
       axios.post(`${NGROK}/signup`, { name, auth0_id: sub, picture })
         .then((response) => {
+          const { navigation } = this.props;
           if (response.status === 300) {
-            const { navigation } = this.props;
             navigation.reset([NavigationActions.navigate({ routeName: 'Signup' })], 0);
             navigation.navigate('Signup');
           } else {
-            this.setState({ name, auth0_id: sub });
+            // this.setState({ name, auth0_id: sub });
+            this.storeData(sub);
+            navigation.navigate('GoalAuth', { auth: true });
           }
         });
     }

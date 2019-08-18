@@ -17,7 +17,9 @@ import axios from 'axios';
 class PlaidScreen extends React.Component {
   constructor(props) {
     super(props);
+    const { auth } = this.props.navigation.state.params;
     this.state = {
+      auth: (auth || false),
       data: {},
       status: '',
       userToken: null,
@@ -55,7 +57,7 @@ class PlaidScreen extends React.Component {
     const { status } = this.state;
     console.log(status, 'status');
     if (status === 'CONNECTED') {
-      const { userToken, data: { metadata: { public_token } } } = this.state;
+      const { userToken, auth, data: { metadata: { public_token } } } = this.state;
       const { navigation } = this.props;
 
       await axios.post(`${NGROK}/get_access_token`, {
@@ -67,7 +69,11 @@ class PlaidScreen extends React.Component {
         userToken,
       });
 
-      navigation.navigate('Home');
+      if (auth) {
+        navigation.navigate('AccountAuth', { auth: true });
+      } else {
+        navigation.navigate('Home');
+      }
     }
   }
 

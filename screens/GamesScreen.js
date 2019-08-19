@@ -20,7 +20,21 @@ import {
 class GamesScreen extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      streak = 0;
+    };
+  }
+
+  async componentWillMount() {
+    try {
+      const primaryGoal = await AsyncStorage.getItem('primaryGoal');
+      if (primaryGoal !== null) {
+        let parsedGoal = JSON.parse(primaryGoal);
+        this.setState({ streak: parsedGoal.streak_days});
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   render() {

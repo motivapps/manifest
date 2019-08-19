@@ -64,11 +64,11 @@ class GamesScreen extends React.Component {
                 </TouchableOpacity>
               </Col>
               <Col style={{ backgroundColor: '#fff', height: 120 }}>
-                <TouchableOpacity onPress={() => navigate('GameTwo')}>
+                <TouchableOpacity onPress={() => navigate('GameFour')}>
                   <Thumbnail
                     square
                     style={styles.gameImg}
-                    source={require('../assets/images/crystal.png')}
+                    source={require('../assets/images/bubble.png')}
                   />
                 </TouchableOpacity>
               </Col>

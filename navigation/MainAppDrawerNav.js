@@ -94,7 +94,12 @@ const GoalsStack = createStackNavigator(
       screen: GoalsScreen,
     },
   },
-  defaultHeader,
+  _.merge({
+    initialRouteName: 'Goals',
+    initialRouteParams: {
+      auth: false,
+    },
+  }, defaultHeader),
 );
 
 GoalsStack.navigationOptions = {
@@ -112,12 +117,7 @@ const GoalsSummaryStack = createStackNavigator(
       screen: GoalsSummaryScreen,
     },
   },
-  _.merge({
-    initialRouteName: 'Goals',
-    initialRouteParams: {
-      auth: false,
-    },
-  }, defaultHeader),
+  defaultHeader,
 );
 
 GoalsSummaryStack.navigationOptions = {

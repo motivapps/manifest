@@ -3,6 +3,9 @@ import { Platform } from 'react-native';
 import { createStackNavigator, createDrawerNavigator } from 'react-navigation';
 import TabBarIcon from '../components/TabBarIcon';
 
+var _ = require('lodash');
+
+
 import HomeScreen from '../screens/HomeScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import PlaidScreen from '../screens/PlaidScreen';
@@ -66,11 +69,14 @@ const PlaidStack = createStackNavigator(
     Plaid: {
       screen: PlaidScreen,
     },
-    PlaidLink: {
-      screen: Link,
-    },
   },
-  defaultHeader,
+  // defaultHeader,
+  _.merge({
+    initialRouteName: 'Plaid',
+    initialRouteParams: {
+      auth: false,
+    },
+  }, defaultHeader),
 );
 
 PlaidStack.navigationOptions = {
@@ -88,7 +94,12 @@ const GoalsStack = createStackNavigator(
       screen: GoalsScreen,
     },
   },
-  defaultHeader,
+  _.merge({
+    initialRouteName: 'Goals',
+    initialRouteParams: {
+      auth: false,
+    },
+  }, defaultHeader),
 );
 
 GoalsStack.navigationOptions = {
@@ -199,7 +210,12 @@ const MyAccountStack = createStackNavigator(
       screen: MyAccountScreen,
     },
   },
-  config
+  _.merge({
+    initialRouteName: 'MyAccount',
+    initialRouteParams: {
+      auth: false,
+    },
+  }, defaultHeader),
 );
 
 MyAccountStack.navigationOptions = {

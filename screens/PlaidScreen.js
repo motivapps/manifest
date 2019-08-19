@@ -17,9 +17,9 @@ import axios from 'axios';
 class PlaidScreen extends React.Component {
   constructor(props) {
     super(props);
-    const { auth } = this.props.navigation.state.params;
+    const auth = (this.props.navigation.state.params.auth || false);
     this.state = {
-      auth,
+      auth: auth,
       data: {},
       status: '',
       userToken: null,

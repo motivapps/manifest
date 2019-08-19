@@ -14,6 +14,8 @@ import StatsScreen from '../screens/StatsScreen';
 import LogOutScreen from '../screens/LogOutScreen';
 import GamesScreen from '../screens/GamesScreen';
 import DKScreen from '../screens/games/DK';
+import GameTwoScreen from '../screens/games/GameTwo';
+import GameThreeScreen from '../screens/games/GameThree';
 import Link from '../screens/subViews/PlaidLink';
 import ManifestTitle from '../screens/Header';
 // import console = require('console');
@@ -125,6 +127,12 @@ const GamesStack = createStackNavigator(
     },
     DK: {
       screen: DKScreen,
+    },
+    GameTwo: {
+      screen: GameTwoScreen,
+    },
+    GameThree: {
+      screen: GameThreeScreen,
     },
   },
   defaultHeader,

@@ -1,6 +1,6 @@
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react';
-import { StyleSheet, View, Alert, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Alert, TouchableOpacity, ScrollView } from 'react-native';
 import {
   Container,
   Footer,
@@ -29,6 +29,7 @@ class GamesScreen extends React.Component {
     return (
       <Container style={styles.container}>
         <View style={styles.viewport}>
+        <ScrollView>
           <Text style={styles.heading}>My Games</Text>
 
           <Grid style={{ width: 260, marginTop: 20 }}>
@@ -43,7 +44,33 @@ class GamesScreen extends React.Component {
                 </TouchableOpacity>
               </Col>
               <Col style={{ backgroundColor: '#fff', height: 120 }}>
-                <Container style={styles.gameContainer} />
+                <TouchableOpacity onPress={() => navigate('GameTwo')}>
+                  <Thumbnail
+                    square
+                    style={styles.gameImg}
+                    source={require('../assets/images/crystal.png')}
+                  />
+                </TouchableOpacity>
+              </Col>
+            </Row>
+            <Row style={{ width: '100%' }}>
+              <Col style={{ backgroundColor: '#fff', height: 120 }}>
+                <TouchableOpacity onPress={() => navigate('GameThree')}>
+                  <Thumbnail
+                    square
+                    style={styles.gameImg}
+                    source={require('../assets/images/DK.jpg')}
+                  />
+                </TouchableOpacity>
+              </Col>
+              <Col style={{ backgroundColor: '#fff', height: 120 }}>
+                <TouchableOpacity onPress={() => navigate('GameTwo')}>
+                  <Thumbnail
+                    square
+                    style={styles.gameImg}
+                    source={require('../assets/images/crystal.png')}
+                  />
+                </TouchableOpacity>
               </Col>
             </Row>
             <Row style={{ width: '100%', marginBottom: 10 }}>
@@ -66,6 +93,7 @@ class GamesScreen extends React.Component {
               </Col>
             </Row>
           </Grid>
+          </ScrollView>
         </View>
         <Footer style={styles.footerbar}>
           <FooterTab style={{ backgroundColor: '#49d5b6' }}>
@@ -125,6 +153,7 @@ const styles = StyleSheet.create({
     fontSize: 26,
     color: '#49d5b6',
     marginTop: 10,
+    textAlign: 'center',
   },
   largeText: {
     fontWeight: 'bold',

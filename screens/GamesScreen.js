@@ -59,7 +59,7 @@ class GamesScreen extends React.Component {
                   <Thumbnail
                     square
                     style={styles.gameImg}
-                    source={require('../assets/images/DK.jpg')}
+                    source={require('../assets/images/animals.png')}
                   />
                 </TouchableOpacity>
               </Col>

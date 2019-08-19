@@ -5,7 +5,7 @@ class GameThree extends React.Component {
   render() {
     return (
       <WebView
-        source={{ uri: 'https://cdn.htmlgames.com/CrystalHexajong/' }}
+        source={{ uri: 'https://cdn.htmlgames.com/FeedTheAnimals/' }}
         style={{ marginTop: 20 }}
       />
     );

@@ -2,10 +2,6 @@ import React from 'react';
 import { Platform } from 'react-native';
 import { createStackNavigator, createDrawerNavigator } from 'react-navigation';
 import TabBarIcon from '../components/TabBarIcon';
-
-var _ = require('lodash');
-
-
 import HomeScreen from '../screens/HomeScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import PlaidScreen from '../screens/PlaidScreen';
@@ -17,10 +13,10 @@ import StatsScreen from '../screens/StatsScreen';
 import LogOutScreen from '../screens/LogOutScreen';
 import GamesScreen from '../screens/GamesScreen';
 import DKScreen from '../screens/games/DK';
-import Link from '../screens/subViews/PlaidLink';
 import ManifestTitle from '../screens/Header';
-// import console = require('console');
+import AccountAssignScreen from '../screens/AccountAssignScreen';
 
+const _ = require('lodash');
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -68,6 +64,9 @@ const PlaidStack = createStackNavigator(
   {
     Plaid: {
       screen: PlaidScreen,
+    },
+    AccountAssign: {
+      screen: AccountAssignScreen,
     },
   },
   // defaultHeader,
@@ -208,6 +207,9 @@ const MyAccountStack = createStackNavigator(
   {
     MyAccount: {
       screen: MyAccountScreen,
+    },
+    AccountAssign: {
+      screen: AccountAssignScreen,
     },
   },
   _.merge({

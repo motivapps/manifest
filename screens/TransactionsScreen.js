@@ -17,6 +17,7 @@ export default class Transactions extends React.Component {
     this.state = {
       userToken: null,
       transactions: [],
+      isReady: false,
     };
     this.onDenyGuilt = this.onDenyGuilt.bind(this);
     this.renderTransactions = this.renderTransactions.bind(this);
@@ -35,6 +36,9 @@ export default class Transactions extends React.Component {
       console.error(error);
     }
     this.getTransactions();
+    this.setState({
+      isReady: true,
+    })
   }
 
 
@@ -93,48 +97,52 @@ export default class Transactions extends React.Component {
       transactionColumns,
       footerbar,
     } = styles;
+    const { isReady } = this.state;
+    if (isReady) {
 
-    return (
-      <Container style={container}>
-        <View style={viewport}>
-          <ScrollView>
-            <Text style={heading}>Transactions</Text>
-            <Text style={smallTextGreen}>
-            These transactions look a little suspicious... Still sticking to your goals?
-          </Text>
-            {this.renderTransactions()}
-          </ScrollView>
-        </View>
-        <Footer style={footerbar}>
-          <FooterTab style={{ backgroundColor: '#49d5b6' }}>
-            <Button vertical>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Stats')}>
-                <Icon style={{ fontSize: 30, color: '#fff' }} name="md-stats" />
-                <Text style={buttonText}>Stats</Text>
-              </TouchableOpacity>
-            </Button>
-            <Button vertical>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Games')}>
-                <Icon style={{ fontSize: 30, color: '#fff' }} name="logo-game-controller-a" />
-                <Text style={buttonText}>Games</Text>
-              </TouchableOpacity>
-            </Button>
-            <Button vertical>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Goals')}>
-                <Icon style={{ fontSize: 30, color: '#fff' }} name="md-ribbon" />
-                <Text style={buttonText}>Goals</Text>
-              </TouchableOpacity>
-            </Button>
-            <Button vertical>
-              <TouchableOpacity onPress={this.props.navigation.openDrawer}>
-                <Icon style={{ fontSize: 30, color: '#fff' }} name="md-menu" />
-                <Text style={buttonText}>Menu</Text>
-              </TouchableOpacity>
-            </Button>
-          </FooterTab>
-        </Footer>
-      </Container>
-    );
+      return (
+        <Container style={container}>
+          <View style={viewport}>
+            <ScrollView>
+              <Text style={heading}>Transactions</Text>
+              <Text style={smallTextGreen}>
+              These transactions look a little suspicious... Still sticking to your goals?
+            </Text>
+              {this.renderTransactions()}
+            </ScrollView>
+          </View>
+          <Footer style={footerbar}>
+            <FooterTab style={{ backgroundColor: '#49d5b6' }}>
+              <Button vertical>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('Stats')}>
+                  <Icon style={{ fontSize: 30, color: '#fff' }} name="md-stats" />
+                  <Text style={buttonText}>Stats</Text>
+                </TouchableOpacity>
+              </Button>
+              <Button vertical>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('Games')}>
+                  <Icon style={{ fontSize: 30, color: '#fff' }} name="logo-game-controller-a" />
+                  <Text style={buttonText}>Games</Text>
+                </TouchableOpacity>
+              </Button>
+              <Button vertical>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('Goals')}>
+                  <Icon style={{ fontSize: 30, color: '#fff' }} name="md-ribbon" />
+                  <Text style={buttonText}>Goals</Text>
+                </TouchableOpacity>
+              </Button>
+              <Button vertical>
+                <TouchableOpacity onPress={this.props.navigation.openDrawer}>
+                  <Icon style={{ fontSize: 30, color: '#fff' }} name="md-menu" />
+                  <Text style={buttonText}>Menu</Text>
+                </TouchableOpacity>
+              </Button>
+            </FooterTab>
+          </Footer>
+        </Container>
+      );
+    }
+    return null;
   }
 }
 

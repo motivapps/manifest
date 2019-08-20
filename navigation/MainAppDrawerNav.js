@@ -13,6 +13,10 @@ import StatsScreen from '../screens/StatsScreen';
 import LogOutScreen from '../screens/LogOutScreen';
 import GamesScreen from '../screens/GamesScreen';
 import DKScreen from '../screens/games/DK';
+import GameTwoScreen from '../screens/games/GameTwo';
+import GameThreeScreen from '../screens/games/GameThree';
+import GameFourScreen from '../screens/games/GameFour';
+import Link from '../screens/subViews/PlaidLink';
 import ManifestTitle from '../screens/Header';
 import AccountAssignScreen from '../screens/AccountAssignScreen';
 
@@ -135,6 +139,15 @@ const GamesStack = createStackNavigator(
     },
     DK: {
       screen: DKScreen,
+    },
+    GameTwo: {
+      screen: GameTwoScreen,
+    },
+    GameThree: {
+      screen: GameThreeScreen,
+    },
+    GameFour: {
+      screen: GameFourScreen,
     },
   },
   defaultHeader,

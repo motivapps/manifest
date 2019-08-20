@@ -1,6 +1,6 @@
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react';
-import { StyleSheet, View, Alert, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Alert, TouchableOpacity, ScrollView, AsyncStorage } from 'react-native';
 import {
   Container,
   Footer,
@@ -20,18 +20,37 @@ import {
 class GamesScreen extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      streak: 0,
+    };
+  }
+
+  async componentWillMount() {
+    try {
+      const primaryGoal = await AsyncStorage.getItem('primaryGoal');
+      if (primaryGoal !== null) {
+        let parsedGoal = JSON.parse(primaryGoal);
+        this.setState({ streak: parsedGoal.streak_days});
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   render() {
     const { navigate } = this.props.navigation;
+    const { streak } = this.state;
 
     return (
       <Container style={styles.container}>
         <View style={styles.viewport}>
+        <ScrollView>
           <Text style={styles.heading}>My Games</Text>
 
           <Grid style={{ width: 260, marginTop: 20 }}>
+              <Row style={{ width: '100%', marginBottom: 10 }}>
+                <Text style={styles.smallText}>Stick with your goals to unlock more games</Text>
+              </Row>
             <Row style={{ width: '100%' }}>
               <Col style={{ backgroundColor: '#fff', height: 120 }}>
                 <TouchableOpacity onPress={() => navigate('DK')}>
@@ -43,11 +62,39 @@ class GamesScreen extends React.Component {
                 </TouchableOpacity>
               </Col>
               <Col style={{ backgroundColor: '#fff', height: 120 }}>
-                <Container style={styles.gameContainer} />
+                {streak >= 8 ? 
+                <TouchableOpacity onPress={() => navigate('GameTwo')}>
+                  <Thumbnail
+                    square
+                    style={styles.gameImg}
+                    source={require('../assets/images/crystal.png')}
+                  />
+                </TouchableOpacity>
+                    : <Container style={styles.gameContainer}><Icon style={{ fontSize: 90, color: '#fff', alignSelf: 'center', marginTop: 8 }} name="md-lock" /></Container> }
               </Col>
             </Row>
-            <Row style={{ width: '100%', marginBottom: 10 }}>
-              <Text style={styles.smallText}>Stick with your goals to unlock more games</Text>
+            <Row style={{ width: '100%' }}>
+              <Col style={{ backgroundColor: '#fff', height: 120 }}>
+                { streak >= 15 ? 
+                  <TouchableOpacity onPress={() => navigate('GameThree')}>
+                  <Thumbnail
+                    square
+                    style={styles.gameImg}
+                    source={require('../assets/images/animals.png')}
+                  />
+                </TouchableOpacity>
+                    : <Container style={styles.gameContainer}><Icon style={{ fontSize: 90, color: '#fff', alignSelf: 'center', marginTop: 8 }} name="md-lock" /></Container> }
+              </Col>
+              <Col style={{ backgroundColor: '#fff', height: 120 }}>
+                {streak >= 22 ? <TouchableOpacity onPress={() => navigate('GameFour')}>
+                  <Thumbnail
+                    square
+                    style={styles.gameImg}
+                    source={require('../assets/images/bubble.png')}
+                  />
+                </TouchableOpacity>
+                    : <Container style={styles.gameContainer}><Icon style={{ fontSize: 90, color: '#fff', alignSelf: 'center', marginTop: 8 }} name="md-lock" /></Container>}
+              </Col>
             </Row>
             <Row style={{ width: '100%' }}>
               <Col style={{ backgroundColor: '#fff', height: 120 }}>
@@ -66,6 +113,7 @@ class GamesScreen extends React.Component {
               </Col>
             </Row>
           </Grid>
+          </ScrollView>
         </View>
         <Footer style={styles.footerbar}>
           <FooterTab style={{ backgroundColor: '#49d5b6' }}>
@@ -125,6 +173,7 @@ const styles = StyleSheet.create({
     fontSize: 26,
     color: '#49d5b6',
     marginTop: 10,
+    textAlign: 'center',
   },
   largeText: {
     fontWeight: 'bold',

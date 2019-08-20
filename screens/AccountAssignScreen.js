@@ -84,6 +84,7 @@ export default class AccountAssign extends React.Component {
         return (
           <BankItem
             key={account.account_id}
+            acctId={account.account_id}
             officialName={account.officialName}
             subType={account.subtype}
             name={account.name}

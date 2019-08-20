@@ -179,7 +179,11 @@ class SignupScreen extends React.Component {
             </Col>
           </Row>
           <Row>
-          <Container style={styles.circle}></Container>
+            <Col>
+              <Container style={styles.circle}>
+                <Text style={styles.dollar}>$</Text>
+              </Container>
+            </Col>
           </Row>
         <Row>
           <Col>
@@ -235,6 +239,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     height: 150,
     maxWidth: 150,
+  },
+  dollar: {
+    fontWeight: 'bold',
+    fontSize: 48,
+    color: '#49d5b6',
+    textAlign: 'center',
   },
 });
 

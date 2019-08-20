@@ -3,7 +3,7 @@ import axios from 'axios';
 import { SwitchActions, NavigationActions } from 'react-navigation';
 import { Button, Grid, Row, Col, Container } from 'native-base';
 import {
-  StyleSheet, View, Alert, Text, AsyncStorage,
+  StyleSheet, View, Alert, Text, AsyncStorage, Image,
 } from 'react-native';
 // import { NavigationActions, } from 'react-navigation';
 // import { Container, Footer, FooterTab, Icon, Content, Button, Text } from 'native-base';
@@ -161,7 +161,7 @@ class SignupScreen extends React.Component {
             <Col style={{ backgroundColor: '#fff', height: 60 }}> 
             <Text style={styles.smallText}>New to Manifest?</Text>
             <Button style={styles.transactionButton} onPress={this.signup}>
-              <Text style={styles.buttonText}>Sign up with Auth0</Text>
+              <Text style={styles.buttonText}>Signup</Text>
             </Button>
             </Col>
             </Row>
@@ -169,7 +169,7 @@ class SignupScreen extends React.Component {
             <Col style={{ backgroundColor: '#fff', height: 60 }}>
             <Text style={styles.smallText}>Already have an account?</Text>
             <Button style={styles.transactionButtonDark} onPress={this.login}>
-              <Text style={styles.buttonText}>Log in with Auth0</Text>
+              <Text style={styles.buttonText}>Login</Text>
             </Button>
             </Col>
           </Row>
@@ -180,9 +180,10 @@ class SignupScreen extends React.Component {
           </Row>
           <Row>
             <Col>
-              <Container style={styles.circle}>
-                <Text style={styles.dollar}>$</Text>
-              </Container>
+            <Image
+              style={styles.logo}
+              source={require('../assets/images/ManifestLogo.png')}
+            />
             </Col>
           </Row>
         <Row>
@@ -207,16 +208,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#49d5b6',
     height: 40,
     alignSelf: 'center',
-    maxWidth: '80%',
-    width: '80%',
+    maxWidth: '60%',
+    width: '60%',
     margin: 10,
   },
   transactionButtonDark: {
     backgroundColor: '#218771',
     height: 40,
     alignSelf: 'center',
-    maxWidth: '80%',
-    width: '80%',
+    maxWidth: '60%',
+    width: '60%',
     margin: 10,
   },
   smallText: {
@@ -245,6 +246,11 @@ const styles = StyleSheet.create({
     fontSize: 48,
     color: '#49d5b6',
     textAlign: 'center',
+  },
+  logo: {
+    alignSelf: 'center',
+    width: 150,
+    height: 150,
   },
 });
 

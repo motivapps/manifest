@@ -38,20 +38,11 @@ export default class AccountAssign extends React.Component {
     this.getAccounts();
   }
 
-  componentWillUpdate() {
-    const { to, from } = this.state;
-
-    if (to) {
-
-    } else if (from) {
-
-    }
-  }
-
   setTo(acctId) {
     this.setState({
       to: acctId,
     });
+    // await axios.
   }
 
   setFrom(acctId) {

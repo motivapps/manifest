@@ -155,7 +155,8 @@ class SignupScreen extends React.Component {
 
     return (
    
-
+      <Container style={styles.container}>
+        <View style={styles.viewport}>
         <Grid style={{ width: '100%', marginTop: 10 }}>
           <Row style={{ width: '100%' }}>
             <Col style={{ backgroundColor: '#fff', height: 60 }}> 
@@ -192,12 +193,28 @@ class SignupScreen extends React.Component {
           </Col>
         </Row>
         </Grid>
+        </View>
+        </Container>
 
     );
   }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: 0,
+    backgroundColor: '#fff',
+  },
+  viewport: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 30,
+    marginRight: 30,
+  },
   buttonText: {
     fontWeight: 'bold',
     color: '#fff',
@@ -208,16 +225,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#49d5b6',
     height: 40,
     alignSelf: 'center',
-    maxWidth: '60%',
-    width: '60%',
+    maxWidth: '80%',
+    width: '80%',
     margin: 10,
   },
   transactionButtonDark: {
     backgroundColor: '#218771',
     height: 40,
     alignSelf: 'center',
-    maxWidth: '60%',
-    width: '60%',
+    maxWidth: '80%',
+    width: '80%',
     margin: 10,
   },
   smallText: {
@@ -249,8 +266,9 @@ const styles = StyleSheet.create({
   },
   logo: {
     alignSelf: 'center',
-    width: 150,
-    height: 150,
+    width: 170,
+    height: 170,
+    marginTop: -60,
   },
 });
 

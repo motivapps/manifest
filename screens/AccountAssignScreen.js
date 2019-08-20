@@ -6,7 +6,7 @@ import {
   Container, Text, Button, Footer, FooterTab, Icon,
 } from 'native-base';
 import axios from 'axios';
-import BankItem from './subViews/BankItem.js';
+import BankItem from './subViews/BankItem';
 import { NGROK } from '../app.config.json';
 
 export default class AccountAssign extends React.Component {
@@ -15,6 +15,8 @@ export default class AccountAssign extends React.Component {
     this.state = {
       userToken: null,
       accounts: [],
+      to: false,
+      from: false,
     };
 
     this.getAccounts = this.getAccounts.bind(this);
@@ -42,9 +44,13 @@ export default class AccountAssign extends React.Component {
       });
   }
 
-  renderAccounts() {
+  renderAccounts(type) {
     const { accounts } = this.state;
+    const designationPrompt = type === 'to'
+      ? 'Select an acccout for us to draw from'
+      : 'Select an account for us to deposit your savings into!';
 
+    // add message to indicate no accounts found
     if (accounts.length) {
       return accounts.map((response) => {
         const account = JSON.parse(response);
@@ -54,10 +60,11 @@ export default class AccountAssign extends React.Component {
             officialName={account.officialName}
             subType={account.subtype}
             name={account.name}
+            designationPrompt={designationPrompt}
           />
         );
       });
-    }
+    } 
     return null;
   }
 
@@ -76,16 +83,24 @@ export default class AccountAssign extends React.Component {
       accountColumns,
       footerbar,
     } = styles;
+    const { to, from } = this.state;
+
 
     return (
       <Container style={container}>
         <View style={viewport}>
           <ScrollView>
-            <Text style={heading}>Account Selection</Text>
-            <Text style={smallTextGreen}>
+          <Text style={heading}>
+            Account Selection
+          </Text>
+          <Text style={smallTextGreen}>
               Please select an account for us to draw from
           </Text>
-            {this.renderAccounts()}
+            {to ? (
+              () => this.renderAccounts('to')
+            ) : (
+              () => this.renderAccounts('from')
+            )}
           </ScrollView>
         </View>
         <Footer style={footerbar}>

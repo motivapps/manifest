@@ -15,13 +15,11 @@ import {
   Row,
 } from 'native-base';
 
-const BankItem = ({ name, officialName, subType }) => {
-  // const = props;
-
+const BankItem = ({ name, officialName, subType, designationPrompt }) => {
   return (
     <Grid style={{ marginBottom: 0, width: '100%', padding: 0 }}>
       <Row style={{ backgroundColor: '#fff', height: 20 }} />
-      <Text style={styles.smallText}>
+      <Text style={styles.smallTextLeft}>
         {officialName}
       </Text>
 
@@ -37,7 +35,9 @@ const BankItem = ({ name, officialName, subType }) => {
       <Row style={{ marginBottom: 0, width: '100%' }}>
         <TouchableOpacity>
           <Button style={styles.accountButton}>
-            <Text style={styles.buttonText}>SelectSavings</Text>
+            <Text style={styles.buttonText}>
+              {designationPrompt}
+            </Text>
           </Button>
         </TouchableOpacity>
       </Row>

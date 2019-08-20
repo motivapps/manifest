@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { SwitchActions, NavigationActions } from 'react-navigation';
-import { Button, Grid, Row, Col } from 'native-base';
+import { Button, Grid, Row, Col, Container } from 'native-base';
 import {
   StyleSheet, View, Alert, Text, AsyncStorage,
 } from 'react-native';
@@ -158,17 +158,34 @@ class SignupScreen extends React.Component {
 
         <Grid style={{ width: '100%', marginTop: 10 }}>
           <Row style={{ width: '100%' }}>
-            <Col style={{ backgroundColor: '#fff', height: 60 }}>
-              <Button style={styles.transactionButtonDark} onPress={this.login}>
-                <Text style={styles.buttonText}>Log in with Auth0</Text>
-              </Button>
+            <Col style={{ backgroundColor: '#fff', height: 60 }}> 
+            <Text style={styles.smallText}>New to Manifest?</Text>
+            <Button style={styles.transactionButton} onPress={this.signup}>
+              <Text style={styles.buttonText}>Sign up with Auth0</Text>
+            </Button>
             </Col>
+            </Row>
+            <Row>
             <Col style={{ backgroundColor: '#fff', height: 60 }}>
-              <Button style={styles.transactionButton} onPress={this.signup}>
-                <Text style={styles.buttonText}>Sign up with Auth0</Text>
-              </Button>
+            <Text style={styles.smallText}>Already have an account?</Text>
+            <Button style={styles.transactionButtonDark} onPress={this.login}>
+              <Text style={styles.buttonText}>Log in with Auth0</Text>
+            </Button>
             </Col>
           </Row>
+          <Row>
+            <Col>
+              <Text style={styles.brand}>Manifest</Text>
+            </Col>
+          </Row>
+          <Row>
+          <Container style={styles.circle}></Container>
+          </Row>
+        <Row>
+          <Col>
+            <Text style={styles.smallText}>Automate your savings while quitting your vices.</Text>
+          </Col>
+        </Row>
         </Grid>
 
     );
@@ -185,16 +202,39 @@ const styles = StyleSheet.create({
   transactionButton: {
     backgroundColor: '#49d5b6',
     height: 40,
-    alignSelf: 'flex-start',
-    maxWidth: '98%',
-    width: '98%',
+    alignSelf: 'center',
+    maxWidth: '80%',
+    width: '80%',
+    margin: 10,
   },
   transactionButtonDark: {
     backgroundColor: '#218771',
     height: 40,
-    alignSelf: 'flex-start',
-    maxWidth: '98%',
-    width: '98%',
+    alignSelf: 'center',
+    maxWidth: '80%',
+    width: '80%',
+    margin: 10,
+  },
+  smallText: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    color: '#4c4c4c',
+    textAlign: 'center',
+  },
+  brand: {
+    fontWeight: 'bold',
+    fontSize: 48,
+    color: '#49d5b6',
+    textAlign: 'center',
+  },
+  circle: {
+    margin: 10,
+    borderRadius: 75,
+    borderWidth: 4,
+    borderColor: '#49d5b6',
+    alignSelf: 'center',
+    height: 150,
+    maxWidth: 150,
   },
 });
 

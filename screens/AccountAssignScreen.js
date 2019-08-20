@@ -58,6 +58,7 @@ export default class AccountAssign extends React.Component {
     this.setState({
       from: acctId,
     });
+    this.props.navigation.navigate('MyAccount');
   }
 
   getAccounts() {
@@ -93,7 +94,7 @@ export default class AccountAssign extends React.Component {
           />
         );
       });
-    } 
+    }
     return null;
   }
 
@@ -126,9 +127,9 @@ export default class AccountAssign extends React.Component {
               Please select an account for us to draw from
           </Text>
             {to ? (
-              () => this.renderAccounts('to')
+              this.renderAccounts('from')
             ) : (
-              () => this.renderAccounts('from')
+              this.renderAccounts('to')
             )}
           </ScrollView>
         </View>

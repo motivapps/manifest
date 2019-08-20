@@ -6,17 +6,17 @@ import {
   Container, Text, Button, Footer, FooterTab, Icon,
 } from 'native-base';
 import axios from 'axios';
-import TransactionItem from './subViews/TransactionItem';
+import BankItem from './subViews/BankItem.js';
 import { NGROK } from '../app.config.json';
 
-export default class Transactions extends React.Component {
+export default class AccountAssign extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       userToken: null,
       accounts: [],
     };
-    
+
     this.getAccounts = this.getAccounts.bind(this);
     this.renderAccounts = this.renderAccounts.bind(this);
   }
@@ -36,9 +36,10 @@ export default class Transactions extends React.Component {
 
   getAccounts() {
     const { userToken } = this.state;
-    axios.get(`${NGROK}/accounts/${userToken}`).then(({ data: accounts }) => {
-      this.setState({ accounts });
-    });
+    axios.get(`${NGROK}/accounts/${userToken}`)
+      .then(({ data: accounts }) => {
+        this.setState({ accounts });
+      });
   }
 
   renderAccounts() {
@@ -48,7 +49,7 @@ export default class Transactions extends React.Component {
       return accounts.map((response) => {
         const account = JSON.parse(response);
         return (
-          <bankItem
+          <BankItem
             key={account.account_id}
             officialName={account.officialName}
             subType={account.subtype}

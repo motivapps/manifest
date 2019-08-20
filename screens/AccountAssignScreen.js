@@ -21,6 +21,8 @@ export default class AccountAssign extends React.Component {
 
     this.getAccounts = this.getAccounts.bind(this);
     this.renderAccounts = this.renderAccounts.bind(this);
+    this.setTo = this.setTo.bind(this);
+    this.setFrom = this.setFrom.bind(this);
   }
 
   async componentWillMount() {
@@ -36,6 +38,28 @@ export default class AccountAssign extends React.Component {
     this.getAccounts();
   }
 
+  componentWillUpdate() {
+    const { to, from } = this.state;
+
+    if (to) {
+
+    } else if (from) {
+
+    }
+  }
+
+  setTo(acctId) {
+    this.setState({
+      to: acctId,
+    });
+  }
+
+  setFrom(acctId) {
+    this.setState({
+      from: acctId,
+    });
+  }
+
   getAccounts() {
     const { userToken } = this.state;
     axios.get(`${NGROK}/accounts/${userToken}`)
@@ -49,6 +73,9 @@ export default class AccountAssign extends React.Component {
     const designationPrompt = type === 'to'
       ? 'Select an acccout for us to draw from'
       : 'Select an account for us to deposit your savings into!';
+    const callback = type === 'to'
+      ? this.setTo
+      : this.setFrom;
 
     // add message to indicate no accounts found
     if (accounts.length) {
@@ -61,6 +88,7 @@ export default class AccountAssign extends React.Component {
             subType={account.subtype}
             name={account.name}
             designationPrompt={designationPrompt}
+            callback={callback}
           />
         );
       });

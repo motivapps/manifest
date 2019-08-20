@@ -15,16 +15,16 @@ import {
   Row,
 } from 'native-base';
 
-const BankItem = ({ name, officialName, subType, designationPrompt }) => {
+const BankItem = ({ name, officialName, subType, designationPrompt, callback, acctId }) => {
   return (
     <Grid style={{ marginBottom: 0, width: '100%', padding: 0 }}>
       <Row style={{ backgroundColor: '#fff', height: 20 }} />
-      <Text style={styles.smallTextLeft}>
-        {officialName}
+      <Text style={styles.largeTextLeft}>
+        {name}
       </Text>
 
       <Text style={styles.smallTextLeft}>
-        {name}
+        {officialName}
       </Text>
 
       <Text style={styles.smallTextLeft}>
@@ -34,7 +34,7 @@ const BankItem = ({ name, officialName, subType, designationPrompt }) => {
       <Row style={{ backgroundColor: '#fff', height: 20 }} />
       <Row style={{ marginBottom: 0, width: '100%' }}>
         <TouchableOpacity>
-          <Button style={styles.accountButton}>
+          <Button style={styles.accountButton} onPress={() => callback(acctId)}>
             <Text style={styles.buttonText}>
               {designationPrompt}
             </Text>
@@ -96,12 +96,11 @@ const styles = StyleSheet.create({
     color: '#49d5b6',
     textAlign: 'center',
   },
-  smallTextLeft: {
+  largeTextLeft: {
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 22,
     color: '#4c4c4c',
     alignSelf: 'flex-start',
-    marginLeft: 0,
   },
   accountButton: {
     backgroundColor: '#49d5b6',

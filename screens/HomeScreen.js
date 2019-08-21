@@ -52,10 +52,10 @@ class HomeScreen extends React.Component {
     };
     // this.onToggleButton = this.onToggleButton.bind(this);
     this.setState = this.setState.bind(this);
+    this.updateAsyncStorage = this.updateAsyncStorage.bind(this);
     this.onToggleThreeMonths = this.onToggleThreeMonths.bind(this);
     this.onToggleSixMonths = this.onToggleSixMonths.bind(this);
     this.onToggleOneYear = this.onToggleOneYear.bind(this);
-    this.updateAsyncStorage = this.updateAsyncStorage.bind(this);
   }
 
   async componentWillMount() {

@@ -15,6 +15,7 @@ import {
 import * as Permissions from 'expo-permissions';
 import axios from 'axios';
 import { Platform, StatusBar, StyleSheet, View, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { NavigationEvents } from 'react-navigation';
 
 import * as Font from 'expo-font';
 import * as Progress from 'react-native-progress';
@@ -54,9 +55,66 @@ class HomeScreen extends React.Component {
     this.onToggleThreeMonths = this.onToggleThreeMonths.bind(this);
     this.onToggleSixMonths = this.onToggleSixMonths.bind(this);
     this.onToggleOneYear = this.onToggleOneYear.bind(this);
+    this.updateAsyncStorage = this.updateAsyncStorage.bind(this);
   }
 
   async componentWillMount() {
+    this.updateAsyncStorage();
+    // const auth0_id = await getData('userToken');
+
+    // axios.get(`${NGROK}/goals/${auth0_id}`).then((response) => {
+    //   this.setState({
+    //     auth0_id,
+    //     primaryGoal: response.data[0],
+    //   });
+    //   console.log('primaryGoal:', this.state.primaryGoal);
+    //     this.setState({
+    //       threeMonthSavings: (response.data[0].daily_savings * 91.25).toFixed(2),
+    //       sixMonthSavings: (response.data[0].daily_savings * 182.5).toFixed(2),
+    //       oneYearSavings: (response.data[0].daily_savings * 365).toFixed(2),
+    //       displayedSavings: (response.data[0].daily_savings * 91.25).toFixed(2),
+    //     });
+     
+    //   const daysLeft = (response.data[0].goal_cost - response.data[0].amount_saved) / response.data[0].daily_savings;
+    //   console.log(daysLeft);
+    //   const targetDate = new Date();
+    //   targetDate.setDate(targetDate.getDate() + daysLeft);
+
+    //   // So you can see the date we have created
+    //   console.log('targetDate:', targetDate);
+
+    //   const dd = targetDate.getDate();
+    //   const mm = targetDate.getMonth() + 1; // 0 is January, so we must add 1
+    //   const yyyy = targetDate.getFullYear();
+
+    //   var dateString = mm + "/" + dd + "/" + yyyy;
+    //   console.log('date:', dateString);
+    //   this.setState({ completionDate: dateString });
+
+    //   if (response.data[0]) {
+    //     storeData('primaryGoal', JSON.stringify(response.data[0]));
+    //   }
+    // }).catch(error => console.log(error));
+  }
+
+  async componentDidMount() {
+    await Font.loadAsync({
+      Roboto: require('../node_modules/native-base/Fonts/Roboto.ttf'),
+      Roboto_medium: require('../node_modules/native-base/Fonts/Roboto_medium.ttf'),
+    });
+
+    this.setState({ isReady: true });
+  }
+
+  // async componentDidUpdate() {
+  //   const primaryGoal = await getData('primaryGoal');
+  //   const auth0_id = await getData('userToken');
+
+  //   this.state.auth0_id = auth0_id;
+  //   this.state.primaryGoal = primaryGoal;
+  // }
+
+  async updateAsyncStorage() {
     const auth0_id = await getData('userToken');
 
     axios.get(`${NGROK}/goals/${auth0_id}`).then((response) => {
@@ -65,13 +123,13 @@ class HomeScreen extends React.Component {
         primaryGoal: response.data[0],
       });
       console.log('primaryGoal:', this.state.primaryGoal);
-        this.setState({
-          threeMonthSavings: (response.data[0].daily_savings * 91.25).toFixed(2),
-          sixMonthSavings: (response.data[0].daily_savings * 182.5).toFixed(2),
-          oneYearSavings: (response.data[0].daily_savings * 365).toFixed(2),
-          displayedSavings: (response.data[0].daily_savings * 91.25).toFixed(2),
-        });
-     
+      this.setState({
+        threeMonthSavings: (response.data[0].daily_savings * 91.25).toFixed(2),
+        sixMonthSavings: (response.data[0].daily_savings * 182.5).toFixed(2),
+        oneYearSavings: (response.data[0].daily_savings * 365).toFixed(2),
+        displayedSavings: (response.data[0].daily_savings * 91.25).toFixed(2),
+      });
+
       const daysLeft = (response.data[0].goal_cost - response.data[0].amount_saved) / response.data[0].daily_savings;
       console.log(daysLeft);
       const targetDate = new Date();
@@ -93,23 +151,6 @@ class HomeScreen extends React.Component {
       }
     }).catch(error => console.log(error));
   }
-
-  async componentDidMount() {
-    await Font.loadAsync({
-      Roboto: require('../node_modules/native-base/Fonts/Roboto.ttf'),
-      Roboto_medium: require('../node_modules/native-base/Fonts/Roboto_medium.ttf'),
-    });
-
-    this.setState({ isReady: true });
-  }
-
-  // async componentDidUpdate() {
-  //   const primaryGoal = await getData('primaryGoal');
-  //   const auth0_id = await getData('userToken');
-
-  //   this.state.auth0_id = auth0_id;
-  //   this.state.primaryGoal = primaryGoal;
-  // }
 
   onToggleThreeMonths(amount) {
     this.setState({
@@ -139,6 +180,9 @@ class HomeScreen extends React.Component {
     return (
       <Container style={styles.container}>
         <View style={styles.viewport}>
+        <NavigationEvents
+          onWillFocus={this.updateAsyncStorage}
+          />
         <ScrollView>
           <Text style={styles.heading}>Goal: {primaryGoal ? primaryGoal.goal_name : 'No goal set'} </Text>
 

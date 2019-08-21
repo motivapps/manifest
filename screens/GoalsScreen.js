@@ -33,7 +33,6 @@ class GoalsScreen extends React.Component {
       userToken: null,
       userId: null,
     };
-
     this.onHandleSubmit = this.onHandleSubmit.bind(this);
   }
 

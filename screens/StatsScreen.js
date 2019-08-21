@@ -22,7 +22,7 @@ export default class StatsScreen extends React.Component {
     super(props);
     this.state = {
       circleData: {
-        labels: ['Relapse', 'Coffee'], // optional
+        labels: ['Relapses', 'Coffee'], // optional
         data: [0.3, 0.6],
       },
       barchartData: {

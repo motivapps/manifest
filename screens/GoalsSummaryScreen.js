@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppLoading, Notifications } from 'expo';
+import { AppLoading } from 'expo';
 import {
   Container,
   Text,
@@ -7,27 +7,24 @@ import {
   Footer,
   FooterTab,
   Icon,
-  Content,
   Grid,
   Row,
   Col,
 } from 'native-base';
-import * as Permissions from 'expo-permissions';
 import axios from 'axios';
-import { Platform, StatusBar, StyleSheet, View, TouchableOpacity, Image, ScrollView } from 'react-native';
-
+import {
+  Modal, TouchableHighlight, StyleSheet, View, TouchableOpacity, Image, ScrollView, TextInput,
+} from 'react-native';
+import RNPickerSelect, { defaultStyles } from 'react-native-picker-select';
 import * as Font from 'expo-font';
 import * as Progress from 'react-native-progress';
-import { kayak } from '../assets/images/kayak.jpg';
 import {
-  FOURSQUARE_CLIENT_ID,
-  FOURSQUARE_CLIENT_SECRET,
   NGROK,
-  GOOGLE_OAUTH_ID,
-  PUSH_TOKEN,
+  UNSPLASH_CLIENT_ID,
 } from '../app.config.json';
-import { storeData, getData, storeMulti, getMulti } from './helpers/asyncHelpers';
-import PropTypes from 'prop-types';
+import {
+  storeData, getData, storeMulti, getMulti,
+} from './helpers/asyncHelpers';
 
 // import { MonoText } from '../components/StyledText';
 
@@ -42,6 +39,14 @@ class GoalsSummaryScreen extends React.Component {
       oneYearSavings: null,
       displayedSavings: 0,
       completionDate: null,
+      modalVisible: false,
+      auth0_id: null,
+      goalName: '',
+      goalItem: '',
+      goalAmount: '',
+      vicePrice: '',
+      viceFrequency: '',
+      viceName: '',
     };
     this.setState = this.setState.bind(this);
   }
@@ -76,13 +81,14 @@ class GoalsSummaryScreen extends React.Component {
       const mm = targetDate.getMonth() + 1; // 0 is January, so we must add 1
       const yyyy = targetDate.getFullYear();
 
-      var dateString = mm + "/" + dd + "/" + yyyy;
+      const dateString = `${mm}/${dd}/${yyyy}`;
       console.log('date:', dateString);
       this.setState({ completionDate: dateString });
 
       if (response.data[0]) {
         storeData('primaryGoal', JSON.stringify(response.data[0]));
       }
+      this.setState({ isReady: true });
     }).catch(error => console.log(error));
   }
 
@@ -91,28 +97,223 @@ class GoalsSummaryScreen extends React.Component {
       Roboto: require('../node_modules/native-base/Fonts/Roboto.ttf'),
       Roboto_medium: require('../node_modules/native-base/Fonts/Roboto_medium.ttf'),
     });
-
-    this.setState({ isReady: true });
   }
 
-  // async componentDidUpdate() {
-  //   const primaryGoal = await getData('primaryGoal');
-  //   const auth0_id = await getData('userToken');
-
-  //   this.state.auth0_id = auth0_id;
-  //   this.state.primaryGoal = primaryGoal;
-  // }
-
+  setModalVisible(visible) {
+    this.setState({ modalVisible: visible });
+  }
 
   render() {
+    const {
+      goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName, auth0_id
+    } = this.state;
     // console.log('state:', this.state);
-    const { primaryGoal, isReady, displayedSavings, threeMonthSavings, sixMonthSavings, oneYearSavings, completionDate } = this.state;
+    const { primaryGoal, isReady, completionDate } = this.state;
+
+    const placeholderVices = {
+      label: 'Select a vice...',
+      value: null,
+      color: '#9EA0A4',
+    };
+
+    const vices = [
+      {
+        label: 'Coffee',
+        value: 'Coffee',
+      },
+      {
+        label: 'Smoking',
+        value: 'Smoking',
+      },
+      {
+        label: 'Fast Food',
+        value: 'Fast Food',
+      },
+    ];
+
+    const placeholderFrequency = {
+      label: 'Ex. Daily',
+      value: null,
+      color: '#9EA0A4',
+    };
+
+    const frequencies = [
+      {
+        label: 'Daily',
+        value: 'Daily',
+      },
+      {
+        label: 'Twice Per Week',
+        value: 'Twice Per Week',
+      },
+      {
+        label: 'Once Per Week',
+        value: 'Once Per Week',
+      },
+    ];
 
     if (!isReady) {
       return <AppLoading />;
     }
     return (
       <Container style={styles.container}>
+        <View style={{ marginTop: 22 }}>
+          <Modal
+            animationType="slide"
+            transparent={false}
+            visible={this.state.modalVisible}
+          >
+            <View style={{ marginTop: 22 }}>
+              <View>
+                <Text style={styles.smallTextLeft}>Goal Name:</Text>
+                <TextInput
+                  style={{
+                    height: 36,
+                    borderColor: '#cccccc',
+                    borderWidth: 1,
+                    width: 300,
+                    borderRadius: 8,
+                  }}
+                  placeholder={primaryGoal.goal_name}
+                  placeholderTextColor="black"
+                  onChangeText={(text) => {
+                    this.setState({ goalName: text || primaryGoal.goal_name });
+                  }}
+                  value={goalName}
+                />
+
+                <Text style={styles.smallTextLeft}>What are you saving up to purchase?</Text>
+                <TextInput
+                  style={{
+                    height: 36,
+                    borderColor: '#cccccc',
+                    borderWidth: 1,
+                    width: 300,
+                    borderRadius: 8,
+                  }}
+                  placeholder={primaryGoal.goal_item}
+                  placeholderTextColor="black"
+                  onChangeText={(text) => {
+                    this.setState({ goalItem: text || primaryGoal.goal_item });
+                  }}
+                  value={goalItem}
+                />
+
+                <Text style={styles.smallTextLeft}>Amount Needed to reach goal:</Text>
+                <TextInput
+                  style={{
+                    height: 36,
+                    borderColor: '#cccccc',
+                    borderWidth: 1,
+                    width: 300,
+                    borderRadius: 8,
+                  }}
+                  defaultValue={primaryGoal.goal_cost.toString()}
+                  placeholder={primaryGoal.goal_cost.toString()}
+                  placeholderTextColor="black"
+                  onChangeText={(text) => {
+                    if (text[0] === '$') {
+                      this.setState({ goalAmount: text.slice(1, text.length) });
+                    } else {
+                      this.setState({ goalAmount: text || primaryGoal.goal_cost.toString() });
+                    }
+                  }}
+                  value={goalAmount}
+                />
+
+                <Text style={styles.smallTextLeft}>Select vice you want to quit:</Text>
+
+                <RNPickerSelect
+                  placeholder={placeholderVices}
+                  items={vices}
+                  onValueChange={(value) => {
+                    this.setState({
+                      viceName: value || primaryGoal.vice,
+                    });
+                  }}
+                  style={pickerSelectStyles}
+                  value={viceName}
+                />
+
+                <Text style={styles.smallTextLeft}>Price per vice purchase:</Text>
+                <TextInput
+                  style={{
+                    height: 36,
+                    borderColor: '#cccccc',
+                    borderWidth: 1,
+                    width: 300,
+                    borderRadius: 8,
+                  }}
+                  placeholder={primaryGoal.vice_price.toString()}
+                  placeholderTextColor="black"
+                  onChangeText={(text) => {
+                    if (text[0] === '$') {
+                      this.setState({ vicePrice: text.slice(1, text.length) });
+                    } else {
+                      this.setState({ vicePrice: text || primaryGoal.vice_price.toString() });
+                    }
+                  }}
+                  value={vicePrice}
+                />
+
+                <Text style={styles.smallTextLeft}>Vice purchase frequency:</Text>
+                <RNPickerSelect
+                  placeholder={placeholderFrequency}
+                  items={frequencies}
+                  onValueChange={(value) => {
+                    this.setState({
+                      viceFrequency: value || primaryGoal.vice_freq,
+                    });
+                  }}
+                  style={pickerSelectStyles}
+                  value={viceFrequency}
+                />
+                <Button
+                  style={styles.modalButton}
+                  onPress={() => {
+                    axios.get(`https://api.unsplash.com/search/photos?page=1&query=${goalItem || primaryGoal.goal_item}
+                    &client_id=${UNSPLASH_CLIENT_ID}`)
+                      .then((response) => {
+                        const goalPhoto = response.data.results[0].urls.thumb;
+                        return goalPhoto;
+                      })
+                      .then((goalPhoto) => {
+                        axios.patch(`${NGROK}/goals/${auth0_id}`, {
+                          goal_cost: goalAmount || primaryGoal.goal_cost,
+                          goal_name: goalName || primaryGoal.goal_name,
+                          goal_item: goalItem || primaryGoal.goal_item,
+                          goal_photo: goalPhoto,
+                          vice: viceName || primaryGoal.vice,
+                          vice_price: vicePrice || primaryGoal.vice_price,
+                          vice_freq: viceFrequency || primaryGoal.vice_freq,
+                        })
+                          .then(() => {
+                            axios.get(`${NGROK}/goals/${auth0_id}`).then((response) => {
+                              this.setState({
+                                primaryGoal: response.data[0],
+                              });
+                              storeData('primaryGoal', JSON.stringify(response.data[0]));
+                            });
+                          })
+                      })
+                      .catch(err => console.error(err));
+                    this.setModalVisible(!this.state.modalVisible);
+                  }}
+                >
+                  <Text style={styles.buttonText}>Confirm</Text>
+                </Button>
+                <Button
+                  style={styles.modalButton}
+                  onPress={() => {
+                    this.setModalVisible(!this.state.modalVisible);
+                  }}
+                >
+                  <Text style={styles.buttonText}>Cancel</Text>
+                </Button>
+              </View>
+            </View>
+          </Modal>
+        </View>
         <View style={styles.viewport}>
           <ScrollView>
             <Text style={styles.heading}>My Goals</Text>
@@ -131,38 +332,65 @@ class GoalsSummaryScreen extends React.Component {
                 </Col>
               </Row>
             </Grid>
- 
-            <Text style={styles.heading}>Goal: {primaryGoal ? primaryGoal.goal_name : 'No goal set'} </Text>
-            <Text style={styles.headingGray}>Category: {primaryGoal ? primaryGoal.vice : 'No vice selected'}</Text>
 
-            <Progress.Circle 
+            <Text style={styles.heading}>
+Goal:
+              {' '}
+              {primaryGoal ? primaryGoal.goal_name : 'No goal set'}
+              {' '}
+            </Text>
+            <Text style={styles.headingGray}>
+Category:
+              {' '}
+              {primaryGoal ? primaryGoal.vice : 'No vice selected'}
+            </Text>
+
+            <Progress.Circle
               size={30}
               progress={primaryGoal ? primaryGoal.amount_saved / primaryGoal.goal_cost : 0}
               color="#49d5b6"
               unfilledColor="#cccccc"
               size={250}
-              showsText={true}
+              showsText
               style={{ alignSelf: 'center', margin: 10 }}
               textStyle={{ fontWeight: 'bold' }}
               thickness={8}
-              />
+            />
 
-            <Image style={styles.mainImage} source={{ uri: primaryGoal ? primaryGoal.goal_photo : "http://cdn.shopify.com/s/files/1/0682/0839/products/Vibe-Yellowfin-100-Kayak-Caribbean_Journey_grande.jpg?v=1555360419" }} />
+            <Image style={styles.mainImage} source={{ uri: primaryGoal ? primaryGoal.goal_photo : 'http://cdn.shopify.com/s/files/1/0682/0839/products/Vibe-Yellowfin-100-Kayak-Caribbean_Journey_grande.jpg?v=1555360419' }} />
 
-            
+
             <View style={{ marginTop: 10, marginBottom: 10 }}>
-              <Text style={styles.smallText}>Projected Completion Date: {completionDate ? completionDate : 'Loading...'}</Text>
-              <Text style={styles.smallTextLeft}>Daily Savings: ${primaryGoal ? primaryGoal.daily_savings.toFixed(2) : 0}</Text>
+              <Text style={styles.smallText}>
+Projected Completion Date:
+                {' '}
+                {completionDate || 'Loading...'}
+              </Text>
+              <Text style={styles.smallTextLeft}>
+Daily Savings: $
+                {primaryGoal ? primaryGoal.daily_savings.toFixed(2) : 0}
+              </Text>
             </View>
             <View style={{ marginBottom: 10, marginLeft: 0 }}>
-              <Text style={styles.largeText}>Goal Amount: ${primaryGoal ? primaryGoal.goal_cost : 0}</Text>
-              <Text style={styles.largeText}>Money Saved: ${primaryGoal ? primaryGoal.amount_saved : 0}</Text>
+              <Text style={styles.largeText}>
+Goal Amount: $
+                {primaryGoal ? primaryGoal.goal_cost : 0}
+              </Text>
+              <Text style={styles.largeText}>
+Money Saved: $
+                {primaryGoal ? primaryGoal.amount_saved : 0}
+              </Text>
             </View>
 
             <Grid style={{ width: '100%', marginTop: 10 }}>
               <Row style={{ width: '100%' }}>
                 <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                  <Button style={styles.transactionButton}>
+                  <Button
+                    style={styles.transactionButton}
+                    onPress={() => {
+                      this.setModalVisible(true);
+                    }}
+                  >
                     <Text style={styles.buttonText}>Edit Goal</Text>
                   </Button>
                 </Col>
@@ -283,6 +511,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     width: '100%',
   },
+  modalButton: {
+    backgroundColor: '#49d5b6',
+    height: 40,
+    alignSelf: 'flex-start',
+    maxWidth: '98%',
+    width: '98%',
+    margin: 10,
+  },
   transactionButton: {
     backgroundColor: '#49d5b6',
     height: 40,
@@ -314,6 +550,31 @@ const styles = StyleSheet.create({
     marginTop: -260,
     zIndex: -100,
     opacity: 0.15,
+  },
+});
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 2,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    height: 36,
+    width: 300,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    color: 'black',
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
+  inputAndroid: {
+    fontSize: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderWidth: 0.5,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    color: 'black',
+    paddingRight: 30, // to ensure the text is never behind the icon
   },
 });
 

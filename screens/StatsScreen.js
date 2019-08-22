@@ -25,13 +25,13 @@ export default class StatsScreen extends React.Component {
     super(props);
     this.state = {
       circleData: {
-        labels: ['Relapses', 'Coffee'], // optional
-        data: [0.3, 0.6],
+        labels: ['Relapses', 'Vice'], // optional
+        data: [0, 0],
       },
       barchartData: {
-        labels: ['Daily Savings', 'Relapses Total', 'Total Saved', 'Goal Amount'],
+        labels: ['Daily', 'Weekly', 'Monthly'],
         datasets: [{
-          data: [20, 45, 28, 80],
+          data: [2, 12, 38],
         }],
       },
       primaryGoal: null,
@@ -40,47 +40,47 @@ export default class StatsScreen extends React.Component {
   }
 
   async componentWillMount() {
-    //this.updateAsyncStorageForStats();
-    try {
-      const primaryGoal = await AsyncStorage.getItem('primaryGoal');
-      if (primaryGoal !== null) {
-        let parsedGoal = JSON.parse(primaryGoal);
-        let relapseTotal = parsedGoal.relapse_cost_total / parsedGoal.goal_cost;
-        console.log('amount:', parsedGoal.amount_saved);
-        let savedTotal = parsedGoal.amount_saved / parsedGoal.goal_cost;
+    this.updateAsyncStorageForStats();
+    // try {
+    //   const primaryGoal = await AsyncStorage.getItem('primaryGoal');
+    //   if (primaryGoal !== null) {
+    //     let parsedGoal = JSON.parse(primaryGoal);
+    //     let relapseTotal = parsedGoal.relapse_cost_total / parsedGoal.goal_cost;
+    //     console.log('amount:', parsedGoal.amount_saved);
+    //     let savedTotal = parsedGoal.amount_saved / parsedGoal.goal_cost;
 
-        const dailySavings = parsedGoal.daily_savings;
-        console.log('goal:', primaryGoal);
-        this.setState({ 
-          primaryGoal: parsedGoal,
-          circleData: {
-            labels: ['Relapses', parsedGoal.vice],
-            data: [relapseTotal, savedTotal],
-          },
-          barchartData: {
-            labels: ['Daily', 'Weekly', 'Monthly'],
-            datasets: [{
-              data: [dailySavings, dailySavings * 7, dailySavings * 30],
-            }],
-          },
-        });
-      }
-    } catch (error) {
-      console.error(error);
-    }
+    //     const dailySavings = parsedGoal.daily_savings;
+    //     console.log('goal:', primaryGoal);
+    //     this.setState({ 
+    //       primaryGoal: parsedGoal,
+    //       circleData: {
+    //         labels: ['Relapses', parsedGoal.vice],
+    //         data: [relapseTotal, savedTotal],
+    //       },
+    //       barchartData: {
+    //         labels: ['Daily', 'Weekly', 'Monthly'],
+    //         datasets: [{
+    //           data: [dailySavings, dailySavings * 7, dailySavings * 30],
+    //         }],
+    //       },
+    //     });
+    //   }
+    // } catch (error) {
+    //   console.error(error);
+    // }
   }
 
   async updateAsyncStorageForStats() {
     const auth0_id = await getData('userToken');
 
     axios.get(`${NGROK}/goals/${auth0_id}`).then((response) => {
+      console.log('response:', response.data[0]);
+      let primaryGoal = response.data[0];
       this.setState({
         primaryGoal: response.data[0],
       });
-      const { primaryGoal } = response.data[0];
       console.log('primaryGoal:', primaryGoal);
       if (primaryGoal !== null) {
-        let parsedGoal = JSON.parse(primaryGoal);
         let relapseTotal = primaryGoal.relapse_cost_total / primaryGoal.goal_cost;
         console.log('amount:', primaryGoal.amount_saved);
         let savedTotal = primaryGoal.amount_saved / primaryGoal.goal_cost;
@@ -88,9 +88,8 @@ export default class StatsScreen extends React.Component {
         const dailySavings = primaryGoal.daily_savings;
         console.log('goal:', primaryGoal);
         this.setState({
-          // primaryGoal: parsedGoal,
           circleData: {
-            labels: ['Relapses', parsedGoal.vice],
+            labels: ['Relapses', primaryGoal.vice],
             data: [relapseTotal, savedTotal],
           },
           barchartData: {

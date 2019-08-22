@@ -3,7 +3,6 @@ import React from 'react';
 import {
   StyleSheet,
   View,
-  Alert,
   TouchableOpacity,
   TextInput,
   Text,
@@ -11,11 +10,10 @@ import {
   AsyncStorage,
 } from 'react-native';
 import {
-  Container, Footer, FooterTab, Icon, Content, Button, Grid, Row, Col,
+  Container, Footer, FooterTab, Icon, Button, Grid, Row, Col,
 } from 'native-base';
 import axios from 'axios';
-import RNPickerSelect, { defaultStyles } from 'react-native-picker-select';
-import Link from './subViews/PlaidLink';
+import RNPickerSelect from 'react-native-picker-select';
 import { NGROK, UNSPLASH_CLIENT_ID } from '../app.config.json';
 
 class GoalsScreen extends React.Component {
@@ -41,15 +39,13 @@ class GoalsScreen extends React.Component {
     try {
       const userToken = await AsyncStorage.getItem('userToken');
       if (userToken !== null) {
-        console.log(userToken);
         this.setState({ userToken });
         axios.get(`${NGROK}/user/${userToken}`)
           .then((response) => {
-            console.log('userId from front :', response.data);
             this.setState({ userId: response.data.id });
           })
           .catch((err) => {
-            console.log('userId get error:', err);
+            console.error('userId get error:', err);
           });
       }
     } catch (error) {
@@ -59,28 +55,31 @@ class GoalsScreen extends React.Component {
 
   onHandleSubmit(dest) {
     const {
-      goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName, userId,
+      goalName,
+      goalItem,
+      goalAmount,
+      vicePrice,
+      viceFrequency,
+      viceName,
+      userId,
     } = this.state;
-    console.log('goalName:', goalName);
-    console.log('goalItem:', goalItem);
-    console.log('goalAmount:', goalAmount);
-    console.log('vicePrice:', vicePrice);
-    console.log('viceFrequency:', viceFrequency);
-    console.log('viceName:', viceName);
-    console.log('userId:', userId);
 
     axios.get(`https://api.unsplash.com/search/photos?page=1&query=${goalItem}
 &client_id=${UNSPLASH_CLIENT_ID}`)
       .then((response) => {
         return axios.post(`${NGROK}/user/goals`, {
-          goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName, userId, goalPhoto: response.data.results[0].urls.thumb,
+          goalName,
+          goalItem,
+          goalAmount,
+          vicePrice,
+          viceFrequency,
+          viceName,
+          userId,
+          goalPhoto: response.data.results[0].urls.thumb,
         });
       })
-      .then((response) => {
-        console.log('goals post from front response:', response);
-      })
       .catch((err) => {
-        console.log('goals error:', err);
+        console.error('goals error:', err);
       });
 
     if (dest) {
@@ -90,10 +89,14 @@ class GoalsScreen extends React.Component {
 
   render() {
     const {
-      goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName, auth,
+      goalName,
+      goalItem,
+      goalAmount,
+      vicePrice,
+      viceFrequency,
+      viceName,
+      auth,
     } = this.state;
-
-    // const { auth } = this.props;
 
     const placeholderVices = {
       label: 'Select a vice...',

@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppLoading, Notifications } from 'expo';
+import { AppLoading } from 'expo';
 import {
   Container,
   Text,
@@ -7,41 +7,29 @@ import {
   Footer,
   FooterTab,
   Icon,
-  Content,
   Grid,
   Row,
   Col,
 } from 'native-base';
 import * as Permissions from 'expo-permissions';
 import axios from 'axios';
-import { Platform, StatusBar, StyleSheet, View, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Image, ScrollView } from 'react-native';
 
 import * as Font from 'expo-font';
 import * as Progress from 'react-native-progress';
-import { kayak } from '../assets/images/kayak.jpg';
+import { NGROK } from '../app.config.json';
 import {
-  FOURSQUARE_CLIENT_ID,
-  FOURSQUARE_CLIENT_SECRET,
-  NGROK,
-  GOOGLE_OAUTH_ID,
-  PUSH_TOKEN,
-} from '../app.config.json';
-import { storeData, getData, storeMulti, getMulti } from './helpers/asyncHelpers';
-
-// import { MonoText } from '../components/StyledText';
+  storeData,
+  getData,
+  storeMulti,
+  getMulti,
+} from './helpers/asyncHelpers';
 
 class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isReady: false,
-      buttonToggle: false,
-      isAuthenticated: false,
-      latitude: null,
-      longitude: null,
-      dangerDistance: null,
-      pushToken: null,
-      // authID: GOOGLE_OAUTH_ID,
       primaryGoal: null,
       threeMonthSavings: null,
       sixMonthSavings: null,
@@ -49,7 +37,6 @@ class HomeScreen extends React.Component {
       displayedSavings: 0,
       completionDate: null,
     };
-    // this.onToggleButton = this.onToggleButton.bind(this);
     this.setState = this.setState.bind(this);
     this.onToggleThreeMonths = this.onToggleThreeMonths.bind(this);
     this.onToggleSixMonths = this.onToggleSixMonths.bind(this);
@@ -64,34 +51,26 @@ class HomeScreen extends React.Component {
         auth0_id,
         primaryGoal: response.data[0],
       });
-      console.log('primaryGoal:', this.state.primaryGoal);
-        this.setState({
-          threeMonthSavings: (response.data[0].daily_savings * 91.25).toFixed(2),
-          sixMonthSavings: (response.data[0].daily_savings * 182.5).toFixed(2),
-          oneYearSavings: (response.data[0].daily_savings * 365).toFixed(2),
-          displayedSavings: (response.data[0].daily_savings * 91.25).toFixed(2),
-        });
-     
+      this.setState({
+        threeMonthSavings: (response.data[0].daily_savings * 91.25).toFixed(2),
+        sixMonthSavings: (response.data[0].daily_savings * 182.5).toFixed(2),
+        oneYearSavings: (response.data[0].daily_savings * 365).toFixed(2),
+        displayedSavings: (response.data[0].daily_savings * 91.25).toFixed(2),
+      });
       const daysLeft = (response.data[0].goal_cost - response.data[0].amount_saved) / response.data[0].daily_savings;
-      console.log(daysLeft);
       const targetDate = new Date();
       targetDate.setDate(targetDate.getDate() + daysLeft);
-
-      // So you can see the date we have created
-      console.log('targetDate:', targetDate);
 
       const dd = targetDate.getDate();
       const mm = targetDate.getMonth() + 1; // 0 is January, so we must add 1
       const yyyy = targetDate.getFullYear();
-
-      var dateString = mm + "/" + dd + "/" + yyyy;
-      console.log('date:', dateString);
+      const dateString = mm + "/" + dd + "/" + yyyy;
       this.setState({ completionDate: dateString });
 
       if (response.data[0]) {
         storeData('primaryGoal', JSON.stringify(response.data[0]));
       }
-    }).catch(error => console.log(error));
+    }).catch(error => console.error(error));
   }
 
   async componentDidMount() {
@@ -102,14 +81,6 @@ class HomeScreen extends React.Component {
 
     this.setState({ isReady: true });
   }
-
-  // async componentDidUpdate() {
-  //   const primaryGoal = await getData('primaryGoal');
-  //   const auth0_id = await getData('userToken');
-
-  //   this.state.auth0_id = auth0_id;
-  //   this.state.primaryGoal = primaryGoal;
-  // }
 
   onToggleThreeMonths(amount) {
     this.setState({
@@ -130,8 +101,15 @@ class HomeScreen extends React.Component {
   }
 
   render() {
-    // console.log('state:', this.state);
-    const { primaryGoal, isReady, displayedSavings, threeMonthSavings, sixMonthSavings, oneYearSavings, completionDate } = this.state;
+    const {
+      primaryGoal,
+      isReady,
+      displayedSavings,
+      threeMonthSavings,
+      sixMonthSavings,
+      oneYearSavings,
+      completionDate,
+    } = this.state;
 
     if (!isReady) {
       return <AppLoading />;

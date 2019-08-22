@@ -1,18 +1,28 @@
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react';
+import axios from 'axios';
 import {
- StyleSheet, View, Alert, TouchableOpacity, AppState,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  AppState,
 } from 'react-native';
 import {
- Container, Footer, FooterTab, Icon, Content, Button, Text 
+  Footer,
+  FooterTab,
+  Icon,
+  Content,
+  Button,
+  Text, 
 } from 'native-base';
-import {
- storeData, getData, storeMulti, getMulti 
-} from './helpers/asyncHelpers';
-// import Link from './subViews/PlaidLink';
 import PlaidAuthenticator from 'react-native-plaid-link';
+import {
+  storeData,
+  getData,
+  storeMulti,
+  getMulti, 
+} from './helpers/asyncHelpers';
 import { NGROK } from '../app.config.json';
-import axios from 'axios';
 
 class PlaidScreen extends React.Component {
   constructor(props) {
@@ -25,15 +35,12 @@ class PlaidScreen extends React.Component {
       userToken: null,
       appState: AppState.currentState
     };
-
-    // this.redirect = this.redirect.bind(this);
   }
 
   async componentWillMount() {
     try {
       const userToken = await getData('userToken');
       if (userToken !== null) {
-        console.log(userToken);
         this.setState({ userToken });
       }
     } catch (error) {
@@ -46,7 +53,6 @@ class PlaidScreen extends React.Component {
   }
 
   onMessage = (data) => {
-    console.log(data);
     this.setState({
       data,
       status: data.action.substr(data.action.lastIndexOf(':') + 1).toUpperCase(),
@@ -55,7 +61,6 @@ class PlaidScreen extends React.Component {
 
   async doStuff() {
     const { status } = this.state;
-    console.log(status, 'status');
     if (status === 'CONNECTED') {
       const { userToken, auth, data: { metadata: { public_token } } } = this.state;
       const { navigation } = this.props;
@@ -70,7 +75,7 @@ class PlaidScreen extends React.Component {
       });
 
       if (auth) {
-        navigation.navigate('AccountAuth', { auth: true });
+        navigation.navigate('AccountAssign', { auth: true });
       } else {
         navigation.navigate('Home');
       }

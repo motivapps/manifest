@@ -13,9 +13,15 @@ import {
 } from 'native-base';
 import axios from 'axios';
 import {
-  Modal, TouchableHighlight, StyleSheet, View, TouchableOpacity, Image, ScrollView, TextInput,
+  Modal,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+  TextInput,
 } from 'react-native';
-import RNPickerSelect, { defaultStyles } from 'react-native-picker-select';
+import RNPickerSelect from 'react-native-picker-select';
 import * as Font from 'expo-font';
 import * as Progress from 'react-native-progress';
 import {
@@ -23,11 +29,12 @@ import {
   UNSPLASH_CLIENT_ID,
 } from '../app.config.json';
 import {
-  storeData, getData, storeMulti, getMulti,
+  storeData,
+  getData,
+  storeMulti,
+  getMulti,
 } from './helpers/asyncHelpers';
 import PropTypes from 'prop-types';
-
-// import { MonoText } from '../components/StyledText';
 
 class GoalsSummaryScreen extends React.Component {
   constructor(props) {
@@ -35,10 +42,6 @@ class GoalsSummaryScreen extends React.Component {
     this.state = {
       isReady: false,
       primaryGoal: null,
-      threeMonthSavings: null,
-      sixMonthSavings: null,
-      oneYearSavings: null,
-      displayedSavings: 0,
       completionDate: null,
       modalVisible: false,
       auth0_id: null,
@@ -60,30 +63,16 @@ class GoalsSummaryScreen extends React.Component {
         auth0_id,
         primaryGoal: response.data[0],
       });
-      console.log('primaryGoal:', this.state.primaryGoal);
-      if (response.data[0].vice_freq === 'Daily') {
-        this.setState({
-          threeMonthSavings: (response.data[0].vice_price * 91.25).toFixed(2),
-          sixMonthSavings: (response.data[0].vice_price * 182.5).toFixed(2),
-          oneYearSavings: (response.data[0].vice_price * 365).toFixed(2),
-          displayedSavings: (response.data[0].vice_price * 91.25).toFixed(2),
-        });
-      }
 
       const daysLeft = (response.data[0].goal_cost - response.data[0].amount_saved) / response.data[0].vice_price;
-      console.log(daysLeft);
       const targetDate = new Date();
       targetDate.setDate(targetDate.getDate() + daysLeft);
-
-      // So you can see the date we have created
-      console.log('targetDate:', targetDate);
 
       const dd = targetDate.getDate();
       const mm = targetDate.getMonth() + 1; // 0 is January, so we must add 1
       const yyyy = targetDate.getFullYear();
 
       const dateString = `${mm}/${dd}/${yyyy}`;
-      console.log('date:', dateString);
       this.setState({ completionDate: dateString });
 
       if (response.data[0]) {
@@ -106,10 +95,19 @@ class GoalsSummaryScreen extends React.Component {
 
   render() {
     const {
-      goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName, auth0_id
+      goalName,
+      goalItem,
+      goalAmount,
+      vicePrice,
+      viceFrequency,
+      viceName,
+      auth0_id,
     } = this.state;
-    // console.log('state:', this.state);
-    const { primaryGoal, isReady, completionDate } = this.state;
+    const {
+      primaryGoal,
+      isReady,
+      completionDate,
+    } = this.state;
 
     const placeholderVices = {
       label: 'Select a vice...',

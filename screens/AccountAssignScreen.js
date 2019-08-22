@@ -15,8 +15,8 @@ export default class AccountAssign extends React.Component {
     this.state = {
       userToken: null,
       accounts: [],
-      to: false,
-      from: false,
+      to: null,
+      from: null,
     };
 
     this.getAccounts = this.getAccounts.bind(this);
@@ -42,14 +42,18 @@ export default class AccountAssign extends React.Component {
     this.setState({
       to: acctId,
     });
-    // await axios.
   }
 
   setFrom(acctId) {
+    const { userToken, to, from } = this.state;
+    const { navigation: { navigate } } = this.props;
+
     this.setState({
       from: acctId,
     });
-    this.props.navigation.navigate('MyAccount');
+
+    axios.post(`accounts/assign/${userToken}`, { to, from })
+      .then(() => navigate('MyAccount'));
   }
 
   getAccounts() {
@@ -61,30 +65,51 @@ export default class AccountAssign extends React.Component {
   }
 
   renderAccounts(type) {
-    const { accounts } = this.state;
-    const designationPrompt = type === 'to'
-      ? 'Select an acccout for us to draw from'
-      : 'Select an account for us to deposit your savings into!';
-    const callback = type === 'to'
+    const { accounts, from } = this.state;
+    const designationPrompt = type !== 'to'
+      ? 'Select an account for us to deposit your savings into!'
+      : 'Select an acccout for us to draw from';
+
+    const callback = type !== 'to'
       ? this.setTo
       : this.setFrom;
 
     // add message to indicate no accounts found
     if (accounts.length) {
-      return accounts.map((response) => {
-        const account = JSON.parse(response);
-        return (
-          <BankItem
-            key={account.account_id}
-            acctId={account.account_id}
-            officialName={account.officialName}
-            subType={account.subtype}
-            name={account.name}
-            designationPrompt={designationPrompt}
-            callback={callback}
-          />
-        );
-      });
+      return type !== 'to'
+        ? accounts
+          .filter((acc) => {
+            console.log(JSON.parse(acc));
+            return JSON.parse(acc).account_id !== this.state.from;
+          })
+          .map((response) => {
+            const account = JSON.parse(response);
+            return (
+              <BankItem
+                key={account.account_id}
+                acctId={account.account_id}
+                officialName={account.officialName}
+                subType={account.subtype}
+                name={account.name}
+                designationPrompt={designationPrompt}
+                callback={callback}
+              />
+            );
+          })
+        : accounts.map((response) => {
+          const account = JSON.parse(response);
+          return (
+            <BankItem
+              key={account.account_id}
+              acctId={account.account_id}
+              officialName={account.officialName}
+              subType={account.subtype}
+              name={account.name}
+              designationPrompt={designationPrompt}
+              callback={callback}
+            />
+          );
+        });
     }
     return null;
   }
@@ -93,15 +118,9 @@ export default class AccountAssign extends React.Component {
     const {
       container,
       viewport,
-      title,
       heading,
-      largeText,
-      smallText,
       smallTextGreen,
-      smallTextLeft,
-      accountButton,
       buttonText,
-      accountColumns,
       footerbar,
     } = styles;
     const { to, from } = this.state;
@@ -111,16 +130,16 @@ export default class AccountAssign extends React.Component {
       <Container style={container}>
         <View style={viewport}>
           <ScrollView>
-          <Text style={heading}>
+            <Text style={heading}>
             Account Selection
           </Text>
-          <Text style={smallTextGreen}>
+            <Text style={smallTextGreen}>
               Please select an account for us to draw from
           </Text>
-            {to ? (
-              this.renderAccounts('from')
+            {from ? (
+              (() => this.renderAccounts('from'))()
             ) : (
-              this.renderAccounts('to')
+              (() => this.renderAccounts('to'))()
             )}
           </ScrollView>
         </View>
@@ -183,7 +202,7 @@ const styles = StyleSheet.create({
     color: '#49d5b6',
     marginBottom: 10,
     marginTop: 12,
-    textAlign: "center",
+    textAlign: 'center',
   },
   largeText: {
     fontWeight: 'bold',

@@ -1,16 +1,19 @@
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react';
-import { StyleSheet, View, Alert, TouchableOpacity, ScrollView, AsyncStorage } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  ScrollView,
+  AsyncStorage,
+} from 'react-native';
 import {
   Container,
   Footer,
   FooterTab,
   Icon,
-  Content,
   Button,
   Text,
-  Item,
-  Input,
   Grid,
   Row,
   Col,
@@ -35,8 +38,8 @@ class GamesScreen extends React.Component {
     try {
       const primaryGoal = await AsyncStorage.getItem('primaryGoal');
       if (primaryGoal !== null) {
-        let parsedGoal = JSON.parse(primaryGoal);
-        this.setState({ streak: parsedGoal.streak_days});
+        const parsedGoal = JSON.parse(primaryGoal);
+        this.setState({ streak: parsedGoal.streak_days });
       }
     } catch (error) {
       console.error(error);

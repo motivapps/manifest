@@ -1,6 +1,11 @@
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react';
-import { Platform, StatusBar, StyleSheet, View, TouchableOpacity, ScrollView, AsyncStorage } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  AsyncStorage,
+} from 'react-native';
 import {
   Container,
   Text,
@@ -8,17 +13,13 @@ import {
   Footer,
   FooterTab,
   Icon,
-  Content,
-  Grid,
-  Col,
-  Row,
 } from 'native-base';
 import { NavigationEvents } from 'react-navigation';
 import axios from 'axios';
 
 import { ProgressChart, BarChart } from 'react-native-chart-kit';
 import { NGROK } from '../app.config.json';
-import { storeData, getData, storeMulti, getMulti } from './helpers/asyncHelpers';
+import { storeData, getData } from './helpers/asyncHelpers';
 
 export default class StatsScreen extends React.Component {
   constructor(props) {
@@ -41,33 +42,6 @@ export default class StatsScreen extends React.Component {
 
   async componentWillMount() {
     this.updateAsyncStorageForStats();
-    // try {
-    //   const primaryGoal = await AsyncStorage.getItem('primaryGoal');
-    //   if (primaryGoal !== null) {
-    //     let parsedGoal = JSON.parse(primaryGoal);
-    //     let relapseTotal = parsedGoal.relapse_cost_total / parsedGoal.goal_cost;
-    //     console.log('amount:', parsedGoal.amount_saved);
-    //     let savedTotal = parsedGoal.amount_saved / parsedGoal.goal_cost;
-
-    //     const dailySavings = parsedGoal.daily_savings;
-    //     console.log('goal:', primaryGoal);
-    //     this.setState({ 
-    //       primaryGoal: parsedGoal,
-    //       circleData: {
-    //         labels: ['Relapses', parsedGoal.vice],
-    //         data: [relapseTotal, savedTotal],
-    //       },
-    //       barchartData: {
-    //         labels: ['Daily', 'Weekly', 'Monthly'],
-    //         datasets: [{
-    //           data: [dailySavings, dailySavings * 7, dailySavings * 30],
-    //         }],
-    //       },
-    //     });
-    //   }
-    // } catch (error) {
-    //   console.error(error);
-    // }
   }
 
   async updateAsyncStorageForStats() {
@@ -105,41 +79,11 @@ export default class StatsScreen extends React.Component {
         storeData('primaryGoal', JSON.stringify(response.data[0]));
       }
     }).catch(error => console.log(error));
-
-
-    // try {
-    //   const primaryGoal = await AsyncStorage.getItem('primaryGoal');
-    //   if (primaryGoal !== null) {
-    //     let parsedGoal = JSON.parse(primaryGoal);
-    //     let relapseTotal = parsedGoal.relapse_cost_total / parsedGoal.goal_cost;
-    //     console.log('amount:', parsedGoal.amount_saved);
-    //     let savedTotal = parsedGoal.amount_saved / parsedGoal.goal_cost;
-
-    //     const dailySavings = parsedGoal.daily_savings;
-    //     console.log('goal:', primaryGoal);
-    //     this.setState({
-    //       primaryGoal: parsedGoal,
-    //       circleData: {
-    //         labels: ['Relapses', parsedGoal.vice],
-    //         data: [relapseTotal, savedTotal],
-    //       },
-    //       barchartData: {
-    //         labels: ['Daily', 'Weekly', 'Monthly'],
-    //         datasets: [{
-    //           data: [dailySavings, dailySavings * 7, dailySavings * 30],
-    //         }],
-    //       },
-    //     });
-    //   }
-    // } catch (error) {
-    //   console.error(error);
-    // }
   }
 
   render() {
     const { circleData, barchartData, primaryGoal } = this.state;
 
-    
     return (
       <Container style={styles.container}>
         <View style={styles.viewport}>
@@ -148,7 +92,7 @@ export default class StatsScreen extends React.Component {
           />
           <Text style={styles.heading}>My Progress</Text>
 
-          <ProgressChart 
+          <ProgressChart
             data={circleData}
             width={350}
             height={180}

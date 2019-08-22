@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppLoading, Notifications } from 'expo';
+import { AppLoading } from 'expo';
 import {
   Container,
   Text,
@@ -7,7 +7,6 @@ import {
   Footer,
   FooterTab,
   Icon,
-  Content,
   Grid,
   Row,
   Col,
@@ -21,32 +20,14 @@ import { NavigationEvents } from 'react-navigation';
 
 import * as Font from 'expo-font';
 import * as Progress from 'react-native-progress';
-import { kayak } from '../assets/images/kayak.jpg';
-import {
-  FOURSQUARE_CLIENT_ID,
-  FOURSQUARE_CLIENT_SECRET,
-  NGROK,
-  GOOGLE_OAUTH_ID,
-  PUSH_TOKEN,
-} from '../app.config.json';
-import {
- storeData, getData, storeMulti, getMulti 
-} from './helpers/asyncHelpers';
-
-// import { MonoText } from '../components/StyledText';
+import { NGROK } from '../app.config.json';
+import { storeData, getData } from './helpers/asyncHelpers';
 
 class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isReady: false,
-      buttonToggle: false,
-      isAuthenticated: false,
-      latitude: null,
-      longitude: null,
-      dangerDistance: null,
-      pushToken: null,
-      // authID: GOOGLE_OAUTH_ID,
       primaryGoal: null,
       threeMonthSavings: null,
       sixMonthSavings: null,
@@ -54,7 +35,6 @@ class HomeScreen extends React.Component {
       displayedSavings: 0,
       completionDate: null,
     };
-    // this.onToggleButton = this.onToggleButton.bind(this);
     this.setState = this.setState.bind(this);
     this.updateAsyncStorage = this.updateAsyncStorage.bind(this);
     this.onToggleThreeMonths = this.onToggleThreeMonths.bind(this);
@@ -128,8 +108,14 @@ class HomeScreen extends React.Component {
 
   render() {
     const {
- primaryGoal, isReady, displayedSavings, threeMonthSavings, sixMonthSavings, oneYearSavings, completionDate 
-} = this.state;
+      primaryGoal,
+      isReady,
+      displayedSavings,
+      threeMonthSavings,
+      sixMonthSavings,
+      oneYearSavings,
+      completionDate,
+    } = this.state;
 
     if (!isReady) {
       return <AppLoading />;

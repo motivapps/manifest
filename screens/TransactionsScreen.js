@@ -29,7 +29,6 @@ export default class Transactions extends React.Component {
     try {
       const userToken = await AsyncStorage.getItem('userToken');
       if (userToken !== null) {
-        console.log(userToken);
         this.setState({ userToken });
       }
     } catch (error) {
@@ -45,7 +44,7 @@ export default class Transactions extends React.Component {
   onDenyGuilt(transaction) {
     const { userToken } = this.state;
     axios.patch(`${NGROK}/deny_transaction/${userToken}`, transaction)
-      .then((response) => {
+      .then(() => {
         this.getTransactions();
       });
   }
@@ -53,7 +52,7 @@ export default class Transactions extends React.Component {
   onRelapse(transaction) {
     const { userToken } = this.state;
     axios.patch(`${NGROK}/accept_transaction/${userToken}`, transaction)
-      .then((response) => {
+      .then(() => {
         this.getTransactions();
       });
   }
@@ -86,20 +85,13 @@ export default class Transactions extends React.Component {
     const {
       container,
       viewport,
-      title,
       heading,
-      largeText,
-      smallText,
       smallTextGreen,
-      smallTextLeft,
-      transactionButton,
       buttonText,
-      transactionColumns,
       footerbar,
     } = styles;
     const { isReady } = this.state;
     if (isReady) {
-
       return (
         <Container style={container}>
           <View style={viewport}>

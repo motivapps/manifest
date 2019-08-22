@@ -61,7 +61,7 @@ export default class AccountAssign extends React.Component {
   }
 
   renderAccounts(type) {
-    const { accounts } = this.state;
+    const { accounts, to } = this.state;
     const designationPrompt = type === 'to'
       ? 'Select an acccout for us to draw from'
       : 'Select an account for us to deposit your savings into!';
@@ -71,20 +71,37 @@ export default class AccountAssign extends React.Component {
 
     // add message to indicate no accounts found
     if (accounts.length) {
-      return accounts.map((response) => {
-        const account = JSON.parse(response);
-        return (
-          <BankItem
-            key={account.account_id}
-            acctId={account.account_id}
-            officialName={account.officialName}
-            subType={account.subtype}
-            name={account.name}
-            designationPrompt={designationPrompt}
-            callback={callback}
-          />
-        );
-      });
+      return type === 'to'
+        ? accounts.map((response) => {
+          const account = JSON.parse(response);
+          return (
+            <BankItem
+              key={account.account_id}
+              acctId={account.account_id}
+              officialName={account.officialName}
+              subType={account.subtype}
+              name={account.name}
+              designationPrompt={designationPrompt}
+              callback={callback}
+            />
+          );
+        })
+        : accounts
+          .filter(acc => acc.account_id !== to)
+          .map((response) => {
+            const account = JSON.parse(response);
+            return (
+              <BankItem
+                key={account.account_id}
+                acctId={account.account_id}
+                officialName={account.officialName}
+                subType={account.subtype}
+                name={account.name}
+                designationPrompt={designationPrompt}
+                callback={callback}
+              />
+            );
+          });
     }
     return null;
   }
@@ -111,10 +128,10 @@ export default class AccountAssign extends React.Component {
       <Container style={container}>
         <View style={viewport}>
           <ScrollView>
-          <Text style={heading}>
+            <Text style={heading}>
             Account Selection
           </Text>
-          <Text style={smallTextGreen}>
+            <Text style={smallTextGreen}>
               Please select an account for us to draw from
           </Text>
             {to ? (
@@ -183,7 +200,7 @@ const styles = StyleSheet.create({
     color: '#49d5b6',
     marginBottom: 10,
     marginTop: 12,
-    textAlign: "center",
+    textAlign: 'center',
   },
   largeText: {
     fontWeight: 'bold',

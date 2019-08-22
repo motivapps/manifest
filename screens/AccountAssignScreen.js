@@ -42,7 +42,6 @@ export default class AccountAssign extends React.Component {
     this.setState({
       to: acctId,
     });
-    // await axios.
   }
 
   setFrom(acctId) {
@@ -52,7 +51,8 @@ export default class AccountAssign extends React.Component {
 
     const { userToken, to, from } = this.state;
     const { navigation: { navigate } } = this.props;
-    axios.post(`/accounts/assign/${userToken}`, { to, from })
+
+    axios.post(`${NGROK}/accounts/assign/${userToken}`, { to, from })
       .then(() => navigate('MyAccount'))
       .catch(err => console.error(err));
   }

@@ -14,7 +14,9 @@ import {
 } from 'native-base';
 import * as Permissions from 'expo-permissions';
 import axios from 'axios';
-import { Platform, StatusBar, StyleSheet, View, TouchableOpacity, Image, ScrollView } from 'react-native';
+import {
+ Platform, StatusBar, StyleSheet, View, TouchableOpacity, Image, ScrollView 
+} from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 
 import * as Font from 'expo-font';
@@ -27,7 +29,9 @@ import {
   GOOGLE_OAUTH_ID,
   PUSH_TOKEN,
 } from '../app.config.json';
-import { storeData, getData, storeMulti, getMulti } from './helpers/asyncHelpers';
+import {
+ storeData, getData, storeMulti, getMulti 
+} from './helpers/asyncHelpers';
 
 // import { MonoText } from '../components/StyledText';
 
@@ -60,41 +64,6 @@ class HomeScreen extends React.Component {
 
   async componentWillMount() {
     this.updateAsyncStorage();
-    // const auth0_id = await getData('userToken');
-
-    // axios.get(`${NGROK}/goals/${auth0_id}`).then((response) => {
-    //   this.setState({
-    //     auth0_id,
-    //     primaryGoal: response.data[0],
-    //   });
-    //   console.log('primaryGoal:', this.state.primaryGoal);
-    //     this.setState({
-    //       threeMonthSavings: (response.data[0].daily_savings * 91.25).toFixed(2),
-    //       sixMonthSavings: (response.data[0].daily_savings * 182.5).toFixed(2),
-    //       oneYearSavings: (response.data[0].daily_savings * 365).toFixed(2),
-    //       displayedSavings: (response.data[0].daily_savings * 91.25).toFixed(2),
-    //     });
-     
-    //   const daysLeft = (response.data[0].goal_cost - response.data[0].amount_saved) / response.data[0].daily_savings;
-    //   console.log(daysLeft);
-    //   const targetDate = new Date();
-    //   targetDate.setDate(targetDate.getDate() + daysLeft);
-
-    //   // So you can see the date we have created
-    //   console.log('targetDate:', targetDate);
-
-    //   const dd = targetDate.getDate();
-    //   const mm = targetDate.getMonth() + 1; // 0 is January, so we must add 1
-    //   const yyyy = targetDate.getFullYear();
-
-    //   var dateString = mm + "/" + dd + "/" + yyyy;
-    //   console.log('date:', dateString);
-    //   this.setState({ completionDate: dateString });
-
-    //   if (response.data[0]) {
-    //     storeData('primaryGoal', JSON.stringify(response.data[0]));
-    //   }
-    // }).catch(error => console.log(error));
   }
 
   async componentDidMount() {
@@ -104,52 +73,6 @@ class HomeScreen extends React.Component {
     });
 
     this.setState({ isReady: true });
-  }
-
-  // async componentDidUpdate() {
-  //   const primaryGoal = await getData('primaryGoal');
-  //   const auth0_id = await getData('userToken');
-
-  //   this.state.auth0_id = auth0_id;
-  //   this.state.primaryGoal = primaryGoal;
-  // }
-
-  async updateAsyncStorage() {
-    const auth0_id = await getData('userToken');
-
-    axios.get(`${NGROK}/goals/${auth0_id}`).then((response) => {
-      this.setState({
-        auth0_id,
-        primaryGoal: response.data[0],
-      });
-      console.log('primaryGoal:', this.state.primaryGoal);
-      this.setState({
-        threeMonthSavings: (response.data[0].daily_savings * 91.25).toFixed(2),
-        sixMonthSavings: (response.data[0].daily_savings * 182.5).toFixed(2),
-        oneYearSavings: (response.data[0].daily_savings * 365).toFixed(2),
-        displayedSavings: (response.data[0].daily_savings * 91.25).toFixed(2),
-      });
-
-      const daysLeft = (response.data[0].goal_cost - response.data[0].amount_saved) / response.data[0].daily_savings;
-      console.log(daysLeft);
-      const targetDate = new Date();
-      targetDate.setDate(targetDate.getDate() + daysLeft);
-
-      // So you can see the date we have created
-      console.log('targetDate:', targetDate);
-
-      const dd = targetDate.getDate();
-      const mm = targetDate.getMonth() + 1; // 0 is January, so we must add 1
-      const yyyy = targetDate.getFullYear();
-
-      var dateString = mm + "/" + dd + "/" + yyyy;
-      console.log('date:', dateString);
-      this.setState({ completionDate: dateString });
-
-      if (response.data[0]) {
-        storeData('primaryGoal', JSON.stringify(response.data[0]));
-      }
-    }).catch(error => console.log(error));
   }
 
   onToggleThreeMonths(amount) {
@@ -170,9 +93,43 @@ class HomeScreen extends React.Component {
     });
   }
 
+  async updateAsyncStorage() {
+    const auth0_id = await getData('userToken');
+
+    axios.get(`${NGROK}/goals/${auth0_id}`).then((response) => {
+      this.setState({
+        auth0_id,
+        primaryGoal: response.data[0],
+      });
+      console.log('primaryGoal:', this.state.primaryGoal);
+      this.setState({
+        threeMonthSavings: (response.data[0].daily_savings * 91.25).toFixed(2),
+        sixMonthSavings: (response.data[0].daily_savings * 182.5).toFixed(2),
+        oneYearSavings: (response.data[0].daily_savings * 365).toFixed(2),
+        displayedSavings: (response.data[0].daily_savings * 91.25).toFixed(2),
+      });
+
+      const daysLeft = (response.data[0].goal_cost - response.data[0].amount_saved) / response.data[0].daily_savings;
+      const targetDate = new Date();
+      targetDate.setDate(targetDate.getDate() + daysLeft);
+
+      const dd = targetDate.getDate();
+      const mm = targetDate.getMonth() + 1; // 0 is January, so we must add 1
+      const yyyy = targetDate.getFullYear();
+
+      let dateString = `${mm}/${dd}/${yyyy}`;
+      this.setState({ completionDate: dateString });
+
+      if (response.data[0]) {
+        storeData('primaryGoal', JSON.stringify(response.data[0]));
+      }
+    }).catch(error => console.log(error));
+  }
+
   render() {
-    // console.log('state:', this.state);
-    const { primaryGoal, isReady, displayedSavings, threeMonthSavings, sixMonthSavings, oneYearSavings, completionDate } = this.state;
+    const {
+ primaryGoal, isReady, displayedSavings, threeMonthSavings, sixMonthSavings, oneYearSavings, completionDate 
+} = this.state;
 
     if (!isReady) {
       return <AppLoading />;
@@ -180,13 +137,18 @@ class HomeScreen extends React.Component {
     return (
       <Container style={styles.container}>
         <View style={styles.viewport}>
-        <NavigationEvents
+          <NavigationEvents
           onWillFocus={this.updateAsyncStorage}
-          />
-        <ScrollView>
-          <Text style={styles.heading}>Goal: {primaryGoal ? primaryGoal.goal_name : 'No goal set'} </Text>
+        />
+          <ScrollView>
+          <Text style={styles.heading}>
+Goal:
+{' '}
+{primaryGoal ? primaryGoal.goal_name : 'No goal set'}
+{' '}
+ </Text>
 
-            <Image style={styles.mainImage} source={{ uri: primaryGoal ? primaryGoal.goal_photo : "http://cdn.shopify.com/s/files/1/0682/0839/products/Vibe-Yellowfin-100-Kayak-Caribbean_Journey_grande.jpg?v=1555360419" }} />
+          <Image style={styles.mainImage} source={{ uri: primaryGoal ? primaryGoal.goal_photo : 'http://cdn.shopify.com/s/files/1/0682/0839/products/Vibe-Yellowfin-100-Kayak-Caribbean_Journey_grande.jpg?v=1555360419' }} />
 
           <Progress.Bar
             progress={primaryGoal ? primaryGoal.amount_saved / primaryGoal.goal_cost : 0}
@@ -197,17 +159,46 @@ class HomeScreen extends React.Component {
             style={{ alignSelf: 'center' }}
           />
           <View style={{ marginTop: 10, marginBottom: 10 }}>
-            <Text style={styles.smallText}>Projected Completion Date: {completionDate ? completionDate : 'Loading...'}</Text>
+            <Text style={styles.smallText}>
+Projected Completion Date:
+{' '}
+{completionDate ? completionDate : 'Loading...'}
+</Text>
           </View>
           <View style={{ marginBottom: 10, marginLeft: 0 }}>
-            <Text style={styles.largeText}>Money Saved: ${primaryGoal ? primaryGoal.amount_saved : 0}</Text>
-            <Text style={styles.largeText}>Current Streak: {primaryGoal ? primaryGoal.streak_days : 0} Days</Text>
+            <Text style={styles.largeText}>
+Money Saved: $
+{primaryGoal ? primaryGoal.amount_saved : 0}
+</Text>
+            <Text style={styles.largeText}>
+Current Streak:
+{' '}
+{primaryGoal ? primaryGoal.streak_days : 0}
+{' '}
+Days
+</Text>
           </View>
 
-          <Text style={styles.smallTextLeft}>Relapses: {primaryGoal ? primaryGoal.relapse_count : 0}</Text>
-          <Text style={styles.smallTextLeft}>Money Lost: ${primaryGoal ? primaryGoal.relapse_cost_total : 0}</Text>
-          <Text style={styles.smallTextLeft}>Setback: {primaryGoal ? primaryGoal.relapse_count : 0} days</Text>
-          <Text style={styles.smallTextGreenLeft}>Savings Projection: ${displayedSavings}</Text>
+          <Text style={styles.smallTextLeft}>
+Relapses:
+{' '}
+{primaryGoal ? primaryGoal.relapse_count : 0}
+</Text>
+          <Text style={styles.smallTextLeft}>
+Money Lost: $
+{primaryGoal ? primaryGoal.relapse_cost_total : 0}
+</Text>
+          <Text style={styles.smallTextLeft}>
+Setback:
+{' '}
+{primaryGoal ? primaryGoal.relapse_count : 0}
+{' '}
+days
+</Text>
+          <Text style={styles.smallTextGreenLeft}>
+Savings Projection: $
+{displayedSavings}
+</Text>
           <Grid style={{ width: '100%', marginTop: 10 }}>
             <Row style={{ width: '100%' }}>
               <Col style={{ backgroundColor: '#fff', height: 60 }}>
@@ -227,7 +218,7 @@ class HomeScreen extends React.Component {
               </Col>
             </Row>
           </Grid>
-          </ScrollView>
+        </ScrollView>
         </View>
 
         <Footer style={styles.footerbar}>

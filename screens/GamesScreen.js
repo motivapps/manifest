@@ -17,6 +17,9 @@ import {
   Thumbnail,
 } from 'native-base';
 import { NavigationEvents } from 'react-navigation';
+import { ScreenOrientation } from 'expo';
+
+// ScreenOrientation.lockAsync(ScreenOrientation.Orientation.PORTRAIT);
 
 class GamesScreen extends React.Component {
   constructor(props) {
@@ -25,7 +28,7 @@ class GamesScreen extends React.Component {
       streak: 0,
     };
 
-    this.lockOrientation = this.lockOrientation.bind(this);
+  this.lockOrientation = this.lockOrientation.bind(this);
   }
 
   async componentWillMount() {
@@ -41,7 +44,7 @@ class GamesScreen extends React.Component {
   }
 
   async lockOrientation() {
-    await this.ScreenOrientation.lockAsync(this.ScreenOrientation.Orientation.PORTRAIT);
+    await ScreenOrientation.lockAsync(ScreenOrientation.Orientation.PORTRAIT);
   }
 
   render() {

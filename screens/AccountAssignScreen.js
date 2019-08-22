@@ -93,15 +93,9 @@ export default class AccountAssign extends React.Component {
     const {
       container,
       viewport,
-      title,
       heading,
-      largeText,
-      smallText,
       smallTextGreen,
-      smallTextLeft,
-      accountButton,
       buttonText,
-      accountColumns,
       footerbar,
     } = styles;
     const { to, from } = this.state;

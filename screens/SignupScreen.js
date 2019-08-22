@@ -1,16 +1,24 @@
 import React from 'react';
 import axios from 'axios';
 import { SwitchActions, NavigationActions } from 'react-navigation';
-import { Button, Grid, Row, Col, Container } from 'native-base';
 import {
-  StyleSheet, View, Alert, Text, AsyncStorage, Image,
+  Button,
+  Grid,
+  Row,
+  Col,
+  Container,
+} from 'native-base';
+import {
+  StyleSheet,
+  View,
+  Alert,
+  Text,
+  AsyncStorage,
+  Image,
 } from 'react-native';
-// import { NavigationActions, } from 'react-navigation';
-// import { Container, Footer, FooterTab, Icon, Content, Button, Text } from 'native-base';
 import { AuthSession } from 'expo';
 import jwtDecode from 'jwt-decode';
 import { AUTHO_CLIENT_ID, AUTHO_DOMAIN, NGROK } from '../app.config.json';
-import Auth0 from './subViews/Auth0';
 
 function toQueryString(params) {
   return `?${Object.entries(params)
@@ -51,7 +59,6 @@ class SignupScreen extends React.Component {
     // Retrieve the redirect URL, add this to the callback URL list
     // of your Auth0 application.
     const redirectUrl = AuthSession.getRedirectUrl();
-    console.log(`Redirect URL: ${redirectUrl}`);
 
     // Structure the auth parameters and URL
     const queryParams = toQueryString({
@@ -62,11 +69,9 @@ class SignupScreen extends React.Component {
       nonce: 'nonce', // ideally, this will be a random value
     });
     const authUrl = `${AUTHO_DOMAIN}/authorize${queryParams}`;
-    console.log('authURL', authUrl);
 
     // Perform the authentication
     const response = await AuthSession.startAsync({ authUrl });
-    console.log('Authentication response', response);
 
     if (response.type === 'success') {
       this.handleResponse(response.params);
@@ -77,7 +82,6 @@ class SignupScreen extends React.Component {
     // Retrieve the redirect URL, add this to the callback URL list
     // of your Auth0 application.
     const redirectUrl = AuthSession.getRedirectUrl();
-    console.log(`Redirect URL: ${redirectUrl}`);
 
     // Structure the auth parameters and URL
     const queryParams = toQueryString({
@@ -88,11 +92,9 @@ class SignupScreen extends React.Component {
       nonce: 'nonce', // ideally, this will be a random value
     });
     const authUrl = `${AUTHO_DOMAIN}/authorize${queryParams}`;
-    console.log('authURL', authUrl);
 
     // Perform the authentication
     const response = await AuthSession.startAsync({ authUrl });
-    console.log('Authentication response', response);
 
     if (response.type === 'success') {
       this.handleResponse(response.params, 'login');
@@ -109,8 +111,6 @@ class SignupScreen extends React.Component {
       // Retrieve the JWT token and decode it
       const jwtToken = response.id_token;
       const { name, picture, sub } = jwtDecode(jwtToken);
-
-      console.log('JWTotken data', jwtDecode(jwtToken));
 
       axios.post(`${NGROK}/login`, { auth0_id: sub })
         .then((response) => {
@@ -131,9 +131,7 @@ class SignupScreen extends React.Component {
       // Retrieve the JWT token and decode it
       const jwtToken = response.id_token;
       const { name, sub, picture } = jwtDecode(jwtToken);
-      
-      console.log('JWTotken data', jwtDecode(jwtToken));
-      
+
       axios.post(`${NGROK}/signup`, { name, auth0_id: sub, picture })
         .then((response) => {
           const { navigation } = this.props;
@@ -154,47 +152,47 @@ class SignupScreen extends React.Component {
     const { navigation } = this.props;
 
     return (
-   
+
       <Container style={styles.container}>
         <View style={styles.viewport}>
-        <Grid style={{ width: '100%', marginTop: 10 }}>
-          <Row style={{ width: '100%' }}>
-            <Col style={{ backgroundColor: '#fff', height: 60 }}> 
-            <Text style={styles.smallText}>New to Manifest?</Text>
-            <Button style={styles.transactionButton} onPress={this.signup}>
-              <Text style={styles.buttonText}>Signup</Text>
-            </Button>
-            </Col>
+          <Grid style={{ width: '100%', marginTop: 10 }}>
+            <Row style={{ width: '100%' }}>
+              <Col style={{ backgroundColor: '#fff', height: 60 }}>
+                <Text style={styles.smallText}>New to Manifest?</Text>
+                <Button style={styles.transactionButton} onPress={this.signup}>
+                  <Text style={styles.buttonText}>Signup</Text>
+                </Button>
+              </Col>
             </Row>
             <Row>
-            <Col style={{ backgroundColor: '#fff', height: 60 }}>
-            <Text style={styles.smallText}>Already have an account?</Text>
-            <Button style={styles.transactionButtonDark} onPress={this.login}>
-              <Text style={styles.buttonText}>Login</Text>
-            </Button>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <Text style={styles.brand}>Manifest</Text>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-            <Image
-              style={styles.logo}
-              source={require('../assets/images/ManifestLogo.png')}
+              <Col style={{ backgroundColor: '#fff', height: 60 }}>
+                <Text style={styles.smallText}>Already have an account?</Text>
+                <Button style={styles.transactionButtonDark} onPress={this.login}>
+                  <Text style={styles.buttonText}>Login</Text>
+                </Button>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <Text style={styles.brand}>Manifest</Text>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <Image
+                  style={styles.logo}
+                  source={require('../assets/images/ManifestLogo.png')}
             />
-            </Col>
-          </Row>
-        <Row>
-          <Col>
-            <Text style={styles.smallText}>Automate your savings while quitting your vices.</Text>
-          </Col>
-        </Row>
-        </Grid>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <Text style={styles.smallText}>Automate your savings while quitting your vices.</Text>
+              </Col>
+            </Row>
+          </Grid>
         </View>
-        </Container>
+      </Container>
 
     );
   }

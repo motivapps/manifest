@@ -49,7 +49,12 @@ export default class AccountAssign extends React.Component {
     this.setState({
       from: acctId,
     });
-    this.props.navigation.navigate('MyAccount');
+
+    const { userToken, to, from } = this.state;
+    const { navigation: { navigate } } = this.props;
+    axios.post(`/accounts/assign/${userToken}`, { to, from })
+      .then(() => navigate('MyAccount'))
+      .catch(err => console.error(err));
   }
 
   getAccounts() {
@@ -115,7 +120,7 @@ export default class AccountAssign extends React.Component {
             Account Selection
           </Text>
           <Text style={smallTextGreen}>
-              Please select an account for us to draw from
+            Almost Done! Please designate accounts for withdrawls and deposits
           </Text>
             {to ? (
               this.renderAccounts('from')

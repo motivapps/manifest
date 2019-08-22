@@ -72,7 +72,6 @@ class GoalsScreen extends React.Component {
     axios.get(`https://api.unsplash.com/search/photos?page=1&query=${goalItem}
 &client_id=${UNSPLASH_CLIENT_ID}`)
       .then((response) => {
-        console.log('unsplash response:', response.data.results[0].urls.thumb);
         return axios.post(`${NGROK}/user/goals`, {
           goalName, goalItem, goalAmount, vicePrice, viceFrequency, viceName, userId, goalPhoto: response.data.results[0].urls.thumb,
         });
@@ -268,7 +267,7 @@ class GoalsScreen extends React.Component {
                 </Button>
               ) : (
                 <Button style={styles.saveButton}>
-                  <Text style={styles.buttonText} onPress={this.onHandleSubmit}>
+                  <Text style={styles.buttonText} onPress={() => this.onHandleSubmit('GoalSummary')}>
                     Save Goal
                   </Text>
                 </Button>

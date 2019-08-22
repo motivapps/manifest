@@ -25,6 +25,7 @@ import {
 import {
   storeData, getData, storeMulti, getMulti,
 } from './helpers/asyncHelpers';
+import PropTypes from 'prop-types';
 
 // import { MonoText } from '../components/StyledText';
 
@@ -157,6 +158,8 @@ class GoalsSummaryScreen extends React.Component {
     }
     return (
       <Container style={styles.container}>
+        <View style={styles.viewport}>
+          <ScrollView>
         <View style={{ marginTop: 22 }}>
           <Modal
             animationType="slide"
@@ -314,8 +317,7 @@ class GoalsSummaryScreen extends React.Component {
             </View>
           </Modal>
         </View>
-        <View style={styles.viewport}>
-          <ScrollView>
+        
             <Text style={styles.heading}>My Goals</Text>
 
             <Grid style={{ width: '100%', marginTop: 10 }}>
@@ -346,12 +348,12 @@ Category:
             </Text>
 
             <Progress.Circle
-              size={30}
+             
               progress={primaryGoal ? primaryGoal.amount_saved / primaryGoal.goal_cost : 0}
               color="#49d5b6"
               unfilledColor="#cccccc"
               size={250}
-              showsText
+              showsText={true}
               style={{ alignSelf: 'center', margin: 10 }}
               textStyle={{ fontWeight: 'bold' }}
               thickness={8}

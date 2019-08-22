@@ -70,7 +70,7 @@ class PlaidScreen extends React.Component {
       });
 
       if (auth) {
-        navigation.navigate('AccountAuth', { auth: true });
+        navigation.navigate('AccountAssign', { auth: true });
       } else {
         navigation.navigate('Home');
       }

@@ -1,6 +1,11 @@
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react';
-import { Platform, StatusBar, StyleSheet, View, TouchableOpacity, ScrollView, AsyncStorage } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  AsyncStorage,
+} from 'react-native';
 import {
   Container,
   Text,
@@ -8,14 +13,8 @@ import {
   Footer,
   FooterTab,
   Icon,
-  Content,
-  Grid,
-  Col,
-  Row,
 } from 'native-base';
-
 import { ProgressChart, BarChart } from 'react-native-chart-kit';
-import { NGROK } from '../app.config.json';
 
 export default class StatsScreen extends React.Component {
   constructor(props) {
@@ -41,18 +40,9 @@ export default class StatsScreen extends React.Component {
       if (primaryGoal !== null) {
         let parsedGoal = JSON.parse(primaryGoal);
         let relapseTotal = parsedGoal.relapse_cost_total / parsedGoal.goal_cost;
-        console.log('amount:', parsedGoal.amount_saved);
         let savedTotal = parsedGoal.amount_saved / parsedGoal.goal_cost;
 
         const dailySavings = parsedGoal.daily_savings;
-        // if (parsedGoal.vice_freq === 'Daily') {
-        //   dailySavings = parsedGoal.vice_price;
-        // } else if (parsedGoal.vice_freq === 'Twice Per Week') {
-        //   dailySavings = (parsedGoal.vice_price * 2) / 7;
-        // } else if (parsedGoal.vice_freq === 'Once Per Week') {
-        //   dailySavings = parsedGoal.vice_price / 7;
-        // }
-        console.log('goal:', primaryGoal);
         this.setState({ 
           primaryGoal: parsedGoal,
           circleData: {
@@ -81,7 +71,7 @@ export default class StatsScreen extends React.Component {
         <View style={styles.viewport}>
           <Text style={styles.heading}>My Progress</Text>
 
-          <ProgressChart 
+          <ProgressChart
             data={circleData}
             width={350}
             height={180}

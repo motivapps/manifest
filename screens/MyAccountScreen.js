@@ -12,17 +12,13 @@ import {
   Footer,
   FooterTab,
   Icon,
-  Content,
   Button,
   Text,
-  Item,
-  Input,
   Grid,
   Row,
   Col,
   Thumbnail,
 } from 'native-base';
-
 import axios from 'axios';
 import { NGROK } from '../app.config.json';
 
@@ -39,18 +35,16 @@ class MyAccountScreen extends React.Component {
     try {
       const userToken = await AsyncStorage.getItem('userToken');
       if (userToken !== null) {
-        console.log(userToken);
         this.setState({ userToken });
         axios.get(`${NGROK}/user/${userToken}`)
           .then((response) => {
-            console.log('userId from front :', response.data);
-            this.setState({ 
+            this.setState({
               profilePic: response.data.picture,
-              name: response.data.name 
+              name: response.data.name, 
             });
           })
           .catch((err) => {
-            console.log('userId get error:', err);
+            console.error('userId get error:', err);
           });
       }
     } catch (error) {

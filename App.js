@@ -37,6 +37,7 @@ class App extends React.Component {
   
   async componentDidMount() {
     primaryGoal = await AsyncStorage.getItem('primaryGoal');
+    primaryGoal = JSON.parse(primaryGoal);
     try {
       const userToken = await AsyncStorage.getItem('userToken');
       if (userToken !== null) {
@@ -143,7 +144,7 @@ TaskManager.defineTask('callFoursquare', ({ data: { locations }, error }) => {
     category = '4bf58dd8d48988d16e941735';
     purchase = 'that deadly food.';
   }
-  // THIS IS STILL ONLY LOOKING FOR COFFEE SHOPS WITHIN 300 METER RADIUS
+  
   axios
     .get(
       `https://api.foursquare.com/v2/venues/search?client_id=${FOURSQUARE_CLIENT_ID}
@@ -152,13 +153,14 @@ TaskManager.defineTask('callFoursquare', ({ data: { locations }, error }) => {
           &intent=checkin&radius=300&categoryId=${category}&v=20190812`,
     )
     .then((response) => {
+      console.log('category: ', category)
       const { distance } = response.data.response.venues[0].location;
       const { name } = response.data.response.venues[0];
       console.log('Foursquare worked!', response.data.response.venues[0]);
       return { distance, name };
     })
     .then(({ distance, name }) => {
-      if (distance < 10) {
+      if (distance <= 15) {
       // User is close to coffee shop, send notification
         axios
           .post(
@@ -167,7 +169,7 @@ TaskManager.defineTask('callFoursquare', ({ data: { locations }, error }) => {
               to: pushToken,
               sound: 'default',
               title: 'Manifest',
-              body: `Step away from ${name}. Don't go in there for ${purchase}`,
+              body: `Step away from ${name}. Don't spend your money ${purchase}`,
             },
             {
               headers: {

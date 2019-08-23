@@ -18,6 +18,9 @@ This is a mobile app built using Expo. To use it, you'll need to run the followi
 `$ npm start` OR `$ expo start`
 **** it is recommended to use `expo start` and to have an account with expo in order to make sure all aspects of the app work. This is mainly due to the way Expo handles authentication.
 
+In order to run Manifest, you'll also have to download the Node server.
+https://github.com/motivapps/manifest-server
+
 # Necessary API keys
 In order to use, you'll need a `.env` file in the root directory with credentials from the following APIs:
 Plaid

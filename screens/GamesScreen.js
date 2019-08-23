@@ -19,6 +19,10 @@ import {
   Col,
   Thumbnail,
 } from 'native-base';
+import { NavigationEvents } from 'react-navigation';
+import { ScreenOrientation } from 'expo';
+
+// ScreenOrientation.lockAsync(ScreenOrientation.Orientation.PORTRAIT);
 
 class GamesScreen extends React.Component {
   constructor(props) {
@@ -26,6 +30,8 @@ class GamesScreen extends React.Component {
     this.state = {
       streak: 0,
     };
+
+  this.lockOrientation = this.lockOrientation.bind(this);
   }
 
   async componentWillMount() {
@@ -40,6 +46,10 @@ class GamesScreen extends React.Component {
     }
   }
 
+  async lockOrientation() {
+    await ScreenOrientation.lockAsync(ScreenOrientation.Orientation.PORTRAIT);
+  }
+
   render() {
     const { navigate } = this.props.navigation;
     const { streak } = this.state;
@@ -47,6 +57,9 @@ class GamesScreen extends React.Component {
     return (
       <Container style={styles.container}>
         <View style={styles.viewport}>
+          <NavigationEvents
+            onWillFocus={this.lockOrientation}
+          />
         <ScrollView>
           <Text style={styles.heading}>My Games</Text>
 

@@ -14,12 +14,13 @@ import {
 import * as Permissions from 'expo-permissions';
 import axios from 'axios';
 import {
- Platform, StatusBar, StyleSheet, View, TouchableOpacity, Image, ScrollView 
+ Platform, StatusBar, StyleSheet, View, TouchableOpacity, Image, ScrollView, TouchableHighlight
 } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 
 import * as Font from 'expo-font';
 import * as Progress from 'react-native-progress';
+// import { TouchableHighlight } from 'react-native-gesture-handler';
 import { NGROK } from '../app.config.json';
 import { storeData, getData } from './helpers/asyncHelpers';
 
@@ -81,7 +82,6 @@ class HomeScreen extends React.Component {
         auth0_id,
         primaryGoal: response.data[0],
       });
-      console.log('primaryGoal:', this.state.primaryGoal);
       this.setState({
         threeMonthSavings: (response.data[0].daily_savings * 91.25).toFixed(2),
         sixMonthSavings: (response.data[0].daily_savings * 182.5).toFixed(2),
@@ -188,17 +188,17 @@ Savings Projection: $
           <Grid style={{ width: '100%', marginTop: 10 }}>
             <Row style={{ width: '100%' }}>
               <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                <Button style={styles.transactionButton} onPress={() => this.onToggleThreeMonths(threeMonthSavings)}>
+                  <Button style={displayedSavings === threeMonthSavings ? styles.transactionButtonDark : styles.transactionButton} onPress={() => this.onToggleThreeMonths(threeMonthSavings)}>
                   <Text style={styles.buttonText}>3 months</Text>
                 </Button>
               </Col>
               <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                <Button style={styles.transactionButton} onPress={() => this.onToggleSixMonths(sixMonthSavings)}>
+                  <Button style={displayedSavings === sixMonthSavings ? styles.transactionButtonDark : styles.transactionButton} onPress={() => this.onToggleSixMonths(sixMonthSavings)}>
                   <Text style={styles.buttonText}>6 months</Text>
                 </Button>
               </Col>
               <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                <Button style={styles.transactionButton} onPress={() => this.onToggleOneYear(oneYearSavings)}>
+                  <Button style={displayedSavings === oneYearSavings ? styles.transactionButtonDark : styles.transactionButton} onPress={() => this.onToggleOneYear(oneYearSavings)}>
                   <Text style={styles.buttonText}>1 year</Text>
                 </Button>
               </Col>
@@ -308,6 +308,13 @@ const styles = StyleSheet.create({
   },
   transactionButton: {
     backgroundColor: '#49d5b6',
+    height: 40,
+    alignSelf: 'flex-start',
+    maxWidth: '98%',
+    width: '98%',
+  },
+  transactionButtonDark: {
+    backgroundColor: '#218771',
     height: 40,
     alignSelf: 'flex-start',
     maxWidth: '98%',

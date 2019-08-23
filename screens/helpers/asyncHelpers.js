@@ -15,7 +15,6 @@ const getData = async (key) => {
     const value = await AsyncStorage.getItem(key);
     if (value !== null) {
       // We have data!!
-      console.log('Success!!!', value);
       return value;
     }
   } catch (error) {
@@ -27,7 +26,6 @@ const getData = async (key) => {
 const storeMulti = async (array, errCB) => {
   try {
     await AsyncStorage.multiSet(array);
-    console.log('Successfully stored!!');
   } catch (error) {
     // Error storing data
     return errCB();
@@ -39,7 +37,6 @@ const getMulti = async (array, CB, errCB) => {
     const value = await AsyncStorage.getItem(array);
     if (value !== null) {
       // We have data!!
-      console.log('Success!!!', value);
       return value;
     }
     return errCB();

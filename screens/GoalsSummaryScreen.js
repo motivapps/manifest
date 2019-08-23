@@ -394,11 +394,7 @@ Money Saved: $
                     <Text style={styles.buttonText}>Edit Goal</Text>
                   </Button>
                 </Col>
-                <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                  <Button style={styles.transactionButtonDark}>
-                    <Text style={styles.buttonText}>Delete Goal</Text>
-                  </Button>
-                </Col>
+                
               </Row>
             </Grid>
           </ScrollView>

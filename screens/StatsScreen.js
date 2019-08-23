@@ -48,15 +48,12 @@ export default class StatsScreen extends React.Component {
     const auth0_id = await getData('userToken');
 
     axios.get(`${NGROK}/goals/${auth0_id}`).then((response) => {
-      console.log('response:', response.data[0]);
       let primaryGoal = response.data[0];
       this.setState({
         primaryGoal: response.data[0],
       });
-      console.log('primaryGoal:', primaryGoal);
       if (primaryGoal !== null) {
         let relapseTotal = primaryGoal.relapse_cost_total / primaryGoal.goal_cost;
-        console.log('amount:', primaryGoal.amount_saved);
         let savedTotal = primaryGoal.amount_saved / primaryGoal.goal_cost;
 
         const dailySavings = primaryGoal.daily_savings;

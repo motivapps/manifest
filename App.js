@@ -40,7 +40,6 @@ class App extends React.Component {
     try {
       const userToken = await AsyncStorage.getItem('userToken');
       if (userToken !== null) {
-        console.log(userToken);
         this.setState({ authID: userToken });
       }
     } catch (error) {
@@ -99,7 +98,7 @@ class App extends React.Component {
     axios
       .post(`${NGROK}/pushtoken`, { pushToken, authID })
       .then((result) => {
-        console.log('device token post result:', result.config.data);
+        // console.log('device token post result:', result.config.data);
       })
       .catch((err) => {
         console.log('device token post error:', err);

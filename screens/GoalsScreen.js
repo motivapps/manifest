@@ -271,7 +271,7 @@ class GoalsScreen extends React.Component {
               ) : (
                 <Button style={styles.saveButton}>
                   <Text style={styles.buttonText} onPress={() => this.onHandleSubmit('GoalSummary')}>
-                    Save Goal
+                    Save New Goal
                   </Text>
                 </Button>
               )

@@ -14,39 +14,56 @@ import {
   FooterTab,
   Icon,
 } from 'native-base';
+import { NavigationEvents } from 'react-navigation';
+import axios from 'axios';
+
 import { ProgressChart, BarChart } from 'react-native-chart-kit';
+import { NGROK } from '../app.config.json';
+import { storeData, getData } from './helpers/asyncHelpers';
 
 export default class StatsScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       circleData: {
-        labels: ['Relapse', 'Coffee'], // optional
-        data: [0.3, 0.6],
+        labels: ['Relapses', 'Vice'], // optional
+        data: [0, 0],
       },
       barchartData: {
-        labels: ['Daily Savings', 'Relapses Total', 'Total Saved', 'Goal Amount'],
+        labels: ['Daily', 'Weekly', 'Monthly'],
         datasets: [{
-          data: [20, 45, 28, 80]
-        }]
+          data: [2, 12, 38],
+        }],
       },
       primaryGoal: null,
     };
+    this.updateAsyncStorageForStats = this.updateAsyncStorageForStats.bind(this);
   }
 
   async componentWillMount() {
-    try {
-      const primaryGoal = await AsyncStorage.getItem('primaryGoal');
-      if (primaryGoal !== null) {
-        let parsedGoal = JSON.parse(primaryGoal);
-        let relapseTotal = parsedGoal.relapse_cost_total / parsedGoal.goal_cost;
-        let savedTotal = parsedGoal.amount_saved / parsedGoal.goal_cost;
+    this.updateAsyncStorageForStats();
+  }
 
-        const dailySavings = parsedGoal.daily_savings;
-        this.setState({ 
-          primaryGoal: parsedGoal,
+  async updateAsyncStorageForStats() {
+    const auth0_id = await getData('userToken');
+
+    axios.get(`${NGROK}/goals/${auth0_id}`).then((response) => {
+      console.log('response:', response.data[0]);
+      let primaryGoal = response.data[0];
+      this.setState({
+        primaryGoal: response.data[0],
+      });
+      console.log('primaryGoal:', primaryGoal);
+      if (primaryGoal !== null) {
+        let relapseTotal = primaryGoal.relapse_cost_total / primaryGoal.goal_cost;
+        console.log('amount:', primaryGoal.amount_saved);
+        let savedTotal = primaryGoal.amount_saved / primaryGoal.goal_cost;
+
+        const dailySavings = primaryGoal.daily_savings;
+        console.log('goal:', primaryGoal);
+        this.setState({
           circleData: {
-            labels: ['Relapses', parsedGoal.vice],
+            labels: ['Relapses', primaryGoal.vice],
             data: [relapseTotal, savedTotal],
           },
           barchartData: {
@@ -57,18 +74,22 @@ export default class StatsScreen extends React.Component {
           },
         });
       }
-    } catch (error) {
-      console.error(error);
-    }
+
+      if (response.data[0]) {
+        storeData('primaryGoal', JSON.stringify(response.data[0]));
+      }
+    }).catch(error => console.log(error));
   }
 
   render() {
     const { circleData, barchartData, primaryGoal } = this.state;
 
-    
     return (
       <Container style={styles.container}>
         <View style={styles.viewport}>
+          <NavigationEvents
+            onWillFocus={this.updateAsyncStorageForStats}
+          />
           <Text style={styles.heading}>My Progress</Text>
 
           <ProgressChart

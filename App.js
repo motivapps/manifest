@@ -69,9 +69,11 @@ class App extends React.Component {
     if (Platform.OS === 'android' && primaryGoal !== null) {
       if (locationGranted) {
         await Location.startLocationUpdatesAsync('callFoursquare', {
-          accuracy: Location.Accuracy.Highest,
+          accuracy: Location.Accuracy.Balanced,
           distanceInterval: 10, // update every 10 meters, will want a bigger number eventually but this is nice for testing
+          deferredUpdatesDistance: 20,
           showsBackgroundLocationIndicator: true,
+          timeInterval: 30000,
         });
       }
     }
@@ -159,7 +161,7 @@ TaskManager.defineTask('callFoursquare', ({ data: { locations }, error }) => {
       return { distance, name };
     })
     .then(({ distance, name }) => {
-      if (distance <= 15) {
+      if (distance <= 90) {
       // User is close to coffee shop, send notification
         axios
           .post(

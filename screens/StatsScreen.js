@@ -26,7 +26,7 @@ export default class StatsScreen extends React.Component {
     super(props);
     this.state = {
       circleData: {
-        labels: ['Relapses', 'Vice'], // optional
+        labels: ['Relapses', 'Savings'],
         data: [0, 0],
       },
       barchartData: {
@@ -60,7 +60,7 @@ export default class StatsScreen extends React.Component {
         console.log('goal:', primaryGoal);
         this.setState({
           circleData: {
-            labels: ['Relapses', primaryGoal.vice],
+            labels: ['Relapses', 'Savings'],
             data: [relapseTotal, savedTotal],
           },
           barchartData: {

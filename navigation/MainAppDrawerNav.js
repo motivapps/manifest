@@ -251,7 +251,6 @@ const drawerNavigator = createDrawerNavigator(
     GoalsSummary: GoalsSummaryStack,
     Games: GamesStack,
     Transactions: TransactionsStack,
-    Settings: SettingsStack,
     Account: MyAccountStack,
     LogOut: {
       screen: LogOutScreen,

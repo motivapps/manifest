@@ -165,7 +165,8 @@ class GoalsSummaryScreen extends React.Component {
             visible={this.state.modalVisible}
           >
             <View style={{ marginTop: 22 }}>
-              <View>
+              <View style={{ marginLeft: 30, marginRight: 30, alignItems: 'center' }}>
+                <Text style={styles.heading}>Edit Goal</Text>
                 <Text style={styles.smallTextLeft}>Goal Name:</Text>
                 <TextInput
                   style={{
@@ -266,7 +267,7 @@ class GoalsSummaryScreen extends React.Component {
                   value={viceFrequency}
                 />
                 <Button
-                  style={styles.modalButton}
+                  style={styles.confirmButton}
                   onPress={() => {
                     axios.get(`https://api.unsplash.com/search/photos?page=1&query=${goalItem || primaryGoal.goal_item}
                     &client_id=${UNSPLASH_CLIENT_ID}`)
@@ -300,7 +301,7 @@ class GoalsSummaryScreen extends React.Component {
                   <Text style={styles.buttonText}>Confirm</Text>
                 </Button>
                 <Button
-                  style={styles.modalButton}
+                  style={styles.cancelButton}
                   onPress={() => {
                     this.setModalVisible(!this.state.modalVisible);
                   }}
@@ -312,7 +313,7 @@ class GoalsSummaryScreen extends React.Component {
           </Modal>
         </View>
         
-            <Text style={styles.heading}>My Goals</Text>
+            <Text style={styles.heading}>My Goal</Text>
 
             <Grid style={{ width: '100%', marginTop: 10 }}>
               <Row style={{ width: '100%' }}>
@@ -323,7 +324,7 @@ class GoalsSummaryScreen extends React.Component {
                 </Col>
                 <Col style={{ backgroundColor: '#fff', height: 60 }}>
                   <Button style={styles.transactionButtonDark}>
-                    <Text style={styles.buttonText}>Current Goals</Text>
+                    <Text style={styles.buttonText}>Current Goal</Text>
                   </Button>
                 </Col>
               </Row>
@@ -400,25 +401,25 @@ Money Saved: $
           <FooterTab style={{ backgroundColor: '#49d5b6' }}>
             <Button vertical>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('Stats')}>
-                <Icon style={{ fontSize: 30, color: '#fff' }} name="md-stats" />
+                <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="md-stats" />
                 <Text style={styles.buttonText}>Stats</Text>
               </TouchableOpacity>
             </Button>
             <Button vertical>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('Games')}>
-                <Icon style={{ fontSize: 30, color: '#fff' }} name="logo-game-controller-a" />
+                <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="logo-game-controller-a" />
                 <Text style={styles.buttonText}>Games</Text>
               </TouchableOpacity>
             </Button>
             <Button vertical>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('Goals')}>
-                <Icon style={{ fontSize: 30, color: '#fff' }} name="md-ribbon" />
-                <Text style={styles.buttonText}>Goals</Text>
+                <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="md-ribbon" />
+                <Text style={styles.buttonText}>Goal</Text>
               </TouchableOpacity>
             </Button>
             <Button vertical>
               <TouchableOpacity onPress={this.props.navigation.openDrawer}>
-                <Icon style={{ fontSize: 30, color: '#fff' }} name="md-menu" />
+                <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="md-menu" />
                 <Text style={styles.buttonText}>Menu</Text>
               </TouchableOpacity>
             </Button>
@@ -481,7 +482,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#4c4c4c',
     alignSelf: 'flex-start',
-    marginTop: 6,
+    marginTop: 10,
   },
   smallTextGreenLeft: {
     fontWeight: 'bold',
@@ -525,10 +526,27 @@ const styles = StyleSheet.create({
     maxWidth: '98%',
     width: '98%',
   },
+  confirmButton: {
+    backgroundColor: '#49d5b6',
+    height: 40,
+    alignSelf: 'flex-start',
+    maxWidth: '98%',
+    width: '98%',
+    marginTop: 10,
+  },
+  cancelButton: {
+    backgroundColor: '#218771',
+    height: 40,
+    alignSelf: 'flex-start',
+    maxWidth: '98%',
+    width: '98%',
+    marginTop: 10,
+  },
   footerbar: {
     backgroundColor: '#49d5b6',
     fontWeight: 'bold',
     color: '#fff',
+    paddingTop: 5,
   },
   mainImage: {
     width: 250,

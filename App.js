@@ -161,7 +161,7 @@ TaskManager.defineTask('callFoursquare', ({ data: { locations }, error }) => {
       return { distance, name };
     })
     .then(({ distance, name }) => {
-      if (distance <= 90) {
+      if (distance <= 10) {
       // User is close to coffee shop, send notification
         axios
           .post(

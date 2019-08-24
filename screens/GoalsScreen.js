@@ -34,7 +34,9 @@ class GoalsScreen extends React.Component {
     this.onHandleSubmit = this.onHandleSubmit.bind(this);
   }
 
-
+/**
+ * Get userID using userToken stored in AsyncStorage to be used to store goal to correct user
+ */
   async componentWillMount() {
     try {
       const userToken = await AsyncStorage.getItem('userToken');
@@ -52,6 +54,14 @@ class GoalsScreen extends React.Component {
       console.error(error);
     }
   }
+
+  /**
+   * 
+   * @param {*} dest 
+   * onHandleSubmit function stores goal to goals table in database using user input
+   * information from GoalsScreen component.  Goal photo is chosen using goalItem input
+   * as query parameter for Unsplash API call
+   */
 
   onHandleSubmit(dest) {
     const {

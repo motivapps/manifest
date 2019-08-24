@@ -21,8 +21,9 @@ import {
 } from 'native-base';
 import { NavigationEvents } from 'react-navigation';
 import { ScreenOrientation } from 'expo';
-
-// ScreenOrientation.lockAsync(ScreenOrientation.Orientation.PORTRAIT);
+import axios from 'axios';
+import { NGROK } from '../app.config.json';
+import { storeData, getData } from './helpers/asyncHelpers';
 
 class GamesScreen extends React.Component {
   constructor(props) {
@@ -31,23 +32,27 @@ class GamesScreen extends React.Component {
       streak: 0,
     };
 
-  this.lockOrientation = this.lockOrientation.bind(this);
+    this.lockOrientation = this.lockOrientation.bind(this);
   }
 
   async componentWillMount() {
-    try {
-      const primaryGoal = await AsyncStorage.getItem('primaryGoal');
-      if (primaryGoal !== null) {
-        const parsedGoal = JSON.parse(primaryGoal);
-        this.setState({ streak: parsedGoal.streak_days });
-      }
-    } catch (error) {
-      console.error(error);
-    }
+    this.lockOrientation();
   }
 
   async lockOrientation() {
     await ScreenOrientation.lockAsync(ScreenOrientation.Orientation.PORTRAIT);
+
+    const auth0_id = await getData('userToken');
+
+    axios.get(`${NGROK}/goals/${auth0_id}`).then((response) => {
+      this.setState({
+        streak: response.data[0].streak_days,
+      });
+
+      if (response.data[0]) {
+        storeData('primaryGoal', JSON.stringify(response.data[0]));
+      }
+    }).catch(error => console.log(error));
   }
 
   render() {
@@ -135,25 +140,25 @@ class GamesScreen extends React.Component {
           <FooterTab style={{ backgroundColor: '#49d5b6' }}>
             <Button vertical>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('Stats')}>
-                <Icon style={{ fontSize: 30, color: '#fff' }} name="md-stats" />
+                <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="md-stats" />
                 <Text style={styles.buttonText}>Stats</Text>
               </TouchableOpacity>
             </Button>
             <Button vertical>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('Games')}>
-                <Icon style={{ fontSize: 30, color: '#fff' }} name="logo-game-controller-a" />
+                <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="logo-game-controller-a" />
                 <Text style={styles.buttonText}>Games</Text>
               </TouchableOpacity>
             </Button>
             <Button vertical>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Goals')}>
-                <Icon style={{ fontSize: 30, color: '#fff' }} name="md-ribbon" />
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('Goal')}>
+                <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="md-ribbon" />
                 <Text style={styles.buttonText}>Goals</Text>
               </TouchableOpacity>
             </Button>
             <Button vertical>
               <TouchableOpacity onPress={this.props.navigation.openDrawer}>
-                <Icon style={{ fontSize: 30, color: '#fff' }} name="md-menu" />
+                <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="md-menu" />
                 <Text style={styles.buttonText}>Menu</Text>
               </TouchableOpacity>
             </Button>
@@ -250,6 +255,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#49d5b6',
     fontWeight: 'bold',
     color: '#fff',
+    paddingTop: 5,
   },
   mainImage: {
     width: 200,

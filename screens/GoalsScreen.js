@@ -291,26 +291,26 @@ class GoalsScreen extends React.Component {
               <FooterTab style={{ backgroundColor: '#49d5b6' }}>
                 <Button vertical>
                   <TouchableOpacity onPress={() => this.props.navigation.navigate('Stats')}>
-                    <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="md-stats" />
-                    <Text style={styles.buttonText}>Stats</Text>
+                    <Icon style={{ fontSize: 30, color: '#fff', marginRight: 20 }} name="md-stats" />
+                    <Text style={styles.buttonTextFoot}>Stats</Text>
                   </TouchableOpacity>
                 </Button>
                 <Button vertical>
                   <TouchableOpacity onPress={() => this.props.navigation.navigate('Games')}>
-                    <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="logo-game-controller-a" />
-                    <Text style={styles.buttonText}>Games</Text>
+                    <Icon style={{ fontSize: 30, color: '#fff', marginRight: 20 }} name="logo-game-controller-a" />
+                    <Text style={styles.buttonTextFoot}>Games</Text>
                   </TouchableOpacity>
                 </Button>
                 <Button vertical>
                   <TouchableOpacity onPress={() => this.props.navigation.navigate('Goals')}>
-                    <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="md-ribbon" />
-                    <Text style={styles.buttonText}>Goal</Text>
+                    <Icon style={{ fontSize: 30, color: '#fff', marginRight: 20 }} name="md-ribbon" />
+                    <Text style={styles.buttonTextFootGoal}>Goal</Text>
                   </TouchableOpacity>
                 </Button>
                 <Button vertical>
                   <TouchableOpacity onPress={this.props.navigation.openDrawer}>
-                    <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="md-menu" />
-                    <Text style={styles.buttonText}>Menu</Text>
+                    <Icon style={{ fontSize: 30, color: '#fff' }} name="md-menu" />
+                    <Text style={styles.buttonTextFoot}>Menu</Text>
                   </TouchableOpacity>
                 </Button>
               </FooterTab>
@@ -386,6 +386,20 @@ const styles = StyleSheet.create({
     color: '#fff',
     textAlign: 'center',
     width: '100%',
+  },
+  buttonTextFoot: {
+    fontWeight: 'bold',
+    color: '#fff',
+    textAlign: 'center',
+    width: '100%',
+    marginLeft: 8,
+  },
+  buttonTextFootGoal: {
+    fontWeight: 'bold',
+    color: '#fff',
+    textAlign: 'center',
+    width: '100%',
+    marginLeft: 12,
   },
   transactionButton: {
     backgroundColor: '#49d5b6',

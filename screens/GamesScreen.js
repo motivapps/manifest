@@ -151,7 +151,7 @@ class GamesScreen extends React.Component {
               </TouchableOpacity>
             </Button>
             <Button vertical>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Goal')}>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('Goals')}>
                 <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="md-ribbon" />
                 <Text style={styles.buttonText}>Goals</Text>
               </TouchableOpacity>

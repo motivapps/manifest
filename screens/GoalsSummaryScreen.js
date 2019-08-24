@@ -176,7 +176,6 @@ class GoalsSummaryScreen extends React.Component {
                     borderRadius: 8,
                   }}
                   placeholder={primaryGoal.goal_name}
-                  placeholderTextColor="black"
                   onChangeText={(text) => {
                     this.setState({ goalName: text || primaryGoal.goal_name });
                   }}
@@ -193,7 +192,6 @@ class GoalsSummaryScreen extends React.Component {
                     borderRadius: 8,
                   }}
                   placeholder={primaryGoal.goal_item}
-                  placeholderTextColor="black"
                   onChangeText={(text) => {
                     this.setState({ goalItem: text || primaryGoal.goal_item });
                   }}
@@ -211,7 +209,6 @@ class GoalsSummaryScreen extends React.Component {
                   }}
                   defaultValue={primaryGoal.goal_cost.toString()}
                   placeholder={primaryGoal.goal_cost.toString()}
-                  placeholderTextColor="black"
                   onChangeText={(text) => {
                     if (text[0] === '$') {
                       this.setState({ goalAmount: text.slice(1, text.length) });
@@ -246,7 +243,6 @@ class GoalsSummaryScreen extends React.Component {
                     borderRadius: 8,
                   }}
                   placeholder={primaryGoal.vice_price.toString()}
-                  placeholderTextColor="black"
                   onChangeText={(text) => {
                     if (text[0] === '$') {
                       this.setState({ vicePrice: text.slice(1, text.length) });

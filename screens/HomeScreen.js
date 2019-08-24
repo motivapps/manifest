@@ -55,6 +55,13 @@ class HomeScreen extends React.Component {
     this.setState({ isReady: true });
   }
 
+  /**
+   * 
+   * @param {*} amount 
+   * onToggleThreeMonths, onToggleSixMonths, onToggleOneYear functions update the amount
+   * displayed for projected savings and are triggered on button press.
+   */
+
   onToggleThreeMonths(amount) {
     this.setState({
       displayedSavings: amount,
@@ -72,6 +79,13 @@ class HomeScreen extends React.Component {
       displayedSavings: amount,
     });
   }
+
+/**
+ * updateAsyncStorage function checks the database for the user's goal and updates
+ * AsyncStorage upon HomeScreen will focus and componentWillMount to update goal related
+ * interfaces and progress.  Function contains algorithms to calculate completion date
+ * for goals.
+ */
 
   async updateAsyncStorage() {
     const auth0_id = await getData('userToken');

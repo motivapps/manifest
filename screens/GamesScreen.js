@@ -39,6 +39,10 @@ class GamesScreen extends React.Component {
     this.lockOrientation();
   }
 
+  /**
+   * lockOrientation function locks orientation of phone/app to portrait upon GamesScreen will focus, this is necessary to prevent rotating after playing a game.  lockOrientation function also checks the database for the user's goal and updates AsyncStorage upon GameScreen will focus to update amount of games available should a user goal streak increase or decrease.
+   */
+
   async lockOrientation() {
     await ScreenOrientation.lockAsync(ScreenOrientation.Orientation.PORTRAIT);
 

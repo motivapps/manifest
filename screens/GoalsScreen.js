@@ -165,7 +165,7 @@ class GoalsScreen extends React.Component {
                     </Col>
                     <Col style={{ backgroundColor: '#fff', height: 60 }}>
                       <Button style={styles.transactionButton}>
-                        <Text style={styles.buttonText} onPress={() => this.props.navigation.navigate('GoalsSummary')}>Current Goals</Text>
+                        <Text style={styles.buttonText} onPress={() => this.props.navigation.navigate('GoalSummary')}>Current Goals</Text>
                       </Button>
                     </Col>
                   </Row>

@@ -39,21 +39,20 @@ export default class AccountAssign extends React.Component {
   }
 
   setTo(acctId) {
-    this.setState({
-      to: acctId,
-    });
+    const { userToken, from } = this.state;
+    const { navigation: { navigate } } = this.props;
+
+    // console.log('to, from', this.state);
+
+    axios.post(`${NGROK}/accounts/assign/${userToken}`, { to: acctId, from })
+      .then(() => navigate('MyAccount'))
+      .catch(err => console.error(err));
   }
 
   setFrom(acctId) {
-    const { userToken, to, from } = this.state;
-    const { navigation: { navigate } } = this.props;
-
     this.setState({
       from: acctId,
     });
-
-    axios.post(`accounts/assign/${userToken}`, { to, from })
-      .then(() => navigate('MyAccount'));
   }
 
   getAccounts() {
@@ -133,8 +132,8 @@ export default class AccountAssign extends React.Component {
             <Text style={heading}>
             Account Selection
           </Text>
-            <Text style={smallTextGreen}>
-              Please select an account for us to draw from
+          <Text style={smallTextGreen}>
+            Almost Done! Please designate accounts for withdrawls and deposits
           </Text>
             {from ? (
               (() => this.renderAccounts('from'))()

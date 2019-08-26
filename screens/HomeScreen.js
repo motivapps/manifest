@@ -13,17 +13,15 @@ import {
 } from 'native-base';
 import * as Permissions from 'expo-permissions';
 import axios from 'axios';
-import { StyleSheet, View, TouchableOpacity, Image, ScrollView } from 'react-native';
+import {
+ Platform, StatusBar, StyleSheet, View, TouchableOpacity, Image, ScrollView, TouchableHighlight
+} from 'react-native';
+import { NavigationEvents } from 'react-navigation';
 
 import * as Font from 'expo-font';
 import * as Progress from 'react-native-progress';
 import { NGROK } from '../app.config.json';
-import {
-  storeData,
-  getData,
-  storeMulti,
-  getMulti,
-} from './helpers/asyncHelpers';
+import { storeData, getData } from './helpers/asyncHelpers';
 
 class HomeScreen extends React.Component {
   constructor(props) {
@@ -38,39 +36,14 @@ class HomeScreen extends React.Component {
       completionDate: null,
     };
     this.setState = this.setState.bind(this);
+    this.updateAsyncStorage = this.updateAsyncStorage.bind(this);
     this.onToggleThreeMonths = this.onToggleThreeMonths.bind(this);
     this.onToggleSixMonths = this.onToggleSixMonths.bind(this);
     this.onToggleOneYear = this.onToggleOneYear.bind(this);
   }
 
   async componentWillMount() {
-    const auth0_id = await getData('userToken');
-
-    axios.get(`${NGROK}/goals/${auth0_id}`).then((response) => {
-      this.setState({
-        auth0_id,
-        primaryGoal: response.data[0],
-      });
-      this.setState({
-        threeMonthSavings: (response.data[0].daily_savings * 91.25).toFixed(2),
-        sixMonthSavings: (response.data[0].daily_savings * 182.5).toFixed(2),
-        oneYearSavings: (response.data[0].daily_savings * 365).toFixed(2),
-        displayedSavings: (response.data[0].daily_savings * 91.25).toFixed(2),
-      });
-      const daysLeft = (response.data[0].goal_cost - response.data[0].amount_saved) / response.data[0].daily_savings;
-      const targetDate = new Date();
-      targetDate.setDate(targetDate.getDate() + daysLeft);
-
-      const dd = targetDate.getDate();
-      const mm = targetDate.getMonth() + 1; // 0 is January, so we must add 1
-      const yyyy = targetDate.getFullYear();
-      const dateString = mm + "/" + dd + "/" + yyyy;
-      this.setState({ completionDate: dateString });
-
-      if (response.data[0]) {
-        storeData('primaryGoal', JSON.stringify(response.data[0]));
-      }
-    }).catch(error => console.error(error));
+    this.updateAsyncStorage();
   }
 
   async componentDidMount() {
@@ -81,6 +54,13 @@ class HomeScreen extends React.Component {
 
     this.setState({ isReady: true });
   }
+
+  /**
+   * 
+   * @param {*} amount 
+   * onToggleThreeMonths, onToggleSixMonths, onToggleOneYear functions update the amount
+   * displayed for projected savings and are triggered on button press.
+   */
 
   onToggleThreeMonths(amount) {
     this.setState({
@@ -100,6 +80,45 @@ class HomeScreen extends React.Component {
     });
   }
 
+/**
+ * updateAsyncStorage function checks the database for the user's goal and updates
+ * AsyncStorage upon HomeScreen will focus and componentWillMount to update goal related
+ * interfaces and progress.  Function contains algorithms to calculate completion date
+ * for goals.
+ */
+
+  async updateAsyncStorage() {
+    const auth0_id = await getData('userToken');
+
+    axios.get(`${NGROK}/goals/${auth0_id}`).then((response) => {
+      this.setState({
+        auth0_id,
+        primaryGoal: response.data[0],
+      });
+      this.setState({
+        threeMonthSavings: (response.data[0].daily_savings * 91.25).toFixed(2),
+        sixMonthSavings: (response.data[0].daily_savings * 182.5).toFixed(2),
+        oneYearSavings: (response.data[0].daily_savings * 365).toFixed(2),
+        displayedSavings: (response.data[0].daily_savings * 91.25).toFixed(2),
+      });
+
+      const daysLeft = (response.data[0].goal_cost - response.data[0].amount_saved) / response.data[0].daily_savings;
+      const targetDate = new Date();
+      targetDate.setDate(targetDate.getDate() + daysLeft);
+
+      const dd = targetDate.getDate();
+      const mm = targetDate.getMonth() + 1; // 0 is January, so we must add 1
+      const yyyy = targetDate.getFullYear();
+
+      let dateString = `${mm}/${dd}/${yyyy}`;
+      this.setState({ completionDate: dateString });
+
+      if (response.data[0]) {
+        storeData('primaryGoal', JSON.stringify(response.data[0]));
+      }
+    }).catch(error => console.log(error));
+  }
+
   render() {
     const {
       primaryGoal,
@@ -117,10 +136,18 @@ class HomeScreen extends React.Component {
     return (
       <Container style={styles.container}>
         <View style={styles.viewport}>
-        <ScrollView>
-          <Text style={styles.heading}>Goal: {primaryGoal ? primaryGoal.goal_name : 'No goal set'} </Text>
+          <NavigationEvents
+          onWillFocus={this.updateAsyncStorage}
+        />
+          <ScrollView>
+          <Text style={styles.heading}>
+Goal:
+{' '}
+{primaryGoal ? primaryGoal.goal_name : 'No goal set'}
+{' '}
+ </Text>
 
-            <Image style={styles.mainImage} source={{ uri: primaryGoal ? primaryGoal.goal_photo : "http://cdn.shopify.com/s/files/1/0682/0839/products/Vibe-Yellowfin-100-Kayak-Caribbean_Journey_grande.jpg?v=1555360419" }} />
+          <Image style={styles.mainImage} source={{ uri: primaryGoal ? primaryGoal.goal_photo : 'http://cdn.shopify.com/s/files/1/0682/0839/products/Vibe-Yellowfin-100-Kayak-Caribbean_Journey_grande.jpg?v=1555360419' }} />
 
           <Progress.Bar
             progress={primaryGoal ? primaryGoal.amount_saved / primaryGoal.goal_cost : 0}
@@ -131,62 +158,91 @@ class HomeScreen extends React.Component {
             style={{ alignSelf: 'center' }}
           />
           <View style={{ marginTop: 10, marginBottom: 10 }}>
-            <Text style={styles.smallText}>Projected Completion Date: {completionDate ? completionDate : 'Loading...'}</Text>
+            <Text style={styles.smallText}>
+Projected Completion Date:
+{' '}
+{completionDate ? completionDate : 'Loading...'}
+</Text>
           </View>
           <View style={{ marginBottom: 10, marginLeft: 0 }}>
-            <Text style={styles.largeText}>Money Saved: ${primaryGoal ? primaryGoal.amount_saved : 0}</Text>
-            <Text style={styles.largeText}>Current Streak: {primaryGoal ? primaryGoal.streak_days : 0} Days</Text>
+            <Text style={styles.largeText}>
+Money Saved: $
+{primaryGoal ? primaryGoal.amount_saved : 0}
+</Text>
+            <Text style={styles.largeText}>
+Current Streak:
+{' '}
+{primaryGoal ? primaryGoal.streak_days : 0}
+{' '}
+Days
+</Text>
           </View>
 
-          <Text style={styles.smallTextLeft}>Relapses: {primaryGoal ? primaryGoal.relapse_count : 0}</Text>
-          <Text style={styles.smallTextLeft}>Money Lost: ${primaryGoal ? primaryGoal.relapse_cost_total : 0}</Text>
-          <Text style={styles.smallTextLeft}>Setback: {primaryGoal ? primaryGoal.relapse_count : 0} days</Text>
-          <Text style={styles.smallTextGreenLeft}>Savings Projection: ${displayedSavings}</Text>
+          <Text style={styles.smallTextLeft}>
+Relapses:
+{' '}
+{primaryGoal ? primaryGoal.relapse_count : 0}
+</Text>
+          <Text style={styles.smallTextLeft}>
+Money Lost: $
+{primaryGoal ? primaryGoal.relapse_cost_total : 0}
+</Text>
+          <Text style={styles.smallTextLeft}>
+Setback:
+{' '}
+{primaryGoal ? primaryGoal.relapse_count : 0}
+{' '}
+days
+</Text>
+          <Text style={styles.smallTextGreenLeft}>
+Savings Projection: $
+{displayedSavings}
+</Text>
           <Grid style={{ width: '100%', marginTop: 10 }}>
             <Row style={{ width: '100%' }}>
               <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                <Button style={styles.transactionButton} onPress={() => this.onToggleThreeMonths(threeMonthSavings)}>
+                  <Button style={displayedSavings === threeMonthSavings ? styles.transactionButtonDark : styles.transactionButton} onPress={() => this.onToggleThreeMonths(threeMonthSavings)}>
                   <Text style={styles.buttonText}>3 months</Text>
                 </Button>
               </Col>
               <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                <Button style={styles.transactionButton} onPress={() => this.onToggleSixMonths(sixMonthSavings)}>
+                  <Button style={displayedSavings === sixMonthSavings ? styles.transactionButtonDark : styles.transactionButton} onPress={() => this.onToggleSixMonths(sixMonthSavings)}>
                   <Text style={styles.buttonText}>6 months</Text>
                 </Button>
               </Col>
               <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                <Button style={styles.transactionButton} onPress={() => this.onToggleOneYear(oneYearSavings)}>
+                  <Button style={displayedSavings === oneYearSavings ? styles.transactionButtonDark : styles.transactionButton} onPress={() => this.onToggleOneYear(oneYearSavings)}>
                   <Text style={styles.buttonText}>1 year</Text>
                 </Button>
               </Col>
             </Row>
           </Grid>
-          </ScrollView>
+        </ScrollView>
         </View>
 
         <Footer style={styles.footerbar}>
           <FooterTab style={{ backgroundColor: '#49d5b6' }}>
             <Button vertical>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('Stats')}>
-                <Icon style={{ fontSize: 30, color: '#fff' }} name="md-stats" />
+                <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="md-stats" />
                 <Text style={styles.buttonText}>Stats</Text>
               </TouchableOpacity>
             </Button>
             <Button vertical>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('Games')}>
-                <Icon style={{ fontSize: 30, color: '#fff' }} name="logo-game-controller-a" />
+                <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="logo-game-controller-a" />
                 <Text style={styles.buttonText}>Games</Text>
               </TouchableOpacity>
             </Button>
             <Button vertical>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('Goals')}>
-                <Icon style={{ fontSize: 30, color: '#fff' }} name="md-ribbon" />
-                <Text style={styles.buttonText}>Goals</Text>
+                <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="md-ribbon" />
+                <Text style={styles.buttonText}>Goal</Text>
               </TouchableOpacity>
             </Button>
             <Button vertical>
               <TouchableOpacity onPress={this.props.navigation.openDrawer}>
-                <Icon style={{ fontSize: 30, color: '#fff' }} name="md-menu" />
+                <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="md-menu" />
                 <Text style={styles.buttonText}>Menu</Text>
               </TouchableOpacity>
             </Button>
@@ -270,10 +326,18 @@ const styles = StyleSheet.create({
     maxWidth: '98%',
     width: '98%',
   },
+  transactionButtonDark: {
+    backgroundColor: '#218771',
+    height: 40,
+    alignSelf: 'flex-start',
+    maxWidth: '98%',
+    width: '98%',
+  },
   footerbar: {
     backgroundColor: '#49d5b6',
     fontWeight: 'bold',
     color: '#fff',
+    paddingTop: 5,
   },
   mainImage: {
     width: 200,

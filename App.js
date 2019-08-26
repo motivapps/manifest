@@ -37,10 +37,10 @@ class App extends React.Component {
   
   async componentDidMount() {
     primaryGoal = await AsyncStorage.getItem('primaryGoal');
+    primaryGoal = JSON.parse(primaryGoal);
     try {
       const userToken = await AsyncStorage.getItem('userToken');
       if (userToken !== null) {
-        console.log(userToken);
         this.setState({ authID: userToken });
       }
     } catch (error) {
@@ -69,9 +69,11 @@ class App extends React.Component {
     if (Platform.OS === 'android' && primaryGoal !== null) {
       if (locationGranted) {
         await Location.startLocationUpdatesAsync('callFoursquare', {
-          accuracy: Location.Accuracy.Highest,
+          accuracy: Location.Accuracy.Balanced,
           distanceInterval: 10, // update every 10 meters, will want a bigger number eventually but this is nice for testing
+          deferredUpdatesDistance: 20,
           showsBackgroundLocationIndicator: true,
+          timeInterval: 30000,
         });
       }
     }
@@ -99,7 +101,7 @@ class App extends React.Component {
     axios
       .post(`${NGROK}/pushtoken`, { pushToken, authID })
       .then((result) => {
-        console.log('device token post result:', result.config.data);
+        // console.log('device token post result:', result.config.data);
       })
       .catch((err) => {
         console.log('device token post error:', err);
@@ -143,7 +145,7 @@ TaskManager.defineTask('callFoursquare', ({ data: { locations }, error }) => {
     category = '4bf58dd8d48988d16e941735';
     purchase = 'that deadly food.';
   }
-  // THIS IS STILL ONLY LOOKING FOR COFFEE SHOPS WITHIN 300 METER RADIUS
+  
   axios
     .get(
       `https://api.foursquare.com/v2/venues/search?client_id=${FOURSQUARE_CLIENT_ID}
@@ -152,13 +154,14 @@ TaskManager.defineTask('callFoursquare', ({ data: { locations }, error }) => {
           &intent=checkin&radius=300&categoryId=${category}&v=20190812`,
     )
     .then((response) => {
+      console.log('category: ', category)
       const { distance } = response.data.response.venues[0].location;
       const { name } = response.data.response.venues[0];
       console.log('Foursquare worked!', response.data.response.venues[0]);
       return { distance, name };
     })
     .then(({ distance, name }) => {
-      if (distance < 10) {
+      if (distance <= 10) {
       // User is close to coffee shop, send notification
         axios
           .post(
@@ -167,7 +170,7 @@ TaskManager.defineTask('callFoursquare', ({ data: { locations }, error }) => {
               to: pushToken,
               sound: 'default',
               title: 'Manifest',
-              body: `Step away from ${name}. Don't go in there for ${purchase}`,
+              body: `Step away from ${name}. Don't spend your money ${purchase}`,
             },
             {
               headers: {

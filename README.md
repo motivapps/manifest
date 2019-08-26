@@ -16,7 +16,10 @@ Signup and login quickly and easily with your Google account.
 This is a mobile app built using Expo. To use it, you'll need to run the following:
 `$ npm install`
 `$ npm start` OR `$ expo start`
-**** it is recommended to use `expo start` and to have an account with expo in order to make sure all aspects of the app work. This is mainly due to the way Expo handles authentication.
+**** It is recommended to use `expo start` and to have an account with expo in order to make sure all aspects of the app work. This is mainly due to the way Expo handles authentication.
+
+***** For proper functioning of goal progress circle on GoalsSummaryScreen delete line 204 of `node_modules/react-native-progress/Circle.js` and replace it with: 
+`{progress ? formatText(progress._value) : this.forceUpdate()}` 
 
 In order to run Manifest, you'll also have to download the Node server.
 https://github.com/motivapps/manifest-server

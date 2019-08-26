@@ -107,25 +107,25 @@ export default class Transactions extends React.Component {
             <FooterTab style={{ backgroundColor: '#49d5b6' }}>
               <Button vertical>
                 <TouchableOpacity onPress={() => this.props.navigation.navigate('Stats')}>
-                  <Icon style={{ fontSize: 30, color: '#fff' }} name="md-stats" />
+                  <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="md-stats" />
                   <Text style={buttonText}>Stats</Text>
                 </TouchableOpacity>
               </Button>
               <Button vertical>
                 <TouchableOpacity onPress={() => this.props.navigation.navigate('Games')}>
-                  <Icon style={{ fontSize: 30, color: '#fff' }} name="logo-game-controller-a" />
+                  <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="logo-game-controller-a" />
                   <Text style={buttonText}>Games</Text>
                 </TouchableOpacity>
               </Button>
               <Button vertical>
                 <TouchableOpacity onPress={() => this.props.navigation.navigate('Goals')}>
-                  <Icon style={{ fontSize: 30, color: '#fff' }} name="md-ribbon" />
+                  <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="md-ribbon" />
                   <Text style={buttonText}>Goals</Text>
                 </TouchableOpacity>
               </Button>
               <Button vertical>
                 <TouchableOpacity onPress={this.props.navigation.openDrawer}>
-                  <Icon style={{ fontSize: 30, color: '#fff' }} name="md-menu" />
+                  <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="md-menu" />
                   <Text style={buttonText}>Menu</Text>
                 </TouchableOpacity>
               </Button>
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     color: '#49d5b6',
     marginBottom: 10,
     marginTop: 12,
-    textAlign: "center",
+    textAlign: 'center',
   },
   largeText: {
     fontWeight: 'bold',
@@ -190,13 +190,6 @@ const styles = StyleSheet.create({
     color: '#49d5b6',
     textAlign: 'center',
   },
-  smallTextLeft: {
-    fontWeight: 'bold',
-    fontSize: 16,
-    color: '#4c4c4c',
-    alignSelf: 'flex-start',
-    marginLeft: 0,
-  },
   transactionButton: {
     backgroundColor: '#49d5b6',
     height: 60,
@@ -217,5 +210,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#49d5b6',
     fontWeight: 'bold',
     color: '#fff',
+    paddingTop: 5,
   },
 });

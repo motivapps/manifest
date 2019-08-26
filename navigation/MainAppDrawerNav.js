@@ -1,256 +1,265 @@
-import React from 'react';
-import { Platform } from 'react-native';
-import { createStackNavigator, createDrawerNavigator } from 'react-navigation';
-import TabBarIcon from '../components/TabBarIcon';
-import HomeScreen from '../screens/HomeScreen';
-import SettingsScreen from '../screens/SettingsScreen';
-import PlaidScreen from '../screens/PlaidScreen';
-import GoalsScreen from '../screens/GoalsScreen';
-import GoalsSummaryScreen from '../screens/GoalsSummaryScreen';
-import MyAccountScreen from '../screens/MyAccountScreen';
-import TransactionsScreen from '../screens/TransactionsScreen';
-import StatsScreen from '../screens/StatsScreen';
+// import React from 'react';
+// import { Platform } from 'react-native';
+import { createDrawerNavigator } from 'react-navigation';
+
+// import { createStackNavigator, createDrawerNavigator } from 'react-navigation';
+// import TabBarIcon from '../components/TabBarIcon';
+// import HomeScreen from '../screens/HomeScreen';
+// import SettingsScreen from '../screens/SettingsScreen';
+// import PlaidScreen from '../screens/PlaidScreen';
+// import MyAccountScreen from '../screens/MyAccountScreen';
+// import AccountAssignScreen from '../screens/AccountAssignScreen';
+// import GoalsScreen from '../screens/GoalsScreen';
+// import GoalsSummaryScreen from '../screens/GoalsSummaryScreen';
+// import TransactionsScreen from '../screens/TransactionsScreen';
+// import StatsScreen from '../screens/StatsScreen';
 import LogOutScreen from '../screens/LogOutScreen';
-import GamesScreen from '../screens/GamesScreen';
-import DKScreen from '../screens/games/DK';
-import GameTwoScreen from '../screens/games/GameTwo';
-import GameThreeScreen from '../screens/games/GameThree';
-import GameFourScreen from '../screens/games/GameFour';
-import ManifestTitle from '../screens/Header';
-import AccountAssignScreen from '../screens/AccountAssignScreen';
+// import GamesScreen from '../screens/GamesScreen';
+// import DKScreen from '../screens/games/DK';
+// import GameTwoScreen from '../screens/games/GameTwo';
+// import GameThreeScreen from '../screens/games/GameThree';
+// import GameFourScreen from '../screens/games/GameFour';
+// import ManifestTitle from '../screens/Header';
 
-const _ = require('lodash');
+// import defaultHeader from './subStacks/DefaultHeader';
 
-const config = Platform.select({
-  web: { headerMode: 'screen' },
-  default: {},
-});
+// const _ = require('lodash');
 
-const defaultHeader = {
-  defaultNavigationOptions: {
-    headerTitle: <ManifestTitle />,
-    headerTintColor: '#fff',
-    headerStyle: {
-      backgroundColor: '#4c4c4c',
-    },
-  },
-  headerLayoutPreset: 'center',
-  config,
-};
+// const config = Platform.select({
+//   web: { headerMode: 'screen' },
+//   default: {},
+// });
 
-const HomeStack = createStackNavigator(
-  {
-    HomePg: {
-      screen: HomeScreen,
-    },
-  },
-  defaultHeader,
-);
+// const defaultHeader = {
+//   defaultNavigationOptions: {
+//     headerTitle: <ManifestTitle />,
+//     headerTintColor: '#fff',
+//     headerStyle: {
+//       backgroundColor: '#4c4c4c',
+//     },
+//   },
+//   headerLayoutPreset: 'center',
+//   config,
+// };
 
-HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
-      }
-    />
-  ),
-};
+// const HomeStack = createStackNavigator(
+//   {
+//     HomePg: {
+//       screen: HomeScreen,
+//     },
+//   },
+//   defaultHeader,
+// );
 
-HomeStack.path = 'app/home/';
+// HomeStack.navigationOptions = {
+//   tabBarLabel: 'Home',
+//   tabBarIcon: ({ focused }) => (
+//     <TabBarIcon
+//       focused={focused}
+//       name={
+//         Platform.OS === 'ios'
+//           ? `ios-information-circle${focused ? '' : '-outline'}`
+//           : 'md-information-circle'
+//       }
+//     />
+//   ),
+// };
 
-const PlaidStack = createStackNavigator(
-  {
-    Plaid: {
-      screen: PlaidScreen,
-    },
-    AccountAssign: {
-      screen: AccountAssignScreen,
-    },
-  },
-  // defaultHeader,
-  _.merge({
-    initialRouteName: 'Plaid',
-    initialRouteParams: {
-      auth: false,
-    },
-  }, defaultHeader),
-);
+// HomeStack.path = 'app/home/';
 
-PlaidStack.navigationOptions = {
-  tabBarLabel: 'Plaid',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
-  ),
-};
+// const PlaidStack = createStackNavigator(
+//   {
+//     Plaid: {
+//       screen: PlaidScreen,
+//     },
+//     AccountAssign: {
+//       screen: AccountAssignScreen,
+//     },
+//   },
+//   // defaultHeader,
+//   _.merge({
+//     initialRouteName: 'Plaid',
+//     initialRouteParams: {
+//       auth: false,
+//     },
+//   }, defaultHeader),
+// );
 
-PlaidStack.path = 'app/plaid';
+// PlaidStack.navigationOptions = {
+//   tabBarLabel: 'Plaid',
+//   tabBarIcon: ({ focused }) => (
+//     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
+//   ),
+// };
 
-const GoalsStack = createStackNavigator(
-  {
-    Goals: {
-      screen: GoalsScreen,
-    },
-  },
-  _.merge({
-    initialRouteName: 'Goals',
-    initialRouteParams: {
-      auth: false,
-    },
-  }, defaultHeader),
-);
+// PlaidStack.path = 'app/plaid';
 
-GoalsStack.navigationOptions = {
-  tabBarLabel: 'Goals',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
-  ),
-};
+// const GoalsStack = createStackNavigator(
+//   {
+//     Goals: {
+//       screen: GoalsScreen,
+//     },
+//   },
+//   _.merge({
+//     initialRouteName: 'Goals',
+//     initialRouteParams: {
+//       auth: false,
+//     },
+//   }, defaultHeader),
+// );
 
-GoalsStack.path = 'app/goals';
+// GoalsStack.navigationOptions = {
+//   tabBarLabel: 'Goals',
+//   tabBarIcon: ({ focused }) => (
+//     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
+//   ),
+// };
 
-const GoalsSummaryStack = createStackNavigator(
-  {
-    Goals: {
-      screen: GoalsSummaryScreen,
-    },
-  },
-  defaultHeader,
-);
+// GoalsStack.path = 'app/goals';
 
-GoalsSummaryStack.navigationOptions = {
-  tabBarLabel: 'Goals Summary',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
-  ),
-};
+// const GoalsSummaryStack = createStackNavigator(
+//   {
+//     Goals: {
+//       screen: GoalsSummaryScreen,
+//     },
+//   },
+//   defaultHeader,
+// );
 
-GoalsSummaryStack.path = 'app/goals-summary';
+// GoalsSummaryStack.navigationOptions = {
+//   tabBarLabel: 'Goals Summary',
+//   tabBarIcon: ({ focused }) => (
+//     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
+//   ),
+// };
 
-const GamesStack = createStackNavigator(
-  {
-    Goals: {
-      screen: GamesScreen,
-    },
-    DK: {
-      screen: DKScreen,
-    },
-    GameTwo: {
-      screen: GameTwoScreen,
-    },
-    GameThree: {
-      screen: GameThreeScreen,
-    },
-    GameFour: {
-      screen: GameFourScreen,
-    },
-  },
-  defaultHeader,
-);
+// GoalsSummaryStack.path = 'app/goals-summary';
 
-GamesStack.navigationOptions = {
-  tabBarLabel: 'Games',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
-  ),
-};
+// const GamesStack = createStackNavigator(
+//   {
+//     Goals: {
+//       screen: GamesScreen,
+//     },
+//     DK: {
+//       screen: DKScreen,
+//     },
+//     GameTwo: {
+//       screen: GameTwoScreen,
+//     },
+//     GameThree: {
+//       screen: GameThreeScreen,
+//     },
+//     GameFour: {
+//       screen: GameFourScreen,
+//     },
+//   },
+//   defaultHeader,
+// );
 
-GamesStack.path = 'app/games';
+// GamesStack.navigationOptions = {
+//   tabBarLabel: 'Games',
+//   tabBarIcon: ({ focused }) => (
+//     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
+//   ),
+// };
 
-const StatsStack = createStackNavigator(
-  {
-    Stats: {
-      screen: StatsScreen,
-    },
-  },
-  defaultHeader,
-);
+// GamesStack.path = 'app/games';
 
-StatsStack.navigationOptions = {
-  tabBarLabel: 'Stats',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
-  ),
-};
+// const StatsStack = createStackNavigator(
+//   {
+//     Stats: {
+//       screen: StatsScreen,
+//     },
+//   },
+//   defaultHeader,
+// );
 
-StatsStack.path = 'app/stats';
+// StatsStack.navigationOptions = {
+//   tabBarLabel: 'Stats',
+//   tabBarIcon: ({ focused }) => (
+//     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
+//   ),
+// };
 
-const TransactionsStack = createStackNavigator(
-  {
-    Transactions: {
-      screen: TransactionsScreen,
-    },
-  },
-  defaultHeader,
-);
+// StatsStack.path = 'app/stats';
 
-TransactionsStack.navigationOptions = {
-  tabBarLabel: 'Transactions',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
-  ),
-};
+// const TransactionsStack = createStackNavigator(
+//   {
+//     Transactions: {
+//       screen: TransactionsScreen,
+//     },
+//   },
+//   defaultHeader,
+// );
 
-TransactionsStack.path = 'app/transactions';
+// TransactionsStack.navigationOptions = {
+//   tabBarLabel: 'Transactions',
+//   tabBarIcon: ({ focused }) => (
+//     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
+//   ),
+// };
 
-const SettingsStack = createStackNavigator(
-  {
-    Settings: {
-      screen: SettingsScreen,
-    },
-  },
-  defaultHeader,
-);
+// TransactionsStack.path = 'app/transactions';
 
-SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
-  ),
-};
+// const SettingsStack = createStackNavigator(
+//   {
+//     Settings: {
+//       screen: SettingsScreen,
+//     },
+//   },
+//   defaultHeader,
+// );
 
-SettingsStack.path = 'app/settings';
+// SettingsStack.navigationOptions = {
+//   tabBarLabel: 'Settings',
+//   tabBarIcon: ({ focused }) => (
+//     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
+//   ),
+// };
 
-const MyAccountStack = createStackNavigator(
-  {
-    MyAccount: {
-      screen: MyAccountScreen,
-    },
-    AccountAssign: {
-      screen: AccountAssignScreen,
-    },
-  },
-  _.merge({
-    initialRouteName: 'MyAccount',
-    initialRouteParams: {
-      auth: false,
-    },
-  }, defaultHeader),
-);
+// SettingsStack.path = 'app/settings';
 
-MyAccountStack.navigationOptions = {
-  tabBarLabel: 'Account',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
-  ),
-};
+// const MyAccountStack = createStackNavigator(
+//   {
+//     MyAccount: {
+//       screen: MyAccountScreen,
+//     },
+//     AccountAssign: {
+//       screen: AccountAssignScreen,
+//     },
+//   },
+//   _.merge({
+//     initialRouteName: 'MyAccount',
+//     initialRouteParams: {
+//       auth: false,
+//     },
+//   }, defaultHeader),
+// );
 
-MyAccountStack.path = 'app/my-account';
+// MyAccountStack.navigationOptions = {
+//   tabBarLabel: 'Account',
+//   tabBarIcon: ({ focused }) => (
+//     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
+//   ),
+// };
+
+// MyAccountStack.path = 'app/my-account';
+
+import HomeStack from './subStacks/HomeStack';
+import StatsStack from './subStacks/StatsStack';
+import GoalsStack from './subStacks/GoalStack';
+import GamesStack from './subStacks/GamesStack';
+import AccountStack from './subStacks/AccountStack';
+import TransactionsStack from './subStacks/TransactionStack';
 
 const drawerNavigator = createDrawerNavigator(
   {
     Home: HomeStack,
-    Plaid: PlaidStack,
     Stats: StatsStack,
     Goals: GoalsStack,
-    GoalsSummary: GoalsSummaryStack,
     Games: GamesStack,
     Transactions: TransactionsStack,
-    Account: MyAccountStack,
+    Account: AccountStack,
     LogOut: {
       screen: LogOutScreen,
     },

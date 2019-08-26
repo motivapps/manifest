@@ -7,7 +7,6 @@ import defaultHeader from './DefaultHeader';
 
 const _ = require('lodash');
 
-
 const AccountStack = createStackNavigator(
   {
     MyAccount: {

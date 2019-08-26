@@ -23,3 +23,5 @@ TransactionsStack.navigationOptions = {
 };
 
 TransactionsStack.path = 'app/transactions';
+
+export default TransactionsStack;

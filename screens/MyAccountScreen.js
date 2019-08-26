@@ -76,7 +76,7 @@ class MyAccountScreen extends React.Component {
               </Col>
             </Row>
             <Row>
-              <Button style={styles.transactionButton} onPress={() => navigate('AccountAssign')}><Text style={styles.buttonText}>Connect Bank</Text></Button>
+              <Button style={styles.transactionButton} onPress={() => navigate('Plaid')}><Text style={styles.buttonText}>Connect Bank</Text></Button>
             </Row>
             <Row style={{ width: '100%', marginBottom: 10 }}>
               <Text style={styles.smallTextLeft}>Connect your bank account to be able to track your spending on vices and transfer money saved by staying on track to your savings account.</Text>

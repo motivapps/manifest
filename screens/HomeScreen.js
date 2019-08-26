@@ -17,7 +17,7 @@ import {
   Platform, StatusBar, StyleSheet, View, TouchableOpacity, Image, ScrollView, TouchableHighlight,
 } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
-
+import footer from './subViews/Footer';
 import * as Font from 'expo-font';
 import * as Progress from 'react-native-progress';
 import { NGROK } from '../app.config.json';
@@ -129,6 +129,7 @@ class HomeScreen extends React.Component {
       oneYearSavings,
       completionDate,
     } = this.state;
+    const context = this;
 
     if (!isReady) {
       return <AppLoading />;
@@ -220,34 +221,7 @@ Savings Projection: $
           </ScrollView>
         </View>
 
-        <Footer style={styles.footerbar}>
-          <FooterTab style={{ backgroundColor: '#49d5b6' }}>
-            <Button vertical>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Stats')}>
-                <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="md-stats" />
-                <Text style={styles.buttonText}>Stats</Text>
-              </TouchableOpacity>
-            </Button>
-            <Button vertical>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Games')}>
-                <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="logo-game-controller-a" />
-                <Text style={styles.buttonText}>Games</Text>
-              </TouchableOpacity>
-            </Button>
-            <Button vertical>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Goals')}>
-                <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="md-ribbon" />
-                <Text style={styles.buttonText}>Goal</Text>
-              </TouchableOpacity>
-            </Button>
-            <Button vertical>
-              <TouchableOpacity onPress={this.props.navigation.openDrawer}>
-                <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="md-menu" />
-                <Text style={styles.buttonText}>Menu</Text>
-              </TouchableOpacity>
-            </Button>
-          </FooterTab>
-        </Footer>
+        {footer(this)}
       </Container>
     );
   }

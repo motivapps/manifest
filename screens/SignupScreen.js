@@ -19,6 +19,7 @@ import {
 import { AuthSession } from 'expo';
 import jwtDecode from 'jwt-decode';
 import { AUTHO_CLIENT_ID, AUTHO_DOMAIN, NGROK } from '../app.config.json';
+import footer from './subViews/Footer';
 
 function toQueryString(params) {
   return `?${Object.entries(params)
@@ -148,9 +149,6 @@ class SignupScreen extends React.Component {
   };
 
   render() {
-    const { name } = this.state;
-    const { navigation } = this.props;
-
     return (
 
       <Container style={styles.container}>

@@ -16,13 +16,10 @@ import {
   Text, 
 } from 'native-base';
 import PlaidAuthenticator from 'react-native-plaid-link';
-import {
-  storeData,
-  getData,
-  storeMulti,
-  getMulti, 
-} from './helpers/asyncHelpers';
+import { getData } from './helpers/asyncHelpers';
 import { NGROK } from '../app.config.json';
+import footer from './subViews/Footer';
+
 
 class PlaidScreen extends React.Component {
   constructor(props) {
@@ -83,8 +80,7 @@ class PlaidScreen extends React.Component {
   }
 
   render() {
-    const { navigation: { navigate, openDrawer } } = this.props;
-
+    const context = this;
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <View style={{ marginTop: 10, marginBottom: 5, height: '90%', width: '100%' }}>
@@ -98,34 +94,7 @@ class PlaidScreen extends React.Component {
           />
         </View>
         <Content />
-        <Footer style={styles.footerbar}>
-          <FooterTab style={{ backgroundColor: '#49d5b6' }}>
-            <Button vertical>
-              <TouchableOpacity onPress={() => navigate('Stats')}>
-                <Icon style={{ fontSize: 30, color: '#fff' }} name="md-stats" />
-                <Text style={styles.buttonText}>Stats</Text>
-              </TouchableOpacity>
-            </Button>
-            <Button vertical>
-              <TouchableOpacity onPress={() => navigate('Games')}>
-                <Icon style={{ fontSize: 30, color: '#fff' }} name="logo-game-controller-a" />
-                <Text style={styles.buttonText}>Games</Text>
-              </TouchableOpacity>
-            </Button>
-            <Button vertical>
-              <TouchableOpacity onPress={() => navigate('Goals')}>
-                <Icon style={{ fontSize: 30, color: '#fff' }} name="md-ribbon" />
-                <Text style={styles.buttonText}>Goals</Text>
-              </TouchableOpacity>
-            </Button>
-            <Button vertical>
-              <TouchableOpacity onPress={openDrawer}>
-                <Icon style={{ fontSize: 30, color: '#fff' }} name="md-menu" />
-                <Text style={styles.buttonText}>Menu</Text>
-              </TouchableOpacity>
-            </Button>
-          </FooterTab>
-        </Footer>
+        {footer(context)}
       </View>
     );
   }

@@ -14,6 +14,7 @@ import {
 } from 'native-base';
 import axios from 'axios';
 import RNPickerSelect from 'react-native-picker-select';
+import footer from './subViews/Footer';
 import { NGROK, UNSPLASH_CLIENT_ID } from '../app.config.json';
 
 class GoalsScreen extends React.Component {
@@ -103,6 +104,8 @@ class GoalsScreen extends React.Component {
       viceName,
       auth,
     } = this.state;
+
+    const context = this;
 
     const placeholderVices = {
       label: 'Select a vice...',
@@ -285,43 +288,18 @@ class GoalsScreen extends React.Component {
 
           </ScrollView>
         </View>
-        <Footer style={styles.footerbar}>
-          {auth
-            ? (
+        {auth
+          ? (
+            <Footer style={styles.footerbar}>
               <FooterTab style={{ backgroundColor: '#ccc' }}>
                 <Button>
                   {/* <Text style={styles.largeText}>Complete Signup</Text> */}
                 </Button>
               </FooterTab>
-            ) : (
-              <FooterTab style={{ backgroundColor: '#49d5b6' }}>
-                <Button vertical>
-                  <TouchableOpacity onPress={() => this.props.navigation.navigate('Stats')}>
-                    <Icon style={{ fontSize: 30, color: '#fff', marginRight: 20 }} name="md-stats" />
-                    <Text style={styles.buttonTextFoot}>Stats</Text>
-                  </TouchableOpacity>
-                </Button>
-                <Button vertical>
-                  <TouchableOpacity onPress={() => this.props.navigation.navigate('Games')}>
-                    <Icon style={{ fontSize: 30, color: '#fff', marginRight: 20 }} name="logo-game-controller-a" />
-                    <Text style={styles.buttonTextFoot}>Games</Text>
-                  </TouchableOpacity>
-                </Button>
-                <Button vertical>
-                  <TouchableOpacity onPress={() => this.props.navigation.navigate('Goals')}>
-                    <Icon style={{ fontSize: 30, color: '#fff', marginRight: 20 }} name="md-ribbon" />
-                    <Text style={styles.buttonTextFootGoal}>Goal</Text>
-                  </TouchableOpacity>
-                </Button>
-                <Button vertical>
-                  <TouchableOpacity onPress={this.props.navigation.openDrawer}>
-                    <Icon style={{ fontSize: 30, color: '#fff' }} name="md-menu" />
-                    <Text style={styles.buttonTextFoot}>Menu</Text>
-                  </TouchableOpacity>
-                </Button>
-              </FooterTab>
-            )}
-        </Footer>
+            </Footer>
+          ) : (
+            footer(context)
+          )}
       </Container>
     );
   }

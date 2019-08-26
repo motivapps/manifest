@@ -21,6 +21,7 @@ import {
 } from 'native-base';
 import axios from 'axios';
 import { NGROK } from '../app.config.json';
+import footer from './subViews/Footer';
 
 class MyAccountScreen extends React.Component {
   constructor(props) {
@@ -55,6 +56,7 @@ class MyAccountScreen extends React.Component {
   render() {
     const { navigate } = this.props.navigation;
     const { name, profilePic } = this.state;
+    const context = this;
 
     return (
       <Container style={styles.container}>
@@ -91,34 +93,7 @@ class MyAccountScreen extends React.Component {
           </Grid>
           </ScrollView>
         </View>
-        <Footer style={styles.footerbar}>
-          <FooterTab style={{ backgroundColor: '#49d5b6' }}>
-            <Button vertical>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Stats')}>
-                <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="md-stats" />
-                <Text style={styles.buttonText}>Stats</Text>
-              </TouchableOpacity>
-            </Button>
-            <Button vertical>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Games')}>
-                <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="logo-game-controller-a" />
-                <Text style={styles.buttonText}>Games</Text>
-              </TouchableOpacity>
-            </Button>
-            <Button vertical>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Goals')}>
-                <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="md-ribbon" />
-                <Text style={styles.buttonText}>Goals</Text>
-              </TouchableOpacity>
-            </Button>
-            <Button vertical>
-              <TouchableOpacity onPress={this.props.navigation.openDrawer}>
-                <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="md-menu" />
-                <Text style={styles.buttonText}>Menu</Text>
-              </TouchableOpacity>
-            </Button>
-          </FooterTab>
-        </Footer>
+        {footer(context)}
       </Container>
     );
   }

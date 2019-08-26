@@ -7,6 +7,7 @@ import {
 } from 'native-base';
 import axios from 'axios';
 import BankItem from './subViews/BankItem';
+import footer from './subViews/Footer';
 import { NGROK } from '../app.config.json';
 
 export default class AccountAssign extends React.Component {
@@ -122,7 +123,8 @@ export default class AccountAssign extends React.Component {
       buttonText,
       footerbar,
     } = styles;
-    const { to, from } = this.state;
+    const { from } = this.state;
+    const context = this;
 
 
     return (
@@ -142,34 +144,7 @@ export default class AccountAssign extends React.Component {
             )}
           </ScrollView>
         </View>
-        <Footer style={footerbar}>
-          <FooterTab style={{ backgroundColor: '#49d5b6' }}>
-            <Button vertical>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Stats')}>
-                <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="md-stats" />
-                <Text style={buttonText}>Stats</Text>
-              </TouchableOpacity>
-            </Button>
-            <Button vertical>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Games')}>
-                <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="logo-game-controller-a" />
-                <Text style={buttonText}>Games</Text>
-              </TouchableOpacity>
-            </Button>
-            <Button vertical>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Goal')}>
-                <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="md-ribbon" />
-                <Text style={buttonText}>Goals</Text>
-              </TouchableOpacity>
-            </Button>
-            <Button vertical>
-              <TouchableOpacity onPress={this.props.navigation.openDrawer}>
-                <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="md-menu" />
-                <Text style={buttonText}>Menu</Text>
-              </TouchableOpacity>
-            </Button>
-          </FooterTab>
-        </Footer>
+        {footer(context)}
       </Container>
     );
   }

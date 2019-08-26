@@ -1,3 +1,4 @@
+import React from 'react';
 import { Platform } from 'react-native';
 import ManifestTitle from '../../screens/Header';
 

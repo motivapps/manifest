@@ -1,4 +1,6 @@
-import { createStackNavigator } from 'react-native';
+import React from 'react';
+import { Platform } from 'react-native';
+import { createStackNavigator } from 'react-navigation';
 import TabBarIcon from '../../components/TabBarIcon';
 import defaultHeader from './DefaultHeader';
 import GamesScreen from '../../screens/GamesScreen';
@@ -31,10 +33,10 @@ const GamesStack = createStackNavigator(
 GamesStack.navigationOptions = {
   tabBarLabel: 'Games',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon 
-      focused={focused} 
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} 
-      />
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+    />
   ),
 };
 

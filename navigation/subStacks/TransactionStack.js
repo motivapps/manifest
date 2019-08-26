@@ -1,4 +1,6 @@
-import { createStackNavigator } from 'react-native';
+import React from 'react';
+import { Platform } from 'react-native';
+import { createStackNavigator } from 'react-navigation';
 import TabBarIcon from '../../components/TabBarIcon';
 import TransactionsScreen from '../../screens/TransactionsScreen';
 import defaultHeader from './DefaultHeader';
@@ -15,9 +17,9 @@ const TransactionsStack = createStackNavigator(
 TransactionsStack.navigationOptions = {
   tabBarLabel: 'Transactions',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon 
+    <TabBarIcon
       focused={focused} 
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} 
+      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
     />
   ),
 };

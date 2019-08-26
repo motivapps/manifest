@@ -1,4 +1,6 @@
-import { createStackNavigator } from 'react-native';
+import React from 'react';
+import { Platform } from 'react-native';
+import { createStackNavigator } from 'react-navigation';
 import TabBarIcon from '../../components/TabBarIcon';
 import defaultHeader from './DefaultHeader';
 import StatsScreen from '../../screens/StatsScreen';

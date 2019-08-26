@@ -14,7 +14,7 @@ import {
 import * as Permissions from 'expo-permissions';
 import axios from 'axios';
 import {
- Platform, StatusBar, StyleSheet, View, TouchableOpacity, Image, ScrollView, TouchableHighlight
+  Platform, StatusBar, StyleSheet, View, TouchableOpacity, Image, ScrollView, TouchableHighlight,
 } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 
@@ -56,8 +56,8 @@ class HomeScreen extends React.Component {
   }
 
   /**
-   * 
-   * @param {*} amount 
+   *
+   * @param {*} amount
    * onToggleThreeMonths, onToggleSixMonths, onToggleOneYear functions update the amount
    * displayed for projected savings and are triggered on button press.
    */
@@ -80,7 +80,7 @@ class HomeScreen extends React.Component {
     });
   }
 
-/**
+  /**
  * updateAsyncStorage function checks the database for the user's goal and updates
  * AsyncStorage upon HomeScreen will focus and componentWillMount to update goal related
  * interfaces and progress.  Function contains algorithms to calculate completion date
@@ -110,7 +110,7 @@ class HomeScreen extends React.Component {
       const mm = targetDate.getMonth() + 1; // 0 is January, so we must add 1
       const yyyy = targetDate.getFullYear();
 
-      let dateString = `${mm}/${dd}/${yyyy}`;
+      const dateString = `${mm}/${dd}/${yyyy}`;
       this.setState({ completionDate: dateString });
 
       if (response.data[0]) {
@@ -137,19 +137,19 @@ class HomeScreen extends React.Component {
       <Container style={styles.container}>
         <View style={styles.viewport}>
           <NavigationEvents
-          onWillFocus={this.updateAsyncStorage}
-        />
+            onWillFocus={this.updateAsyncStorage}
+          />
           <ScrollView>
-          <Text style={styles.heading}>
+            <Text style={styles.heading}>
 Goal:
-{' '}
-{primaryGoal ? primaryGoal.goal_name : 'No goal set'}
-{' '}
- </Text>
+            {' '}
+            {primaryGoal ? primaryGoal.goal_name : 'No goal set'}
+            {' '}
+          </Text>
 
-          <Image style={styles.mainImage} source={{ uri: primaryGoal ? primaryGoal.goal_photo : 'http://cdn.shopify.com/s/files/1/0682/0839/products/Vibe-Yellowfin-100-Kayak-Caribbean_Journey_grande.jpg?v=1555360419' }} />
+            <Image style={styles.mainImage} source={{ uri: primaryGoal ? primaryGoal.goal_photo : 'http://cdn.shopify.com/s/files/1/0682/0839/products/Vibe-Yellowfin-100-Kayak-Caribbean_Journey_grande.jpg?v=1555360419' }} />
 
-          <Progress.Bar
+            <Progress.Bar
             progress={primaryGoal ? primaryGoal.amount_saved / primaryGoal.goal_cost : 0}
             width={240}
             color="#49d5b6"
@@ -157,67 +157,67 @@ Goal:
             height={24}
             style={{ alignSelf: 'center' }}
           />
-          <View style={{ marginTop: 10, marginBottom: 10 }}>
+            <View style={{ marginTop: 10, marginBottom: 10 }}>
             <Text style={styles.smallText}>
 Projected Completion Date:
-{' '}
-{completionDate ? completionDate : 'Loading...'}
-</Text>
+              {' '}
+              {completionDate || 'Loading...'}
+                        </Text>
           </View>
-          <View style={{ marginBottom: 10, marginLeft: 0 }}>
+            <View style={{ marginBottom: 10, marginLeft: 0 }}>
             <Text style={styles.largeText}>
 Money Saved: $
-{primaryGoal ? primaryGoal.amount_saved : 0}
-</Text>
+              {primaryGoal ? primaryGoal.amount_saved : 0}
+                        </Text>
             <Text style={styles.largeText}>
 Current Streak:
-{' '}
-{primaryGoal ? primaryGoal.streak_days : 0}
-{' '}
+              {' '}
+              {primaryGoal ? primaryGoal.streak_days : 0}
+              {' '}
 Days
-</Text>
+                        </Text>
           </View>
 
-          <Text style={styles.smallTextLeft}>
+            <Text style={styles.smallTextLeft}>
 Relapses:
-{' '}
-{primaryGoal ? primaryGoal.relapse_count : 0}
-</Text>
-          <Text style={styles.smallTextLeft}>
+            {' '}
+            {primaryGoal ? primaryGoal.relapse_count : 0}
+                    </Text>
+            <Text style={styles.smallTextLeft}>
 Money Lost: $
-{primaryGoal ? primaryGoal.relapse_cost_total : 0}
-</Text>
-          <Text style={styles.smallTextLeft}>
+            {primaryGoal ? primaryGoal.relapse_cost_total : 0}
+                    </Text>
+            <Text style={styles.smallTextLeft}>
 Setback:
-{' '}
-{primaryGoal ? primaryGoal.relapse_count : 0}
-{' '}
+            {' '}
+            {primaryGoal ? primaryGoal.relapse_count : 0}
+            {' '}
 days
-</Text>
-          <Text style={styles.smallTextGreenLeft}>
+                    </Text>
+            <Text style={styles.smallTextGreenLeft}>
 Savings Projection: $
-{displayedSavings}
-</Text>
-          <Grid style={{ width: '100%', marginTop: 10 }}>
+            {displayedSavings}
+                    </Text>
+            <Grid style={{ width: '100%', marginTop: 10 }}>
             <Row style={{ width: '100%' }}>
               <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                  <Button style={displayedSavings === threeMonthSavings ? styles.transactionButtonDark : styles.transactionButton} onPress={() => this.onToggleThreeMonths(threeMonthSavings)}>
-                  <Text style={styles.buttonText}>3 months</Text>
-                </Button>
+                <Button style={displayedSavings === threeMonthSavings ? styles.transactionButtonDark : styles.transactionButton} onPress={() => this.onToggleThreeMonths(threeMonthSavings)}>
+                    <Text style={styles.buttonText}>3 months</Text>
+                  </Button>
               </Col>
               <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                  <Button style={displayedSavings === sixMonthSavings ? styles.transactionButtonDark : styles.transactionButton} onPress={() => this.onToggleSixMonths(sixMonthSavings)}>
-                  <Text style={styles.buttonText}>6 months</Text>
-                </Button>
+                <Button style={displayedSavings === sixMonthSavings ? styles.transactionButtonDark : styles.transactionButton} onPress={() => this.onToggleSixMonths(sixMonthSavings)}>
+                    <Text style={styles.buttonText}>6 months</Text>
+                  </Button>
               </Col>
               <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                  <Button style={displayedSavings === oneYearSavings ? styles.transactionButtonDark : styles.transactionButton} onPress={() => this.onToggleOneYear(oneYearSavings)}>
-                  <Text style={styles.buttonText}>1 year</Text>
-                </Button>
+                <Button style={displayedSavings === oneYearSavings ? styles.transactionButtonDark : styles.transactionButton} onPress={() => this.onToggleOneYear(oneYearSavings)}>
+                    <Text style={styles.buttonText}>1 year</Text>
+                  </Button>
               </Col>
             </Row>
           </Grid>
-        </ScrollView>
+          </ScrollView>
         </View>
 
         <Footer style={styles.footerbar}>

@@ -39,25 +39,20 @@ export default class AccountAssign extends React.Component {
   }
 
   setTo(acctId) {
-    this.setState({
-      to: acctId,
-    });
+    const { userToken, from } = this.state;
+    const { navigation: { navigate } } = this.props;
+
+    // console.log('to, from', this.state);
+
+    axios.post(`${NGROK}/accounts/assign/${userToken}`, { to: acctId, from })
+      .then(() => navigate('MyAccount'))
+      .catch(err => console.error(err));
   }
 
   setFrom(acctId) {
-    const { userToken, to, from } = this.state;
-    const { navigation: { navigate } } = this.props;
-
     this.setState({
       from: acctId,
     });
-
-    const { userToken, to, from } = this.state;
-    const { navigation: { navigate } } = this.props;
-
-    axios.post(`${NGROK}/accounts/assign/${userToken}`, { to, from })
-      .then(() => navigate('MyAccount'))
-      .catch(err => console.error(err));
   }
 
   getAccounts() {

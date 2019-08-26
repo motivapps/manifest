@@ -21,7 +21,7 @@ class GoalsScreen extends React.Component {
     super(props);
     const auth = (this.props.navigation.state.params.auth || false);
     this.state = {
-      auth: auth,
+      auth,
       goalName: '',
       goalItem: '',
       goalAmount: '',
@@ -34,7 +34,7 @@ class GoalsScreen extends React.Component {
     this.onHandleSubmit = this.onHandleSubmit.bind(this);
   }
 
-/**
+  /**
  * Get userID using userToken stored in AsyncStorage to be used to store goal to correct user
  */
   async componentWillMount() {
@@ -56,8 +56,7 @@ class GoalsScreen extends React.Component {
   }
 
   /**
-   * 
-   * @param {*} dest 
+   * @param {*} dest
    * onHandleSubmit function stores goal to goals table in database using user input
    * information from GoalsScreen component.  Goal photo is chosen using goalItem input
    * as query parameter for Unsplash API call
@@ -74,20 +73,17 @@ class GoalsScreen extends React.Component {
       userId,
     } = this.state;
 
-    axios.get(`https://api.unsplash.com/search/photos?page=1&query=${goalItem}
-&client_id=${UNSPLASH_CLIENT_ID}`)
-      .then((response) => {
-        return axios.post(`${NGROK}/user/goals`, {
-          goalName,
-          goalItem,
-          goalAmount,
-          vicePrice,
-          viceFrequency,
-          viceName,
-          userId,
-          goalPhoto: response.data.results[0].urls.thumb,
-        });
-      })
+    axios.get(`https://api.unsplash.com/search/photos?page=1&query=${goalItem}&client_id=${UNSPLASH_CLIENT_ID}`)
+      .then(response => axios.post(`${NGROK}/user/goals`, {
+        goalName,
+        goalItem,
+        goalAmount,
+        vicePrice,
+        viceFrequency,
+        viceName,
+        userId,
+        goalPhoto: response.data.results[0].urls.thumb,
+      }))
       .catch((err) => {
         console.error('goals error:', err);
       });

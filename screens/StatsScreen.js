@@ -20,6 +20,8 @@ import axios from 'axios';
 import { ProgressChart, BarChart } from 'react-native-chart-kit';
 import { NGROK } from '../app.config.json';
 import { storeData, getData } from './helpers/asyncHelpers';
+import footer from './subViews/Footer';
+
 
 export default class StatsScreen extends React.Component {
   constructor(props) {
@@ -80,7 +82,7 @@ export default class StatsScreen extends React.Component {
 
   render() {
     const { circleData, barchartData, primaryGoal } = this.state;
-
+    const context = this;
     return (
       <Container style={styles.container}>
         <View style={styles.viewport}>
@@ -110,34 +112,7 @@ export default class StatsScreen extends React.Component {
           <Text style={styles.smallText}>Savings Potential Based on Daily Savings</Text>
 
         </View>
-        <Footer style={styles.footerbar}>
-          <FooterTab style={{ backgroundColor: '#49d5b6' }}>
-            <Button vertical>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Stats')}>
-                <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="md-stats" />
-                <Text style={styles.buttonText}>Stats</Text>
-              </TouchableOpacity>
-            </Button>
-            <Button vertical>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Games')}>
-                <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="logo-game-controller-a" />
-                <Text style={styles.buttonText}>Games</Text>
-              </TouchableOpacity>
-            </Button>
-            <Button vertical>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Goals')}>
-                <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="md-ribbon" />
-                <Text style={styles.buttonText}>Goals</Text>
-              </TouchableOpacity>
-            </Button>
-            <Button vertical>
-              <TouchableOpacity onPress={this.props.navigation.openDrawer}>
-                <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="md-menu" />
-                <Text style={styles.buttonText}>Menu</Text>
-              </TouchableOpacity>
-            </Button>
-          </FooterTab>
-        </Footer>
+        {footer(context)}
       </Container>
     );
   }

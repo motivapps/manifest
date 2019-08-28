@@ -1,6 +1,5 @@
 import React from 'react';
 import { AppLoading } from 'expo';
-// import { SwitchActions } from 'react-navigation';
 import { AsyncStorage, View } from 'react-native';
 
 class LogOutScreen extends React.Component {

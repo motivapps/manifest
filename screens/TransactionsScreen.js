@@ -10,6 +10,8 @@ import {
 import axios from 'axios';
 import TransactionItem from './subViews/TransactionItem';
 import { NGROK } from '../app.config.json';
+import footer from './subViews/Footer';
+
 
 export default class Transactions extends React.Component {
   constructor(props) {
@@ -91,6 +93,7 @@ export default class Transactions extends React.Component {
       footerbar,
     } = styles;
     const { isReady } = this.state;
+    const context = this;
     if (isReady) {
       return (
         <Container style={container}>
@@ -103,34 +106,7 @@ export default class Transactions extends React.Component {
               {this.renderTransactions()}
             </ScrollView>
           </View>
-          <Footer style={footerbar}>
-            <FooterTab style={{ backgroundColor: '#49d5b6' }}>
-              <Button vertical>
-                <TouchableOpacity onPress={() => this.props.navigation.navigate('Stats')}>
-                  <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="md-stats" />
-                  <Text style={buttonText}>Stats</Text>
-                </TouchableOpacity>
-              </Button>
-              <Button vertical>
-                <TouchableOpacity onPress={() => this.props.navigation.navigate('Games')}>
-                  <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="logo-game-controller-a" />
-                  <Text style={buttonText}>Games</Text>
-                </TouchableOpacity>
-              </Button>
-              <Button vertical>
-                <TouchableOpacity onPress={() => this.props.navigation.navigate('Goals')}>
-                  <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="md-ribbon" />
-                  <Text style={buttonText}>Goals</Text>
-                </TouchableOpacity>
-              </Button>
-              <Button vertical>
-                <TouchableOpacity onPress={this.props.navigation.openDrawer}>
-                  <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="md-menu" />
-                  <Text style={buttonText}>Menu</Text>
-                </TouchableOpacity>
-              </Button>
-            </FooterTab>
-          </Footer>
+          {footer(context)}
         </Container>
       );
     }

@@ -14,6 +14,7 @@ import {
 } from 'native-base';
 import axios from 'axios';
 import RNPickerSelect from 'react-native-picker-select';
+import footer from './subViews/Footer';
 import { NGROK, UNSPLASH_CLIENT_ID } from '../app.config.json';
 
 class GoalsScreen extends React.Component {
@@ -21,7 +22,7 @@ class GoalsScreen extends React.Component {
     super(props);
     const auth = (this.props.navigation.state.params.auth || false);
     this.state = {
-      auth: auth,
+      auth,
       goalName: '',
       goalItem: '',
       goalAmount: '',
@@ -34,7 +35,7 @@ class GoalsScreen extends React.Component {
     this.onHandleSubmit = this.onHandleSubmit.bind(this);
   }
 
-/**
+  /**
  * Get userID using userToken stored in AsyncStorage to be used to store goal to correct user
  */
   async componentWillMount() {
@@ -56,8 +57,7 @@ class GoalsScreen extends React.Component {
   }
 
   /**
-   * 
-   * @param {*} dest 
+   * @param {*} dest
    * onHandleSubmit function stores goal to goals table in database using user input
    * information from GoalsScreen component.  Goal photo is chosen using goalItem input
    * as query parameter for Unsplash API call
@@ -74,20 +74,17 @@ class GoalsScreen extends React.Component {
       userId,
     } = this.state;
 
-    axios.get(`https://api.unsplash.com/search/photos?page=1&query=${goalItem}
-&client_id=${UNSPLASH_CLIENT_ID}`)
-      .then((response) => {
-        return axios.post(`${NGROK}/user/goals`, {
-          goalName,
-          goalItem,
-          goalAmount,
-          vicePrice,
-          viceFrequency,
-          viceName,
-          userId,
-          goalPhoto: response.data.results[0].urls.thumb,
-        });
-      })
+    axios.get(`https://api.unsplash.com/search/photos?page=1&query=${goalItem}&client_id=${UNSPLASH_CLIENT_ID}`)
+      .then(response => axios.post(`${NGROK}/user/goals`, {
+        goalName,
+        goalItem,
+        goalAmount,
+        vicePrice,
+        viceFrequency,
+        viceName,
+        userId,
+        goalPhoto: response.data.results[0].urls.thumb,
+      }))
       .catch((err) => {
         console.error('goals error:', err);
       });
@@ -107,6 +104,8 @@ class GoalsScreen extends React.Component {
       viceName,
       auth,
     } = this.state;
+
+    const context = this;
 
     const placeholderVices = {
       label: 'Select a vice...',
@@ -169,7 +168,7 @@ class GoalsScreen extends React.Component {
                     </Col>
                     <Col style={{ backgroundColor: '#fff', height: 60 }}>
                       <Button style={styles.transactionButton}>
-                        <Text style={styles.buttonText} onPress={() => this.props.navigation.navigate('GoalsSummary')}>Current Goals</Text>
+                        <Text style={styles.buttonText} onPress={() => this.props.navigation.navigate('GoalSummary')}>Current Goals</Text>
                       </Button>
                     </Col>
                   </Row>
@@ -289,43 +288,18 @@ class GoalsScreen extends React.Component {
 
           </ScrollView>
         </View>
-        <Footer style={styles.footerbar}>
-          {auth
-            ? (
+        {auth
+          ? (
+            <Footer style={styles.footerbar}>
               <FooterTab style={{ backgroundColor: '#ccc' }}>
                 <Button>
                   {/* <Text style={styles.largeText}>Complete Signup</Text> */}
                 </Button>
               </FooterTab>
-            ) : (
-              <FooterTab style={{ backgroundColor: '#49d5b6' }}>
-                <Button vertical>
-                  <TouchableOpacity onPress={() => this.props.navigation.navigate('Stats')}>
-                    <Icon style={{ fontSize: 30, color: '#fff', marginRight: 20 }} name="md-stats" />
-                    <Text style={styles.buttonTextFoot}>Stats</Text>
-                  </TouchableOpacity>
-                </Button>
-                <Button vertical>
-                  <TouchableOpacity onPress={() => this.props.navigation.navigate('Games')}>
-                    <Icon style={{ fontSize: 30, color: '#fff', marginRight: 20 }} name="logo-game-controller-a" />
-                    <Text style={styles.buttonTextFoot}>Games</Text>
-                  </TouchableOpacity>
-                </Button>
-                <Button vertical>
-                  <TouchableOpacity onPress={() => this.props.navigation.navigate('Goals')}>
-                    <Icon style={{ fontSize: 30, color: '#fff', marginRight: 20 }} name="md-ribbon" />
-                    <Text style={styles.buttonTextFootGoal}>Goal</Text>
-                  </TouchableOpacity>
-                </Button>
-                <Button vertical>
-                  <TouchableOpacity onPress={this.props.navigation.openDrawer}>
-                    <Icon style={{ fontSize: 30, color: '#fff' }} name="md-menu" />
-                    <Text style={styles.buttonTextFoot}>Menu</Text>
-                  </TouchableOpacity>
-                </Button>
-              </FooterTab>
-            )}
-        </Footer>
+            </Footer>
+          ) : (
+            footer(context)
+          )}
       </Container>
     );
   }

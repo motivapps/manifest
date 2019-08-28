@@ -35,6 +35,7 @@ import {
   getMulti,
 } from './helpers/asyncHelpers';
 import PropTypes from 'prop-types';
+import footer from './subViews/Footer.js';
 
 class GoalsSummaryScreen extends React.Component {
   constructor(props) {
@@ -103,6 +104,9 @@ class GoalsSummaryScreen extends React.Component {
       viceName,
       auth0_id,
     } = this.state;
+
+    const context = this;
+
     const {
       primaryGoal,
       isReady,
@@ -318,7 +322,7 @@ class GoalsSummaryScreen extends React.Component {
             <Grid style={{ width: '100%', marginTop: 10 }}>
               <Row style={{ width: '100%' }}>
                 <Col style={{ backgroundColor: '#fff', height: 60 }}>
-                  <Button style={styles.transactionButton} onPress={() => this.props.navigation.navigate('Goals')}>
+                  <Button style={styles.transactionButton} onPress={() => this.props.navigation.navigate('Goals', { auth: false })}>
                     <Text style={styles.buttonText}>Set New Goal</Text>
                   </Button>
                 </Col>
@@ -343,7 +347,6 @@ Category:
             </Text>
 
             <Progress.Circle
-             
               progress={primaryGoal ? primaryGoal.amount_saved / primaryGoal.goal_cost : 0}
               color="#49d5b6"
               unfilledColor="#cccccc"
@@ -397,34 +400,7 @@ Money Saved: $
           </ScrollView>
         </View>
 
-        <Footer style={styles.footerbar}>
-          <FooterTab style={{ backgroundColor: '#49d5b6' }}>
-            <Button vertical>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Stats')}>
-                <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="md-stats" />
-                <Text style={styles.buttonText}>Stats</Text>
-              </TouchableOpacity>
-            </Button>
-            <Button vertical>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Games')}>
-                <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="logo-game-controller-a" />
-                <Text style={styles.buttonText}>Games</Text>
-              </TouchableOpacity>
-            </Button>
-            <Button vertical>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Goals')}>
-                <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="md-ribbon" />
-                <Text style={styles.buttonText}>Goal</Text>
-              </TouchableOpacity>
-            </Button>
-            <Button vertical>
-              <TouchableOpacity onPress={this.props.navigation.openDrawer}>
-                <Icon style={{ fontSize: 30, color: '#fff', marginLeft: 22 }} name="md-menu" />
-                <Text style={styles.buttonText}>Menu</Text>
-              </TouchableOpacity>
-            </Button>
-          </FooterTab>
-        </Footer>
+        {footer(context)}
       </Container>
     );
   }

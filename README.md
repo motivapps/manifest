@@ -3,6 +3,7 @@ Manifest Your Destiny
 
 ![Alt text](/assets/screenshots/Screenshot_20190824-154528.png?raw=true)
 
+
 ![Alt text](/assets/screenshots/Screenshot_20190824-154536.jpg?raw=true)
 ![Alt text](/assets/screenshots/Screenshot_20190824-154612.png?raw=true)
 ![Alt text](/assets/screenshots/Screenshot_20190824-154646.png?raw=true)

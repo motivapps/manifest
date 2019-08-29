@@ -19,7 +19,7 @@ import PlaidAuthenticator from 'react-native-plaid-link';
 import { getData } from './helpers/asyncHelpers';
 import { NGROK } from '../app.config.json';
 import footer from './subViews/Footer';
-
+import AccountAssign from './AccountAssignScreen';
 
 class PlaidScreen extends React.Component {
   constructor(props) {
@@ -59,7 +59,7 @@ class PlaidScreen extends React.Component {
   async doStuff() {
     const { status } = this.state;
     if (status === 'CONNECTED') {
-      const { userToken, auth, data: { metadata: { public_token } } } = this.state;
+      const { userToken, data: { metadata: { public_token } } } = this.state;
       const { navigation: { navigate } } = this.props;
 
       await axios.post(`${NGROK}/get_access_token`, {
@@ -71,11 +71,8 @@ class PlaidScreen extends React.Component {
         userToken,
       });
 
-      if (auth) {
-        navigate('AccountAssign', { auth: true });
-      } else {
-        navigate('Home');
-      }
+
+      navigate('AccountAssign', { auth: true });
     }
   }
 

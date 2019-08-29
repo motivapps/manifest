@@ -46,7 +46,7 @@ export default class AccountAssign extends React.Component {
     // console.log('to, from', this.state);
 
     axios.post(`${NGROK}/accounts/assign/${userToken}`, { to: acctId, from })
-      .then(() => navigate('HomeStack'))
+      .then(() => navigate('Home'))
       .catch(err => console.error(err));
   }
 

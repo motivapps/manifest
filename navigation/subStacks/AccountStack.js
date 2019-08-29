@@ -9,24 +9,48 @@ import defaultHeader from './DefaultHeader';
 
 const _ = require('lodash');
 
-const AccountStack = createStackNavigator(
+const PlaidStack = createStackNavigator(
   {
-    MyAccount: {
-      screen: MyAccountScreen,
-    },
-    Plaid: {
+    PlaidScreen: {
       screen: PlaidScreen,
     },
     AccountAssign: {
       screen: AccountAssignScreen,
     },
   },
-  _.merge({
-    initialRouteName: 'MyAccount',
+  {
+    initialRouteName: 'PlaidScreen',
     initialRouteParams: {
       auth: false,
     },
-  }, defaultHeader),
+    backBehavior: 'initialRoute',
+    headerMode: 'none',
+    navigationOptions: {
+      headerVisible: false,
+    }
+  },
+);
+
+const AccountStack = createStackNavigator(
+  {
+    MyAccount: {
+      screen: MyAccountScreen,
+    },
+    // substack here.
+    Plaid: {
+      screen: PlaidStack,
+    },
+  },
+  _.merge(
+    {
+      initialRouteName: 'MyAccount',
+      initialRouteParams: {
+        auth: false,
+      },
+      backBehavior: 'initialRoute',
+    },
+    defaultHeader,
+  ),
 );
 
 AccountStack.navigationOptions = {

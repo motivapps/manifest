@@ -1,6 +1,6 @@
 # Manifest from Motiv
 Manifest Your Destiny
-
+![Alt text](/assets/screenshots/Screenshot_20190824-154528.png?raw=true)
 # Description
 Automate your savings growth by quitting your vices! After signup, answer a few quick questions about your goals, what vice you'd like to give up in order to reach that goal, and how frequently you spend money on said vice. Manifest will do the rest for you! Each week, Manifest will take the money you saved from quitting your vice and deposit it into your savings account, without you having to lift a finger! If allowed, Manifest will also track your location and send you positive reinforcement if you are in the vicinity of a place that sells your vice.
 

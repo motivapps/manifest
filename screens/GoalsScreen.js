@@ -63,7 +63,7 @@ class GoalsScreen extends React.Component {
    * as query parameter for Unsplash API call
    */
 
-  onHandleSubmit(dest) {
+  async onHandleSubmit(dest) {
     const {
       goalName,
       goalItem,
@@ -74,7 +74,7 @@ class GoalsScreen extends React.Component {
       userId,
     } = this.state;
 
-    axios.get(`https://api.unsplash.com/search/photos?page=1&query=${goalItem}&client_id=${UNSPLASH_CLIENT_ID}`)
+    await axios.get(`https://api.unsplash.com/search/photos?page=1&query=${goalItem}&client_id=${UNSPLASH_CLIENT_ID}`)
       .then(response => axios.post(`${NGROK}/user/goals`, {
         goalName,
         goalItem,
@@ -89,6 +89,7 @@ class GoalsScreen extends React.Component {
         console.error('goals error:', err);
       });
 
+    await axios.post()
     if (dest) {
       this.props.navigation.navigate('PlaidAuth', { auth: true });
     }
@@ -263,12 +264,9 @@ class GoalsScreen extends React.Component {
               placeholder={placeholderFrequency}
               items={frequencies}
               onValueChange={(value) => {
-                this.setState({
-                  viceFrequency: value,
-                });
+                this.state.viceFrequency = value;
               }}
               style={pickerSelectStyles}
-              value={viceFrequency}
             />
             {
               auth ? (

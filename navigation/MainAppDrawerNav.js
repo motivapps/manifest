@@ -9,22 +9,28 @@ import TransactionsStack from './subStacks/TransactionStack';
 
 const drawerNavigator = createDrawerNavigator(
   {
-    HomeStack,
-    StatsStack,
-    GoalsStack,
-    GamesStack,
-    TransactionsStack,
-    AccountStack,
+    Home: HomeStack,
+    Stats: StatsStack,
+    Goals: GoalsStack,
+    Games: GamesStack,
+    Transactions: TransactionsStack,
+    Accounts: AccountStack,
     LogOut: {
       screen: LogOutScreen,
     },
   },
   {
-    initialRouteName: 'HomeStack',
+    initialRouteName: 'Home',
     hideStatusBar: true,
     drawerBackgroundColor: 'rgba(255,255,255,.9)',
     overlayColor: '#49d5b6',
     contentOptions: {
+      itemsContainerStyle: {
+        marginVertical: 0,
+      },
+      iconContainerStyle: {
+        opacity: 1,
+      },
       activeTintColor: '#fff',
       activeBackgroundColor: '#49d5b6',
     },

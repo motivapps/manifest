@@ -28,9 +28,9 @@ const styles = StyleSheet.create({
 
 // { navStats, navGames, navGoals, openDrawer }
 const footer = (context) => {
-  const navStats = () => context.props.navigation.navigate('StatsStack');
-  const navGames = () => context.props.navigation.navigate('GamesStack');
-  const navGoals = () => context.props.navigation.navigate('GoalsStack');
+  const navStats = () => context.props.navigation.navigate('Stats');
+  const navGames = () => context.props.navigation.navigate('Games');
+  const navGoals = () => context.props.navigation.navigate('Goals');
   const { openDrawer } = context.props.navigation;
   const { footerbar, buttonText } = styles;
 

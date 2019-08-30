@@ -17,11 +17,11 @@ const defaultHeader = {
       headerStyle: {
         backgroundColor: '#4c4c4c',
       },
-      headerLayoutPreset: 'center',
     },
     config,
-  ),
-};
+    ),
+    headerLayoutPreset: 'center',
+  };
 
 
 export default defaultHeader;
